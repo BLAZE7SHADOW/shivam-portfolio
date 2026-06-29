@@ -5,7 +5,7 @@
 
 export const profile = {
   name: "Shivam Govind Rao",
-  initials: "SGR",
+  initials: "Shivam",
   role: "Software Development Engineer",
   tagline: "software development engineer · frontend-rooted · AI-powered products.",
   // Drop your photo at /public/images/avatar.jpg (square works best)

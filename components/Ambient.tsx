@@ -59,7 +59,7 @@ export default function Ambient() {
         ref={railRef}
         className="fixed left-0 top-0 z-[999] h-[2px] w-0"
         style={{
-          background: "linear-gradient(90deg, #7c5cff, #22d3ee)",
+          background: "linear-gradient(90deg, #f59e0b, #22d3ee)",
           boxShadow: "0 0 12px var(--accent-glow)",
         }}
       />

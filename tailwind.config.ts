@@ -13,7 +13,7 @@ const config: Config = {
         ink: "#f4f4f6",
         "ink-dim": "#a1a1ad",
         "ink-faint": "#6b6b78",
-        accent: "#7c5cff",
+        accent: "#f59e0b",
         "accent-2": "#22d3ee",
         panel: "rgba(255,255,255,0.025)",
         "panel-border": "rgba(255,255,255,0.08)",
