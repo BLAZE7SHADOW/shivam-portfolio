@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --accent-glow: rgba(124, 92, 255, 0.35);
+  --accent-glow: rgba(245, 158, 11, 0.35);
 }
 
 * {
@@ -22,20 +22,29 @@ body {
 }
 
 ::selection {
-  background: rgba(124, 92, 255, 0.35);
+  background: rgba(245, 158, 11, 0.35);
   color: #fff;
 }
 
-/* hide native cursor on devices that support hover (custom cursor takes over) */
+/* custom cursor — fine pointer only (mouse). Hidden + disabled on touch/Android */
+.cursor-dot,
+.cursor-ring {
+  display: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
   * {
     cursor: none !important;
+  }
+  .cursor-dot,
+  .cursor-ring {
+    display: block;
   }
 }
 
 @layer utilities {
   .grad-text {
-    background: linear-gradient(120deg, #7c5cff 10%, #22d3ee 90%);
+    background: linear-gradient(120deg, #f59e0b 10%, #22d3ee 90%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
