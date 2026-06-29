@@ -32,7 +32,7 @@ export default function Home() {
           </div>
         </Reveal>
         <Reveal delay={0.05}>
-          <h1 className="mb-7 font-serif text-[clamp(46px,8vw,92px)] font-normal leading-[1.02] tracking-tight">
+          <h1 className="mb-7 font-serif text-[clamp(32px,8vw,92px)] font-normal leading-[1.02] tracking-tight">
             {profile.name}
             <br />
             <span className="grad-text italic">{profile.tagline}</span>
