@@ -1,15 +1,13 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import Magnetic from "@/components/Magnetic";
 import TiltCard from "@/components/TiltCard";
-import Avatar from "@/components/Avatar";
 import ContactForm from "@/components/ContactForm";
+import HeroSection from "@/components/HeroSection";
 import { Eyebrow, SectionHeading } from "@/components/Section";
 import { Download, Github, Linkedin, Twitter } from "lucide-react";
 import {
   profile,
   stats,
-  marquee,
   journey,
   projects,
   skills,
@@ -20,75 +18,8 @@ export default function Home() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="flex min-h-screen flex-col justify-center pt-20">
-        <Reveal>
-          <div className="mb-7 flex items-center gap-5">
-            <Avatar size={92} />
-            <span className="inline-flex items-center gap-2 rounded-full border border-panel-border bg-panel px-3.5 py-1.5 font-mono text-xs text-ink-dim">
-              <span className="h-[7px] w-[7px] animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
-              {profile.status}
-            </span>
-          </div>
-        </Reveal>
-        <Reveal delay={0.05}>
-          <h1 className="mb-7 font-serif text-[clamp(32px,8vw,92px)] font-normal leading-[1.02] tracking-tight">
-            {profile.name}
-            <br />
-            <span className="grad-text italic">{profile.tagline}</span>
-          </h1>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="mb-10 max-w-2xl text-[clamp(17px,2.2vw,21px)] text-ink-dim">
-            {profile.intro}
-          </p>
-        </Reveal>
-        <Reveal delay={0.15}>
-          <div className="flex flex-wrap items-center gap-3.5">
-            <Magnetic>
-              <Link
-                href="/projects"
-                data-mag
-                className="inline-flex items-center gap-2 rounded-xl bg-ink px-6 py-3 text-sm font-semibold text-bg transition-shadow hover:shadow-[0_10px_40px_rgba(255,255,255,0.15)]"
-              >
-                View work →
-              </Link>
-            </Magnetic>
-            <Magnetic>
-              <Link
-                href="/journey"
-                data-mag
-                className="inline-flex items-center gap-2 rounded-xl border border-panel-border bg-panel px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/[0.06]"
-              >
-                My journey
-              </Link>
-            </Magnetic>
-            <Magnetic>
-              <a
-                href={profile.resume}
-                download
-                data-mag
-                className="inline-flex items-center gap-2 rounded-xl border border-panel-border bg-panel px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/[0.06]"
-              >
-                <Download className="h-4 w-4" /> Resume
-              </a>
-            </Magnetic>
-          </div>
-        </Reveal>
-
-        {/* marquee */}
-        <Reveal delay={0.2}>
-          <div className="mt-16 overflow-hidden border-y border-panel-border py-4">
-            <div className="flex w-max animate-scroll-x gap-12">
-              {[...marquee, ...marquee].map((m, i) => (
-                <span key={i} className="whitespace-nowrap font-mono text-[13px] text-ink-faint">
-                  {m}
-                </span>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-      </section>
+      {/* HERO — Apple-style scroll reveal */}
+      <HeroSection />
 
       {/* WORK */}
       <section id="work" className="py-28">
@@ -143,18 +74,21 @@ export default function Home() {
         <div className="grid gap-5 sm:grid-cols-2">
           {featured.map((p, i) => (
             <Reveal key={p.slug} delay={i * 0.05}>
-              <TiltCard className="flex h-full flex-col p-7">
-                <div className="mb-4 font-mono text-xs text-accent">{p.year}</div>
-                <h3 className="mb-2.5 text-lg font-semibold tracking-tight">{p.title}</h3>
-                <p className="text-sm leading-relaxed text-ink-dim">{p.blurb}</p>
-                <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
-                  {p.stack.slice(0, 4).map((t) => (
-                    <span key={t} className="rounded-md bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-ink-faint">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </TiltCard>
+              <Link href={`/projects#${p.slug}`} className="block h-full">
+                <TiltCard className="flex h-full flex-col p-7 transition-colors hover:border-accent/40">
+                  <div className="mb-4 font-mono text-xs text-accent">{p.year}</div>
+                  <h3 className="mb-2.5 text-lg font-semibold tracking-tight">{p.title}</h3>
+                  <p className="text-sm leading-relaxed text-ink-dim">{p.blurb}</p>
+                  <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                    {p.stack.slice(0, 4).map((t) => (
+                      <span key={t} className="rounded-md bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-ink-faint">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-4 text-xs text-accent-2">View details →</div>
+                </TiltCard>
+              </Link>
             </Reveal>
           ))}
         </div>

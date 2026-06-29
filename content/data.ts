@@ -87,7 +87,7 @@ export const growthPath = [
   { label: "Product Engineer", note: "Owning features end-to-end, thinking in user outcomes." },
   { label: "Full Stack Engineer", note: "Node, Postgres, queues, cloud — building the whole pipe." },
   { label: "AI Engineer", note: "Bedrock, Claude, document intelligence, voice automation." },
-  { label: "Software Development Engineer", note: "0→production ownership in a fast-paced AI startup." },
+  { label: "Full-Stack AI Engineer", note: "0→production ownership — frontend, backend, cloud, AI, voice, RPA." },
 ];
 
 // ============================================================================

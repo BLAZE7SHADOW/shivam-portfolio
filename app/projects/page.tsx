@@ -24,6 +24,7 @@ export default function ProjectsPage() {
       <div className="grid gap-8">
         {projects.map((p, i) => (
           <Reveal key={p.slug} delay={i * 0.05}>
+            <div id={p.slug} className="scroll-mt-28">
             <TiltCard className="p-7 sm:p-9" max={3}>
               <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
                 <div>
@@ -63,6 +64,7 @@ export default function ProjectsPage() {
                 <Gallery media={p.media} />
               </div>
             </TiltCard>
+            </div>
           </Reveal>
         ))}
       </div>
