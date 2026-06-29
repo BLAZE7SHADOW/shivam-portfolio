@@ -6,8 +6,8 @@
 export const profile = {
   name: "Shivam Govind Rao",
   initials: "SGR",
-  role: "Founding Engineer",
-  tagline: "full-stack founding engineer · frontend-rooted · AI-powered products.",
+  role: "Software Development Engineer",
+  tagline: "software development engineer · frontend-rooted · AI-powered products.",
   // Drop your photo at /public/images/avatar.jpg (square works best)
   avatar: "/images/avatar.jpg",
   location: "Gurugram, India",
@@ -44,7 +44,7 @@ export const marquee = [
 export const journey = [
   {
     period: "Jan 2025 — April 2026",
-    role: "Founding Engineer · Full-Stack",
+    role: "Software Development Engineer · Full-Stack",
     company: "Diagna AI — FAXFlo",
     place: "Gurugram",
     tag: "End-to-end product ownership",
@@ -87,7 +87,7 @@ export const growthPath = [
   { label: "Product Engineer", note: "Owning features end-to-end, thinking in user outcomes." },
   { label: "Full Stack Engineer", note: "Node, Postgres, queues, cloud — building the whole pipe." },
   { label: "AI Engineer", note: "Bedrock, Claude, document intelligence, voice automation." },
-  { label: "Founding Engineer", note: "0→production ownership in a fast-paced AI startup." },
+  { label: "Software Development Engineer", note: "0→production ownership in a fast-paced AI startup." },
 ];
 
 // ============================================================================
@@ -118,7 +118,7 @@ export const projects: Project[] = [
     title: "FAXFlo — Diagna AI",
     blurb: "Full-stack AI medical-document platform — clinical inbox, eFax triage, voice scheduling, RPA EHR automation, and analytics. Taken from a company pivot to its first paying US clinic.",
     year: "2025",
-    role: "Founding Engineer · Full-Stack",
+    role: "Software Development Engineer · Full-Stack",
     featured: true,
     media: [
       { type: "image", src: "/images/Faxflo_main_dashboard.png", caption: "Main clinical dashboard" },
