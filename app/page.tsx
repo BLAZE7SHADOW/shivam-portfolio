@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import Magnetic from "@/components/Magnetic";
+import { HL } from "@/lib/highlight";
 import TiltCard from "@/components/TiltCard";
 import Avatar from "@/components/Avatar";
 import ContactForm from "@/components/ContactForm";
@@ -83,7 +84,7 @@ export default function Home() {
         <div className="grid gap-5">
           {journey.map((job, i) => (
             <Reveal key={job.company} delay={i * 0.05}>
-              <TiltCard className="p-8">
+              <TiltCard className="p-9 sm:p-10">
                 <div className="mb-2 flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <div className="text-xl font-semibold tracking-tight">{job.role}</div>
@@ -98,11 +99,11 @@ export default function Home() {
                     {job.period}
                   </div>
                 </div>
-                <ul className="mt-5 grid gap-3">
+                <ul className="mt-6 grid gap-5">
                   {job.points.map((p, j) => (
-                    <li key={j} className="relative pl-5.5 text-[14.5px] leading-relaxed text-ink-dim">
-                      <span className="absolute left-0 text-accent">▹</span>
-                      <span className="pl-3 block">{p}</span>
+                    <li key={j} className="relative pl-6 text-[16px] leading-loose text-ink-dim">
+                      <span className="absolute left-0 top-[6px] text-accent">▹</span>
+                      <span className="block"><HL text={p} /></span>
                     </li>
                   ))}
                 </ul>

@@ -4,6 +4,7 @@ import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import Gallery from "@/components/Gallery";
 import { Eyebrow } from "@/components/Section";
+import { HL } from "@/lib/highlight";
 import { projects } from "@/content/data";
 
 export default function ProjectsPage() {
@@ -25,21 +26,27 @@ export default function ProjectsPage() {
         {projects.map((p, i) => (
           <Reveal key={p.slug} delay={i * 0.05}>
             <div id={p.slug} className="scroll-mt-28">
-            <TiltCard className="p-7 sm:p-9" max={3}>
-              <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
+            <TiltCard className="p-8 sm:p-11" max={3}>
+              <div className={`grid gap-8 ${p.media.length > 0 ? "lg:grid-cols-[1.1fr_1fr] lg:items-start" : ""}`}>
                 <div>
-                  <div className="mb-3 flex items-center gap-3 font-mono text-xs">
+                  <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-xs">
                     <span className="text-accent">{p.year}</span>
                     <span className="text-ink-faint">·</span>
                     <span className="text-ink-dim">{p.role}</span>
+                    {p.wip && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-0.5 text-[11px] font-medium text-amber-400">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
+                        In Development
+                      </span>
+                    )}
                   </div>
                   <h2 className="mb-3 font-serif text-3xl">{p.title}</h2>
                   <p className="mb-5 text-[15px] leading-relaxed text-ink-dim">{p.blurb}</p>
-                  <ul className="mb-6 grid gap-2">
+                  <ul className="mb-6 grid gap-4">
                     {p.highlights.map((h, j) => (
-                      <li key={j} className="relative pl-5 text-sm text-ink-dim">
-                        <span className="absolute left-0 text-accent">▹</span>
-                        <span className="block pl-3">{h}</span>
+                      <li key={j} className="relative pl-6 text-[15px] leading-relaxed text-ink-dim">
+                        <span className="absolute left-0 top-[5px] text-accent">▹</span>
+                        <span className="block"><HL text={h} /></span>
                       </li>
                     ))}
                   </ul>

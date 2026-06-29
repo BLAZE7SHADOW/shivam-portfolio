@@ -2,6 +2,7 @@ import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import { Eyebrow } from "@/components/Section";
+import { HL } from "@/lib/highlight";
 import { journey, growthPath, hobbies, profile } from "@/content/data";
 
 export default function JourneyPage() {
@@ -10,7 +11,7 @@ export default function JourneyPage() {
       <Reveal><Eyebrow>My journey</Eyebrow></Reveal>
       <Reveal>
         <h1 className="mb-5 font-serif text-[clamp(40px,7vw,76px)] font-normal leading-[1.04] tracking-tight">
-          Frontend to founding,
+          Frontend to full-stack AI,
           <br />
           <span className="grad-text italic">one era at a time.</span>
         </h1>
@@ -28,7 +29,7 @@ export default function JourneyPage() {
             <div className="relative mx-auto sm:mx-0">
               <div
                 className="absolute -inset-1 rounded-2xl opacity-70 blur-md"
-                style={{ background: "linear-gradient(135deg, #7c5cff, #22d3ee)" }}
+                style={{ background: "linear-gradient(135deg, #f59e0b, #22d3ee)" }}
               />
               <Image
                 src="/images/portrait.jpg"
@@ -82,7 +83,7 @@ export default function JourneyPage() {
         <div className="grid gap-5">
           {journey.map((job, i) => (
             <Reveal key={job.company} delay={i * 0.05}>
-              <TiltCard className="p-8">
+              <TiltCard className="p-9 sm:p-10">
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                   <span className="font-serif text-2xl italic grad-text">{job.chapter}</span>
                   <span className="font-mono text-xs text-ink-faint">{job.period}</span>
@@ -91,12 +92,12 @@ export default function JourneyPage() {
                   {job.role} <span className="text-ink-dim">·</span>{" "}
                   <span className="text-accent-2">{job.company}</span>
                 </div>
-                <p className="mb-5 max-w-2xl text-[15px] text-ink-dim">{job.summary}</p>
-                <ul className="grid gap-3">
+                <p className="mb-6 max-w-2xl text-[15px] text-ink-dim">{job.summary}</p>
+                <ul className="grid gap-5">
                   {job.points.map((p, j) => (
-                    <li key={j} className="relative pl-5 text-[14.5px] leading-relaxed text-ink-dim">
-                      <span className="absolute left-0 text-accent">▹</span>
-                      <span className="block pl-3">{p}</span>
+                    <li key={j} className="relative pl-6 text-[16px] leading-loose text-ink-dim">
+                      <span className="absolute left-0 top-[6px] text-accent">▹</span>
+                      <span className="block"><HL text={p} /></span>
                     </li>
                   ))}
                 </ul>

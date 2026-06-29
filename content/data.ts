@@ -20,7 +20,7 @@ export const profile = {
   socials: {
     github: "https://github.com/BLAZE7SHADOW",
     linkedin: "https://www.linkedin.com/in/shivam-govind-rao-138881157/",
-    twitter: "https://twitter.com/your_handle", // EDIT
+    twitter: "https://x.com/BLAZE07SHADOW",
   },
   intro:
     "I started as a frontend engineer and grew into the full stack — backend, cloud, AI pipelines, and RPA automation. At Diagna AI I owned FAXFlo end-to-end: 110+ React components, a 40-endpoint Node.js API, a distributed AWS document pipeline processing 1,000+ faxes daily, and the AI + voice automation that took the product live in a paying US clinic.",
@@ -52,13 +52,15 @@ export const journey = [
     summary:
       "Took FAXFlo from a company pivot to its first paying US clinic in production. Owned the entire stack — React frontend, Node.js backend, AWS cloud pipeline, multi-model AI, Voice-AI scheduling, RPA automation, and analytics.",
     points: [
-      "Full-stack owner: shipped the React 19 frontend solo (110+ components, lazy-loaded routes, per-clinic feature flags, ~60% bundle reduction) AND the production backend (Node.js · Express · PostgreSQL, 40+ REST endpoints, JWT/RBAC auth, Redis-backed BullMQ queues, Swagger docs).",
-      "Architected a distributed AWS pipeline (S3 · SQS · Textract · SNS · Bedrock) processing 1,000+ medical documents daily at 99%+ uptime, with DLQ handling and Slack alerting.",
-      "Integrated Claude (Sonnet), GPT-4o, and AWS Bedrock for document classification at ~95% accuracy across 40+ categories — extracting structured patient data with custom prompts and retry logic.",
-      "Built an AI SMS orchestrator (Twilio · Telnyx · Vonage) for opt-in/opt-out flows, appointment reminders, and follow-up — and a Voice-AI scheduling module (VAPI + ElevenLabs) cutting manual outreach ~70%.",
-      "Engineered an RPA automation suite (Robocorp · Python · FastAPI · Redis RQ) for MDLand EHR — OTP/2FA login, patient search, document upload, and schedule sync via iframe-heavy UI, with a React Chrome Extension for on-page orchestration.",
-      "Built the HIPAA-compliant PostHog analytics dashboard (EMR sync counts, bar charts, appointment analytics) and the investor + clinic demo that closed the first paying US clinic.",
-      "Wrote a custom Zustand + Immer document-editing engine with field-level diffing and patch-only updates; PDF.js rendering at 300 DPI with multi-page batch processing and ~80% image compression.",
+      "**Frontend** — Shipped the entire **React 19** UI solo: **110+ components**, lazy-loaded routes, per-clinic feature flags, role-based views, and **~60% bundle reduction** via aggressive code splitting.",
+      "**Backend API** — Built the production **Node.js · Express · PostgreSQL** backend from scratch: **40+ REST endpoints**, JWT + RBAC auth, input validation, Swagger docs, and **Redis-backed BullMQ** job queues for async processing.",
+      "**AWS Pipeline** — Architected a distributed document pipeline (**S3 → SQS → Textract → SNS → Bedrock**) processing **1,000+ medical faxes daily** at **99%+ uptime** — with dead-letter queues (DLQ) for poison-message handling, SNS-triggered retries, and Slack alerting on failures.",
+      "**AI Classification** — Integrated **Claude (Sonnet)**, **GPT-4o**, and **AWS Bedrock** in a multi-model chain for document classification at **~95% accuracy** across **40+ medical categories** — custom system prompts, structured JSON extraction, confidence scoring, and fallback retry logic.",
+      "**SMS Orchestration** — Built an AI-driven SMS system across three providers (**Twilio · Telnyx · Vonage**) handling opt-in/opt-out compliance, appointment reminders, two-way patient messaging, and automated follow-up flows — with provider failover so no single outage breaks delivery.",
+      "**Voice AI** — Built a Voice-AI outbound scheduling module (**VAPI + ElevenLabs**) for automated patient calls: appointment confirmations, reschedule handling, and intake — cutting manual outreach by **~70%**.",
+      "**RPA & EHR Automation** — Engineered a full RPA suite (**Robocorp · Python · FastAPI · Redis RQ**) targeting MDLand EHR's iframe-heavy UI: OTP/2FA login, patient lookup, document upload, and calendar sync — plus a **React Chrome Extension** that embedded the orchestration UI directly on the EHR page.",
+      "**Document Engine** — Wrote a custom **Zustand + Immer** editing engine with field-level diffing and patch-only backend sync; **PDF.js** rendering at **300 DPI**, multi-page batch processing, and **~80% image compression** before S3 upload.",
+      "**Analytics** — Built a **HIPAA-compliant PostHog** dashboard tracking EMR sync rates, document pipeline throughput, appointment conversion, and AI classification accuracy — the same dashboard used in the investor demo that **closed the first paying US clinic**.",
     ],
     stack: ["React 19", "TypeScript", "Zustand", "Node.js", "Express", "PostgreSQL", "Redis", "BullMQ", "AWS Bedrock", "Claude", "GPT-4o", "Textract", "VAPI", "ElevenLabs", "Robocorp", "Python", "FastAPI", "PDF.js", "PostHog"],
   },
@@ -72,10 +74,15 @@ export const journey = [
     summary:
       "The only frontend engineer on VoiceGenie, a generative-AI voice sales platform. Built the dashboard and marketing site that closed the first enterprise customers.",
     points: [
-      "Grew VoiceGenie from 0 to $10K MRR in 11 months as the sole frontend engineer.",
-      "Built a live variable composer for AI voice scripts — drop @name / @appointment tokens that resolve per-contact at call time.",
-      "Integrated HubSpot, ElevenLabs, GoHighLevel, and Cal.com into one workflow.",
-      "Cut page load times 30–50% with code splitting, lazy loading, and targeted caching.",
+      "**Product ownership** — Designed and built the **entire VoiceGenie platform from 0** as the **sole frontend engineer**: customer-facing dashboard, marketing site, and internal tooling — all shipped solo.",
+      "**Campaign builder** — Built the full campaign creation flow: configure AI voice scripts, select and segment contact lists, set call schedules, define call objectives (**lead generation, sales, appointment setting**), and monitor live campaign status per contact in real time.",
+      "**Voice configuration** — Built a per-campaign voice settings panel: **ElevenLabs** voice selection, **pitch**, **speaking rate**, **AI temperature**, **engagement style**, and **tone** — letting teams tune the AI persona for each use case (cold outreach vs. warm follow-up vs. enterprise sales).",
+      "**Post-call analytics** — Built a post-call review interface with full **call recordings**, **auto-generated transcripts**, **emotion detection** per call segment, and **AI-extracted entities** (name, email, phone, address, intent signals) surfaced as structured data — actionable intel without listening to every call.",
+      "**R&D & internal dashboard** — Built an internal analytics platform for the product and research team: **call success rates**, **conversion funnels**, drop-off analysis by script section, and **voice model performance comparisons** — used directly for product iteration.",
+      "**Onboarding UX** — Designed and built the end-to-end user onboarding: account setup, workspace config, first-campaign walkthrough, and guided integration steps — reducing **time-to-first-call** for new customers.",
+      "**CRM integrations** — Connected **HubSpot**, **GoHighLevel**, and **Cal.com**: contact sync, call outcome and entity data logged back to CRM records, and **auto calendar booking** on successful calls.",
+      "**Script composer** — Live **@token** variable composer (@name, @appointment, @product) that resolves per-contact at call time; no hardcoded scripts — every call personalised dynamically.",
+      "**Performance & growth** — Cut page load times **30–50%** via code splitting, lazy loading, and caching; grew VoiceGenie from **0 to $10K MRR in 11 months** as the only frontend engineer.",
     ],
     stack: ["React", "Next.js", "TypeScript", "Material UI", "Redux", "Tailwind"],
   },
@@ -106,6 +113,7 @@ export type Project = {
   year: string;
   role: string;
   featured: boolean;
+  wip?: boolean;
   media: Media[];
   highlights: string[];
   stack: string[];
@@ -127,12 +135,15 @@ export const projects: Project[] = [
       { type: "image", src: "/images/Faxflo_analytics_dashboard-2.png", caption: "Analytics dashboard — appointment & AI status" },
     ],
     highlights: [
-      "Full-stack: 110+ React components · 40+ REST endpoints · distributed AWS pipeline",
-      "AI classification at ~95% accuracy across 40+ medical document categories",
-      "1,000+ documents processed daily — S3 · SQS · Textract · Bedrock at 99%+ uptime",
-      "AI SMS orchestrator (Twilio · Telnyx · Vonage) + Voice-AI scheduling (VAPI + ElevenLabs) cutting manual outreach ~70%",
-      "RPA automation suite (Robocorp · FastAPI · Redis) for MDLand EHR entry and schedule sync",
-      "HIPAA-compliant analytics dashboard — demo that closed the first paying US clinic",
+      "React 19 frontend: 110+ components, lazy routes, per-clinic feature flags, ~60% bundle reduction",
+      "Node.js backend: 40+ REST endpoints, JWT/RBAC auth, Redis BullMQ queues, Swagger docs",
+      "AWS pipeline: S3 → SQS → Textract → SNS → Bedrock — 1,000+ docs/day, 99%+ uptime, DLQ + Slack alerting",
+      "Multi-model AI: Claude (Sonnet) + GPT-4o + Bedrock — ~95% accuracy across 40+ medical document categories",
+      "SMS: Twilio · Telnyx · Vonage orchestrator with provider failover, opt-in/out compliance, automated reminders",
+      "Voice AI: VAPI + ElevenLabs outbound scheduling — automated patient calls, cutting manual outreach ~70%",
+      "RPA: Robocorp · FastAPI · Redis RQ for MDLand EHR automation + React Chrome Extension for on-page control",
+      "Document engine: Zustand + Immer field-level diffing, PDF.js at 300 DPI, 80% image compression",
+      "HIPAA-compliant PostHog analytics dashboard — the demo that closed the first paying US clinic",
     ],
     stack: ["React 19", "TypeScript", "Zustand", "Node.js", "Express", "PostgreSQL", "Redis", "BullMQ", "AWS Bedrock", "Claude", "GPT-4o", "Textract", "VAPI", "ElevenLabs", "Robocorp", "Python", "FastAPI", "Prisma", "PostHog"],
     links: { live: "", github: "" },
@@ -140,7 +151,7 @@ export const projects: Project[] = [
   {
     slug: "voicegenie",
     title: "VoiceGenie",
-    blurb: "Generative-AI voice sales platform. Built the full dashboard and marketing site as the sole frontend engineer; reached $10K MRR.",
+    blurb: "Generative-AI voice sales platform. Designed and built the entire product solo — campaign management, internal analytics, onboarding UX, ElevenLabs voice integration, and CRM connections. Reached $10K MRR in 11 months.",
     year: "2024",
     role: "Frontend Developer",
     featured: true,
@@ -149,12 +160,16 @@ export const projects: Project[] = [
       // { type: "video", src: "/demos/voicegenie-demo.mp4" },
     ],
     highlights: [
-      "0 → $10K MRR in 11 months",
-      "Live variable composer for AI voice scripts",
-      "HubSpot / ElevenLabs / Cal.com integrations",
-      "30–50% faster page loads",
+      "Sole frontend engineer — designed and built the entire platform, dashboard, and marketing site from 0",
+      "Campaign builder with call objective config (lead gen, sales, appointments) and per-contact live tracking",
+      "Voice configuration panel: ElevenLabs voice, pitch, rate, AI temperature, tone, engagement style per campaign",
+      "Post-call analytics: recordings, auto transcripts, emotion detection, AI entity extraction (email, phone, address, intent)",
+      "Internal R&D dashboard: conversion funnels, drop-off by script section, voice model performance comparison",
+      "CRM integrations: HubSpot · GoHighLevel · Cal.com — entity data logged back, auto calendar booking on success",
+      "Live @token script composer — personalised per contact at call time, no hardcoded scripts",
+      "0 → $10K MRR in 11 months · 30–50% faster page loads via code splitting and caching",
     ],
-    stack: ["React", "Next.js", "TypeScript", "Ant Design", "Tailwind"],
+    stack: ["React", "Next.js", "TypeScript", "Ant Design", "Tailwind", "Redux", "ElevenLabs", "HubSpot", "GoHighLevel", "Cal.com"],
     links: { live: "", github: "" },
   },
   {
@@ -162,8 +177,9 @@ export const projects: Project[] = [
     title: "MotionStudio",
     blurb: "A browser-based video editor built on Remotion — early stage, timeline engine in progress. A deep exploration of programmatic video generation and creative tooling.",
     year: "2026",
-    role: "Personal project · In development",
+    role: "Personal project",
     featured: false,
+    wip: true,
     media: [],
     highlights: [
       "Early stage — timeline engine actively in progress",
