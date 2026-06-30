@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
+
+export const metadata: Metadata = {
+  title: "Journey",
+  description: "From frontend engineer to full-stack AI — Shivam Govind Rao's career story across VoiceGenie and Diagna AI FAXFlo.",
+  alternates: { canonical: "https://www.shivamgovindrao.com/journey" },
+};
 import { Eyebrow } from "@/components/Section";
 import { HL } from "@/lib/highlight";
 import { journey, growthPath, hobbies, profile } from "@/content/data";
