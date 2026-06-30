@@ -43,12 +43,12 @@ export default function Ambient() {
         }}
       />
       {/* glow orbs */}
-      <div className="pointer-events-none fixed -left-20 -top-32 z-0 h-[480px] w-[480px] rounded-full bg-accent opacity-[0.16] blur-[120px]" />
-      <div className="pointer-events-none fixed -right-24 bottom-[10%] z-0 h-[420px] w-[420px] rounded-full bg-accent-2 opacity-[0.16] blur-[120px]" />
-      {/* spotlight */}
+      <div className="pointer-events-none fixed -left-20 -top-32 z-0 h-[480px] w-[480px] rounded-full bg-accent opacity-[0.12] blur-[80px] sm:opacity-[0.16] sm:blur-[120px]" />
+      <div className="pointer-events-none fixed -right-24 bottom-[10%] z-0 h-[420px] w-[420px] rounded-full bg-accent-2 opacity-[0.12] blur-[80px] sm:opacity-[0.16] sm:blur-[120px]" />
+      {/* spotlight — desktop only (useless on touch) */}
       <div
         ref={spotRef}
-        className="pointer-events-none fixed inset-0 z-[1] opacity-50"
+        className="pointer-events-none fixed inset-0 z-[1] hidden opacity-50 sm:block"
         style={{
           background:
             "radial-gradient(600px circle at var(--mx,50%) var(--my,0%), var(--accent-glow), transparent 45%)",
