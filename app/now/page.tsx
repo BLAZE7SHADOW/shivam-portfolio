@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import { Eyebrow } from "@/components/Section";
+
+export const metadata: Metadata = {
+  title: "Now",
+  description: "What Shivam Govind Rao is building, learning, and thinking about right now.",
+  alternates: { canonical: "https://www.shivamgovindrao.com/now" },
+};
 import { now } from "@/content/data";
 
 function Column({
