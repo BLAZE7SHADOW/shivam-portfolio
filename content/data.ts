@@ -23,11 +23,11 @@ export const profile = {
     twitter: "https://x.com/BLAZE07SHADOW",
   },
   intro:
-    "I started as a frontend engineer and grew into the full stack — backend, cloud, AI pipelines, and RPA automation. At Diagna AI I owned FAXFlo end-to-end: 110+ React components, a 40-endpoint Node.js API, a distributed AWS document pipeline processing 1,000+ faxes daily, and the AI + voice automation that took the product live in a paying US clinic.",
+    "I started as a frontend engineer and grew into owning full products end-to-end — backend, cloud, AI pipelines, and RPA automation. At Diagna AI I took FAXFlo from a company pivot to its first paying US clinic: the full clinical platform, a 40-endpoint Node.js API, a distributed AWS document pipeline processing 1,000+ faxes daily, and the AI + voice automation that made it all work.",
 };
 
 export const stats = [
-  { num: "110+", label: "React components shipped solo" },
+  { num: "2", label: "Full-stack AI products shipped from 0" },
   { num: "1K+", label: "Medical docs processed daily" },
   { num: "$10K", label: "MRR built in 11 months" },
   { num: "40+", label: "AI doc categories at ~95% accuracy" },
@@ -52,7 +52,7 @@ export const journey = [
     summary:
       "Took FAXFlo from a company pivot to its first paying US clinic in production. Owned the entire stack — React frontend, Node.js backend, AWS cloud pipeline, multi-model AI, Voice-AI scheduling, RPA automation, and analytics.",
     points: [
-      "**Frontend** — Shipped the entire **React 19** UI solo: **110+ components**, lazy-loaded routes, per-clinic feature flags, role-based views, and **~60% bundle reduction** via aggressive code splitting.",
+      "**Frontend** — Built the complete **React 19** clinical platform solo: document inbox with dual-view **PDF.js** viewer, eFax module, appointment scheduling and confirmation flows, and multi-clinic analytics dashboard — per-clinic feature flags, RBAC routing, and route-based code splitting to keep the platform lean as it scaled.",
       "**Backend API** — Built the production **Node.js · Express · PostgreSQL** backend from scratch: **40+ REST endpoints**, JWT + RBAC auth, input validation, Swagger docs, and **Redis-backed BullMQ** job queues for async processing.",
       "**AWS Pipeline** — Architected a distributed document pipeline (**S3 → SQS → Textract → SNS → Bedrock**) processing **1,000+ medical faxes daily** at **99%+ uptime** — with dead-letter queues (DLQ) for poison-message handling, SNS-triggered retries, and Slack alerting on failures.",
       "**AI Classification** — Integrated **Claude (Sonnet)**, **GPT-4o**, and **AWS Bedrock** in a multi-model chain for document classification at **~95% accuracy** across **40+ medical categories** — custom system prompts, structured JSON extraction, confidence scoring, and fallback retry logic.",
@@ -135,7 +135,7 @@ export const projects: Project[] = [
       { type: "image", src: "/images/Faxflo_analytics_dashboard-2.png", caption: "Analytics dashboard — appointment & AI status" },
     ],
     highlights: [
-      "React 19 frontend: 110+ components, lazy routes, per-clinic feature flags, ~60% bundle reduction",
+      "React 19 frontend: clinical inbox, eFax module, scheduling views, analytics dashboard — per-clinic feature flags, RBAC routing, lazy-loaded routes",
       "Node.js backend: 40+ REST endpoints, JWT/RBAC auth, Redis BullMQ queues, Swagger docs",
       "AWS pipeline: S3 → SQS → Textract → SNS → Bedrock — 1,000+ docs/day, 99%+ uptime, DLQ + Slack alerting",
       "Multi-model AI: Claude (Sonnet) + GPT-4o + Bedrock — ~95% accuracy across 40+ medical document categories",
