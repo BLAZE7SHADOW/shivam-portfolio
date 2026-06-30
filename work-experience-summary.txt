@@ -1,0 +1,139 @@
+Resume Bullet Points — Diagna AI (document-ai / fax-demo-backend)
+
+  Role: Backend Engineer — AI-Powered Fax & Document Processing Platform for US Clinics
+
+  ---
+  Core System
+
+  - Built and maintained a TypeScript/Express backend service for automated AI processing of inbound medical faxes and documents for US clinics
+  - Designed an end-to-end document ingestion pipeline: PDF/fax → AWS Textract extraction → AWS Bedrock (Claude) AI processing → structured EHR data
+
+  AI & ML Integration
+
+  - Integrated AWS Bedrock with Claude Sonnet 4 as the default model for document understanding, with token counting and retry logic for malformed outputs
+  - Extended Claude context window support up to 1M tokens; added image path + S3 path support for multimodal document processing
+  - Built batch processing with partial success/failure handling and Slack alerting for model job outcomes
+
+  Async Job Processing
+
+  - Architected an SQS + BullMQ (Redis) worker queue system for async document and AI job processing with Dead Letter Queue (DLQ) handling
+  - Built scheduled polling service and scripts to run end-to-end schedule syncing and job creation pipelines
+
+  Patient & EHR Integration
+
+  - Developed a patient matching algorithm (from schedule PDFs) with middle name disambiguation and appointment update logic instead of duplicating records
+  - Integrated with Medplum EHR to create appointment requests and sync patient data
+
+  AI Messaging (SMS Conversations)
+
+  - Built an AI SMS messaging orchestrator supporting opt-in/opt-out flows, follow-up messages, appointment reminders, and cancellation reasons
+  - Integrated with three SMS providers (Twilio, Telnyx, Vonage); added logic to close historical conversations before starting new AI conversations
+  - Added multi-clinic mapping logic for different message templates and appointment types
+
+  Infrastructure & DevOps
+
+  - Built Slack notification service for fax updates, user login events, SQS processing, and batch job status
+  - Implemented email parsing and S3 folder organization for processed emails
+  - Set up JWT authentication with cookie-based sessions and clinic-level access control
+  - Added Swagger/OpenAPI documentation across all routes
+
+  Code Quality
+
+  - Refactored path manipulation code into a clean utility layer (PathOperations, EditValidation, ResultMergeService) eliminating duplication across 3 files
+  - Encapsulated major services into class-based implementations (BedrockService, UserConsentService, PatientService) for testability
+  - Added Jest + Supertest configuration for API integration testing
+
+  ---
+  Tech Stack: TypeScript, Node.js, Express, AWS (Bedrock, S3, SQS, Lambda, Textract), Redis, BullMQ, Prisma (PostgreSQL), Medplum EHR, Twilio, Telnyx, Vonage,
+  Slack API, Claude AI, OpenAI, JWT, Docker
+
+✻ Churned for 47s
+
+❯ have you mention about the sms thing and the rpa thing ?                                                                                                    
+
+⏺ Yes, SMS is covered under the "AI Messaging (SMS Conversations)" section. For RPA, I only briefly mentioned it — let me look at it more closely to give it
+  proper coverage.
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+⏺ Bash(git log main..efax --oneline 2>/dev/null || git log origin/main..HEAD --oneline 2>/dev/null | head -20)
+  ⎿  9ff4a60 Added efax tables to prod
+     00b5848 Added support for multiple appointment types in daily job creation script
+     15c7a8d Add support to delete a conversation and corresponding messages
+     … +17 lines (ctrl+o to expand)
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Yes, SMS was covered well. Here's what was missing or thin on RPA — here are the corrected/added bullets:
+
+  ---
+  RPA Backend Integration (what was missing)
+
+  - Built integration layer between the AI backend and an RPA (Robotic Process Automation) service (rpa-dev.diagna.ai) that interacts directly with the
+  clinic's EHR system
+  - Implemented two RPA-triggered workflows:
+    - Fax Upload: after AI processes a document, triggers the RPA backend to upload the structured result into the EHR via POST
+  /api/v1/mdland/fax_upload/queue
+    - Schedule Download: triggers the RPA backend to pull appointment schedules from the EHR via POST /api/v1/mdland/schedule_download/queue
+  - Built a job status polling service (jobStatusChecker.ts) that queries the RPA backend for async job completion and syncs results back
+  - Implemented token caching in Redis for RPA backend auth tokens (access + refresh), with auto-refresh to avoid re-authenticating on every request
+  - Added CORS and auth middleware to allow secure RPA-to-backend callbacks without requiring user session cookies
+
+  ---
+
+
+  ---
+  FAX RPA — Enterprise EHR Automation Suite (Diagna)
+
+  - Built an end-to-end RPA system in Python (Robocorp framework) to automate workflows on MDLand EHR, including user login with OTP/2FA extraction, patient
+  search, document upload, and schedule download — replacing manual clinical staff effort
+  - Developed a FastAPI backend server that exposes REST endpoints (/fax_upload, /schedule_download, /check_status) to trigger RPA tasks programmatically,
+  with an async execution lock to prevent concurrent runs
+  - Implemented a dual authentication system supporting both JWT Bearer tokens and a legacy X-RPA-Verification header with constant-time comparison for
+  security
+  - Designed a job queuing architecture using Redis + RQ workers, assigning UUIDs to tasks and storing results with TTL for async status polling
+  - Engineered robust browser automation with triple-fallback CSS/XPath selectors, 3-retry logic per action, OTP auto-extraction via backend API call, and
+  headless Playwright-based execution
+  - Built a schedule download pipeline that navigates a deeply nested iframe-based EHR UI (47+ frames), triggers print dialogs, captures the schedule as
+  HTML/MHTML, and uploads artifacts to AWS S3
+  - Extended patient search to handle middle name variations and fuzzy combinations, improving match rate on real patient records
+  - Created a Chrome Extension (React-based floating widget + popup) for browser-side RPA workflow orchestration directly on the EHR page
+  - Wrote a Playwright test suite for lab workflow automation on Medplum FHIR EHR, covering specimen creation, multi-observation entry, and diagnostic report
+  generation
+  - Structured the project as a modular monorepo with separate layers for API routes, data transformers, automation components, infrastructure utilities, and
+  external client integrations
+
+
+
+  Diagna AI — Frontend Engineer (React)
+
+  Healthcare AI Platform — A web application for medical document processing, eFax communication, appointment management, and EHR integration.
+
+  ---
+  Resume Bullet Points
+
+  AI-Powered Document Processing
+  - Built an intelligent inbox with PDF document analysis using AWS Bedrock and AWS Textract, extracting structured patient data (name, DOB, referrals,
+  critical elements) from uploaded faxes
+  - Engineered custom prompts for LLM-based document analysis with fallback handling and retry logic for expired tokens (403 errors)
+  - Implemented a dual-view document result page showing both raw OCR data and AI-extracted structured output
+
+  eFax Module
+  - Developed a full eFax send/receive module from scratch — including sidebar navigation, routing, service layer, pagination, and fax number formatting
+  - Added filtering by sender and receiver fax numbers with UI enhancements for clinic-specific customization
+
+  Appointment Scheduling & Confirmation
+  - Built appointment scheduling views with follow-up group filters, staff_review field, and patient_intent/ai_status tracking
+  - Integrated FOLLOWUP group into schedule filter and handled multiple schema migrations across branches
+
+  EHR Integration
+  - Created an EHR context and service layer consumed by the Inbox page to sync extracted data to Electronic Health Records
+  - Added synced to EMR count analytics in bar charts and a manual refresh trigger
+
+  Core Platform Features
+  - Built multi-file upload component with a 5MB limit, batch upload support, and S3 URL PDF preview
+  - Implemented global search (patient name, trimmed + lowercased), date range filters, sorting, and pagination across the inbox
+  - Added analytics via PostHog and build optimization (code splitting, performance tuning)
+  - Developed a Referral Manager page and profile views
+
+  Tech Stack: React, Vite, Ant Design, Zustand, Axios, React Router, Framer Motion, AWS Bedrock, AWS Textract, PostHog, dayjs
