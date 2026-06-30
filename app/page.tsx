@@ -6,7 +6,8 @@ import TiltCard from "@/components/TiltCard";
 import Avatar from "@/components/Avatar";
 import ContactForm from "@/components/ContactForm";
 import { Eyebrow, SectionHeading } from "@/components/Section";
-import { Download, Github, Linkedin, Twitter } from "lucide-react";
+import { Download, Github, Linkedin, Mail, Twitter } from "lucide-react";
+import CopyEmail from "@/components/CopyEmail";
 import {
   profile,
   stats,
@@ -202,6 +203,8 @@ export default function Home() {
             <a href={profile.socials.github} target="_blank" rel="noopener" data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Github className="h-4 w-4" /> GitHub</a>
             <a href={profile.socials.linkedin} target="_blank" rel="noopener" data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Linkedin className="h-4 w-4" /> LinkedIn</a>
             <a href={profile.socials.twitter} target="_blank" rel="noopener" data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Twitter className="h-4 w-4" /> Twitter / X</a>
+            <a href={`mailto:${profile.email}`} data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Mail className="h-4 w-4" /> Mail</a>
+            <CopyEmail email={profile.email} />
             <a href={profile.resume} download data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Download className="h-4 w-4" /> Resume</a>
           </div>
         </Reveal>
