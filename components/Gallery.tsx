@@ -1,14 +1,17 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import type { Media } from "@/content/data";
 
 function MediaFrame({
   item,
   onClick,
+  priority = false,
 }: {
   item: Media;
   onClick?: () => void;
+  priority?: boolean;
 }) {
   if (item.type === "video") {
     return (
@@ -24,13 +27,19 @@ function MediaFrame({
     );
   }
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={item.src}
-      alt={item.caption || "project media"}
+    <div
       onClick={onClick}
-      className="aspect-video w-full cursor-zoom-in rounded-xl border border-panel-border object-cover transition-opacity hover:opacity-90"
-    />
+      className="relative aspect-video w-full cursor-zoom-in overflow-hidden rounded-xl border border-panel-border"
+    >
+      <Image
+        src={item.src}
+        alt={item.caption || "project media"}
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        priority={priority}
+        className="object-cover transition-opacity hover:opacity-90"
+      />
+    </div>
   );
 }
 
@@ -64,7 +73,7 @@ export default function Gallery({ media }: { media: Media[] }) {
   return (
     <>
       <div>
-        <MediaFrame item={current} onClick={() => setLightbox(active)} />
+        <MediaFrame item={current} onClick={() => setLightbox(active)} priority={active === 0} />
 
         {current.caption && (
           <div className="mt-2 text-center font-mono text-[11px] text-ink-faint">
