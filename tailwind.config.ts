@@ -19,9 +19,9 @@ const config: Config = {
         "panel-border": "rgba(255,255,255,0.08)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        serif: ["'Instrument Serif'", "serif"],
-        mono: ["'JetBrains Mono'", "monospace"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "serif"],
+        mono: ["var(--font-mono)", "monospace"],
       },
       spacing: {
         "5.5": "1.375rem",

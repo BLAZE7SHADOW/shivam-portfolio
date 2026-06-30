@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
+import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Ambient from "@/components/Ambient";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { profile } from "@/content/data";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"], weight: "400", style: ["normal", "italic"],
+  variable: "--font-serif", display: "swap",
+});
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"], weight: ["400", "500"],
+  variable: "--font-mono", display: "swap",
+});
 
 const BASE_URL = "https://www.shivamgovindrao.com";
 
@@ -88,18 +99,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="font-sans">
+      <body className={`font-sans ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}>
         <Ambient />
         <Cursor />
         <Nav />

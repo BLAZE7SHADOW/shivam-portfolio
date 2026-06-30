@@ -32,6 +32,7 @@ export default function Avatar({
           alt={profile.name}
           width={size * 2}
           height={size * 2}
+          sizes={`${size * 2}px`}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           priority
         />
