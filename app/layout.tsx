@@ -5,6 +5,7 @@ import Ambient from "@/components/Ambient";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import PHProvider from "@/components/PHProvider";
 import { profile } from "@/content/data";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
@@ -105,11 +106,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`font-sans ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}>
-        <Ambient />
-        <Cursor />
-        <Nav />
-        <main className="relative z-[2] mx-auto max-w-[980px] px-7">{children}</main>
-        <Footer />
+        <PHProvider>
+          <Ambient />
+          <Cursor />
+          <Nav />
+          <main className="relative z-[2] mx-auto max-w-[980px] px-7">{children}</main>
+          <Footer />
+        </PHProvider>
       </body>
     </html>
   );

@@ -6,8 +6,9 @@ import TiltCard from "@/components/TiltCard";
 import Avatar from "@/components/Avatar";
 import ContactForm from "@/components/ContactForm";
 import { Eyebrow, SectionHeading } from "@/components/Section";
-import { Download, Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 import CopyEmail from "@/components/CopyEmail";
+import ResumeButton from "@/components/ResumeButton";
 import {
   profile,
   stats,
@@ -58,9 +59,7 @@ export default function Home() {
               </Link>
             </Magnetic>
             <Magnetic>
-              <a href={profile.resume} download data-mag className="inline-flex items-center gap-2 rounded-xl border border-panel-border bg-panel px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/[0.06]">
-                <Download className="h-4 w-4" /> Resume
-              </a>
+              <ResumeButton href={profile.resume} variant="hero" />
             </Magnetic>
           </div>
         </Reveal>
@@ -205,7 +204,7 @@ export default function Home() {
             <a href={profile.socials.twitter} target="_blank" rel="noopener" data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Twitter className="h-4 w-4" /> Twitter / X</a>
             <a href={`mailto:${profile.email}`} data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Mail className="h-4 w-4" /> Mail</a>
             <CopyEmail email={profile.email} />
-            <a href={profile.resume} download data-mag className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"><Download className="h-4 w-4" /> Resume</a>
+            <ResumeButton href={profile.resume} variant="contact" />
           </div>
         </Reveal>
       </section>

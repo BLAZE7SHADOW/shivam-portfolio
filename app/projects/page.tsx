@@ -1,5 +1,6 @@
 "use client";
 
+import posthog from "posthog-js";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import Gallery from "@/components/Gallery";
@@ -60,10 +61,24 @@ export default function ProjectsPage() {
                   {(p.links.live || p.links.github) && (
                     <div className="mt-6 flex gap-3">
                       {p.links.live && (
-                        <a href={p.links.live} target="_blank" rel="noopener" data-mag className="text-sm text-accent-2 hover:underline">Live →</a>
+                        <a
+                          href={p.links.live}
+                          target="_blank"
+                          rel="noopener"
+                          data-mag
+                          onClick={() => posthog.capture("project_link_clicked", { project: p.slug, link_type: "live" })}
+                          className="text-sm text-accent-2 hover:underline"
+                        >Live →</a>
                       )}
                       {p.links.github && (
-                        <a href={p.links.github} target="_blank" rel="noopener" data-mag className="text-sm text-ink-dim hover:text-ink">GitHub →</a>
+                        <a
+                          href={p.links.github}
+                          target="_blank"
+                          rel="noopener"
+                          data-mag
+                          onClick={() => posthog.capture("project_link_clicked", { project: p.slug, link_type: "github" })}
+                          className="text-sm text-ink-dim hover:text-ink"
+                        >GitHub →</a>
                       )}
                     </div>
                   )}

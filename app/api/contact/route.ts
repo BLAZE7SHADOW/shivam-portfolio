@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 // In-memory rate limiter: works per serverless instance (good enough for a portfolio).
 // Resets on cold start, which is acceptable — persistent rate limiting needs Upstash/Redis.
@@ -72,6 +73,15 @@ export async function POST(req: NextRequest) {
       subject: `Portfolio message from ${name}`,
       text: `${message}\n\n— ${name} (${email})`,
     });
+
+    const posthog = getPostHogClient();
+    posthog.capture({
+      distinctId: email,
+      event: "contact_message_sent",
+      properties: { sender_name: name, source: "resend" },
+    });
+    await posthog.shutdown();
+
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[contact] Resend error:", err);
