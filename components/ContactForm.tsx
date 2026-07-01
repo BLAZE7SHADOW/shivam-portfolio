@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import { profile } from "@/content/data";
 
 type State = "idle" | "sending" | "sent" | "error" | "rate-limited";
@@ -31,9 +32,11 @@ export default function ContactForm() {
       const data = await res.json();
       if (res.ok) {
         if (data?.fallback) {
+          posthog.capture("contact_form_submitted", { method: "mailto_fallback" });
           mailtoFallback();
           setState("idle");
         } else {
+          posthog.capture("contact_form_submitted", { method: "resend" });
           setState("sent");
           setForm({ name: "", email: "", message: "" });
         }
@@ -43,6 +46,7 @@ export default function ContactForm() {
         setState("error");
       }
     } catch {
+      posthog.capture("contact_form_submitted", { method: "mailto_fallback_error" });
       mailtoFallback();
       setState("idle");
     }

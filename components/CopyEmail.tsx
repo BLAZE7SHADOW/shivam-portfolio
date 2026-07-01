@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import posthog from "posthog-js";
 import { Check, Copy } from "lucide-react";
 
 export default function CopyEmail({ email }: { email: string }) {
@@ -8,6 +9,7 @@ export default function CopyEmail({ email }: { email: string }) {
 
   function copy() {
     navigator.clipboard.writeText(email).then(() => {
+      posthog.capture("email_copied");
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
