@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import posthog from "posthog-js";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
@@ -28,7 +29,7 @@ export default function ProjectsPage() {
           <Reveal key={p.slug} delay={i * 0.05}>
             <div id={p.slug} className="scroll-mt-28">
             <TiltCard className="p-8 sm:p-11" max={3}>
-              <div className={`grid gap-8 ${p.media.length > 0 ? "lg:grid-cols-[1.1fr_1fr] lg:items-start" : ""}`}>
+              <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
                 <div>
                   <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-xs">
                     <span className="text-accent">{p.year}</span>
@@ -43,10 +44,10 @@ export default function ProjectsPage() {
                   </div>
                   <h2 className="mb-3 font-serif text-3xl">{p.title}</h2>
                   <p className="mb-5 text-[15px] leading-relaxed text-ink-dim">{p.blurb}</p>
-                  <ul className="mb-6 grid gap-4">
+                  <ul className="mb-6 grid gap-3.5">
                     {p.highlights.map((h, j) => (
                       <li key={j} className="relative pl-6 text-[15px] leading-relaxed text-ink-dim">
-                        <span className="absolute left-0 top-[5px] text-accent">▹</span>
+                        <span className="absolute left-0 top-[4px] text-accent">▹</span>
                         <span className="block"><HL text={h} /></span>
                       </li>
                     ))}
@@ -58,8 +59,15 @@ export default function ProjectsPage() {
                       </span>
                     ))}
                   </div>
-                  {(p.links.live || p.links.github) && (
-                    <div className="mt-6 flex gap-3">
+                  {(p.links.live || p.links.github || p.caseStudy) && (
+                    <div className="mt-6 flex gap-4">
+                      {p.caseStudy && (
+                        <Link
+                          href={p.caseStudy}
+                          data-mag
+                          className="text-sm font-medium text-accent hover:underline"
+                        >Read the case study →</Link>
+                      )}
                       {p.links.live && (
                         <a
                           href={p.links.live}
@@ -83,7 +91,18 @@ export default function ProjectsPage() {
                     </div>
                   )}
                 </div>
-                <Gallery media={p.media} />
+                <div className="lg:sticky lg:top-28">
+                  {p.media.length > 0 ? (
+                    <Gallery media={p.media} />
+                  ) : (
+                    <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 rounded-xl border border-panel-border bg-[radial-gradient(ellipse_at_top_left,rgba(245,158,11,0.10),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(34,211,238,0.08),transparent_55%)]">
+                      <span className="font-serif text-3xl italic text-ink-dim/80">{p.title.split(" ")[0]}</span>
+                      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
+                        {p.wip ? "In development · demo coming soon" : "Screenshots coming soon"}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </TiltCard>
             </div>

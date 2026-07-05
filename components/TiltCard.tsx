@@ -48,7 +48,7 @@ export default function TiltCard({
         className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           background:
-            "radial-gradient(400px circle at var(--cx,50%) var(--cy,50%), rgba(124,92,255,0.12), transparent 40%)",
+            "radial-gradient(400px circle at var(--cx,50%) var(--cy,50%), rgba(245,158,11,0.10), transparent 40%)",
         }}
       />
       {children}

@@ -100,10 +100,10 @@ export default function JourneyPage() {
                   <span className="text-accent-2">{job.company}</span>
                 </div>
                 <p className="mb-6 max-w-2xl text-[15px] text-ink-dim">{job.summary}</p>
-                <ul className="grid gap-5">
+                <ul className="grid max-w-3xl gap-3.5">
                   {job.points.map((p, j) => (
-                    <li key={j} className="relative pl-6 text-[16px] leading-loose text-ink-dim">
-                      <span className="absolute left-0 top-[6px] text-accent">▹</span>
+                    <li key={j} className="relative pl-6 text-[15px] leading-relaxed text-ink-dim">
+                      <span className="absolute left-0 top-[4px] text-accent">▹</span>
                       <span className="block"><HL text={p} /></span>
                     </li>
                   ))}

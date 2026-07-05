@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import Magnetic from "@/components/Magnetic";
 import { HL } from "@/lib/highlight";
@@ -35,14 +36,14 @@ export default function Home() {
           </div>
         </Reveal>
         <Reveal delay={0.05}>
-          <h1 className="mb-7 font-serif text-[clamp(32px,8vw,92px)] font-normal leading-[1.02] tracking-tight">
+          <h1 className="mb-7 font-serif text-[clamp(32px,7vw,80px)] font-normal leading-[1.05] tracking-tight">
             {profile.name}
             <br />
             <span className="grad-text italic">{profile.tagline}</span>
           </h1>
         </Reveal>
         <Reveal delay={0.1}>
-          <p className="mb-10 max-w-2xl text-[clamp(17px,2.2vw,21px)] text-ink-dim">
+          <p className="mb-9 max-w-2xl text-[clamp(16px,2vw,19px)] text-ink-dim">
             {profile.intro}
           </p>
         </Reveal>
@@ -64,7 +65,7 @@ export default function Home() {
           </div>
         </Reveal>
         <Reveal delay={0.2}>
-          <div className="mt-16 overflow-hidden border-y border-panel-border py-4">
+          <div className="mt-14 overflow-hidden border-y border-panel-border py-4">
             <div className="flex w-max animate-scroll-x gap-12">
               {[...marquee, ...marquee].map((m, i) => (
                 <span key={i} className="whitespace-nowrap font-mono text-[13px] text-ink-faint">
@@ -81,10 +82,21 @@ export default function Home() {
         <Reveal><Eyebrow>Experience</Eyebrow></Reveal>
         <Reveal><SectionHeading title="Where I've shipped." sub="Two companies, both times the only frontend engineer, both times the work went to production and converted customers." /></Reveal>
 
+        <Reveal>
+          <div className="mb-14 grid grid-cols-2 gap-5 sm:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label}>
+                <div className="font-serif text-[clamp(34px,5vw,52px)] leading-none grad-text">{s.num}</div>
+                <div className="mt-2.5 text-[13px] text-ink-dim">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
         <div className="grid gap-5">
           {journey.map((job, i) => (
             <Reveal key={job.company} delay={i * 0.05}>
-              <TiltCard className="p-9 sm:p-10">
+              <TiltCard className="p-8 sm:p-9">
                 <div className="mb-2 flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <div className="text-xl font-semibold tracking-tight">{job.role}</div>
@@ -99,14 +111,27 @@ export default function Home() {
                     {job.period}
                   </div>
                 </div>
-                <ul className="mt-6 grid gap-5">
-                  {job.points.map((p, j) => (
-                    <li key={j} className="relative pl-6 text-[16px] leading-loose text-ink-dim">
-                      <span className="absolute left-0 top-[6px] text-accent">▹</span>
+                <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-ink-dim">{job.summary}</p>
+                <ul className="mt-5 grid gap-3">
+                  {job.topPoints.map((p, j) => (
+                    <li key={j} className="relative pl-6 text-[15px] leading-relaxed text-ink-dim">
+                      <span className="absolute left-0 top-[3px] text-accent">▹</span>
                       <span className="block"><HL text={p} /></span>
                     </li>
                   ))}
                 </ul>
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex flex-wrap gap-1.5">
+                    {job.stack.slice(0, 7).map((t) => (
+                      <span key={t} className="rounded-md bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-ink-faint">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <Link href="/journey" data-mag className="whitespace-nowrap text-sm text-accent-2 hover:underline">
+                    Full story →
+                  </Link>
+                </div>
               </TiltCard>
             </Reveal>
           ))}
@@ -127,25 +152,46 @@ export default function Home() {
           </div>
         </Reveal>
         <div className="grid gap-5 sm:grid-cols-2">
-          {featured.map((p, i) => (
+          {featured.map((p, i) => {
+            const cover = p.media.find((m) => m.type === "image");
+            return (
             <Reveal key={p.slug} delay={i * 0.05}>
               <Link href={`/projects#${p.slug}`} className="block h-full">
-                <TiltCard className="flex h-full flex-col p-7 transition-colors hover:border-accent/40">
-                  <div className="mb-4 font-mono text-xs text-accent">{p.year}</div>
-                  <h3 className="mb-2.5 text-lg font-semibold tracking-tight">{p.title}</h3>
-                  <p className="text-sm leading-relaxed text-ink-dim">{p.blurb}</p>
-                  <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
-                    {p.stack.slice(0, 4).map((t) => (
-                      <span key={t} className="rounded-md bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-ink-faint">
-                        {t}
-                      </span>
-                    ))}
+                <TiltCard className="flex h-full flex-col transition-colors hover:border-accent/40">
+                  {cover ? (
+                    <div className="relative aspect-[16/9] w-full border-b border-panel-border">
+                      <Image
+                        src={cover.src}
+                        alt={cover.caption || p.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                        className="object-cover object-top"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-bg/60 to-transparent" />
+                    </div>
+                  ) : (
+                    <div className="relative flex aspect-[16/9] w-full items-center justify-center border-b border-panel-border bg-[radial-gradient(ellipse_at_top_left,rgba(245,158,11,0.12),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(34,211,238,0.10),transparent_55%)]">
+                      <span className="font-serif text-3xl italic text-ink-dim/80">{p.title.split(" ")[0]}</span>
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col p-7">
+                    <div className="mb-3 font-mono text-xs text-accent">{p.year}</div>
+                    <h3 className="mb-2.5 text-lg font-semibold tracking-tight">{p.title}</h3>
+                    <p className="text-sm leading-relaxed text-ink-dim">{p.blurb}</p>
+                    <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                      {p.stack.slice(0, 4).map((t) => (
+                        <span key={t} className="rounded-md bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-ink-faint">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-4 text-xs text-accent-2">View details →</div>
                   </div>
-                  <div className="mt-4 text-xs text-accent-2">View details →</div>
                 </TiltCard>
               </Link>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -153,17 +199,6 @@ export default function Home() {
       <section className="py-28">
         <Reveal><Eyebrow>Toolkit</Eyebrow></Reveal>
         <Reveal><SectionHeading title="What I work with." /></Reveal>
-
-        <Reveal>
-          <div className="mb-14 grid grid-cols-2 gap-5 sm:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <div className="font-serif text-[clamp(34px,5vw,52px)] leading-none grad-text">{s.num}</div>
-                <div className="mt-2.5 text-[13px] text-ink-dim">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </Reveal>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {skills.map((s, i) => (

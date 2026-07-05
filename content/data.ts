@@ -7,7 +7,7 @@ export const profile = {
   name: "Shivam Govind Rao",
   initials: "Shivam",
   role: "Software Development Engineer",
-  tagline: "software development engineer · frontend-rooted · AI-powered products.",
+  tagline: "builds AI products end-to-end, with frontend craft at the core.",
   // Drop your photo at /public/images/avatar.jpg (square works best)
   avatar: "/images/avatar.jpg",
   location: "Gurugram, India",
@@ -51,6 +51,13 @@ export const journey = [
     chapter: "The healthcare era",
     summary:
       "Took FAXFlo from a company pivot to its first paying US clinic in production. Owned the entire stack — React frontend, Node.js backend, AWS cloud pipeline, multi-model AI, Voice-AI scheduling, RPA automation, and analytics.",
+    // Short versions shown on the home page — full `points` live on /journey
+    topPoints: [
+      "Built the complete **React 19** clinical platform solo — document inbox, PDF viewer, scheduling, analytics",
+      "**40+ endpoint** Node.js API and an AWS pipeline processing **1,000+ faxes daily** at 99%+ uptime",
+      "Multi-model AI classification at **~95% accuracy**, plus Voice-AI calls that cut manual outreach ~70%",
+      "Went from company pivot to **first paying US clinic** in production",
+    ],
     points: [
       "**Frontend** — Built the complete **React 19** clinical platform solo: document inbox with dual-view **PDF.js** viewer, eFax module, appointment scheduling and confirmation flows, and multi-clinic analytics dashboard — per-clinic feature flags, RBAC routing, and route-based code splitting to keep the platform lean as it scaled.",
       "**Backend API** — Built the production **Node.js · Express · PostgreSQL** backend from scratch: **40+ REST endpoints**, JWT + RBAC auth, input validation, Swagger docs, and **Redis-backed BullMQ** job queues for async processing.",
@@ -73,6 +80,12 @@ export const journey = [
     chapter: "The voice-AI era",
     summary:
       "The only frontend engineer on VoiceGenie, a generative-AI voice sales platform. Built the dashboard and marketing site that closed the first enterprise customers.",
+    topPoints: [
+      "Sole frontend engineer — designed and built the **entire platform** and marketing site from 0",
+      "Campaign builder, **ElevenLabs** voice tuning, and post-call analytics with AI entity extraction",
+      "CRM integrations (**HubSpot · GoHighLevel · Cal.com**) with auto calendar booking on successful calls",
+      "**0 → $10K MRR in 11 months** · 30–50% faster page loads",
+    ],
     points: [
       "**Product ownership** — Designed and built the **entire VoiceGenie platform from 0** as the **sole frontend engineer**: customer-facing dashboard, marketing site, and internal tooling — all shipped solo.",
       "**Campaign builder** — Built the full campaign creation flow: configure AI voice scripts, select and segment contact lists, set call schedules, define call objectives (**lead generation, sales, appointment setting**), and monitor live campaign status per contact in real time.",
@@ -114,6 +127,7 @@ export type Project = {
   role: string;
   featured: boolean;
   wip?: boolean;
+  caseStudy?: string; // internal deep-dive page, e.g. "/projects/motionstudio"
   media: Media[];
   highlights: string[];
   stack: string[];
@@ -129,10 +143,12 @@ export const projects: Project[] = [
     role: "Software Development Engineer · Full-Stack",
     featured: true,
     media: [
+      { type: "video", src: "/demos/faxflo-demo.mp4", caption: "FAXFlo product walkthrough — official demo from diagna.ai" },
       { type: "image", src: "/images/Faxflo_main_dashboard.png", caption: "Main clinical dashboard" },
       { type: "image", src: "/images/Faxfllo-appointment_dashboad.png", caption: "Appointment scheduling dashboard" },
       { type: "image", src: "/images/Faxflo_analytics_dashboard-1.png", caption: "Analytics dashboard — document & EMR metrics" },
       { type: "image", src: "/images/Faxflo_analytics_dashboard-2.png", caption: "Analytics dashboard — appointment & AI status" },
+      { type: "image", src: "/images/First_page.avif", caption: "diagna.ai — public site" },
     ],
     highlights: [
       "React 19 frontend: clinical inbox, eFax module, scheduling views, analytics dashboard — per-clinic feature flags, RBAC routing, lazy-loaded routes",
@@ -146,7 +162,7 @@ export const projects: Project[] = [
       "HIPAA-compliant PostHog analytics dashboard — the demo that closed the first paying US clinic",
     ],
     stack: ["React 19", "TypeScript", "Zustand", "Node.js", "Express", "PostgreSQL", "Redis", "BullMQ", "AWS Bedrock", "Claude", "GPT-4o", "Textract", "VAPI", "ElevenLabs", "Robocorp", "Python", "FastAPI", "Prisma", "PostHog"],
-    links: { live: "", github: "" },
+    links: { live: "https://www.diagna.ai", github: "" },
   },
   {
     slug: "voicegenie",
@@ -156,8 +172,8 @@ export const projects: Project[] = [
     role: "Frontend Developer",
     featured: true,
     media: [
-      // { type: "image", src: "/demos/voicegenie-dashboard.png", caption: "Campaign dashboard" },
-      // { type: "video", src: "/demos/voicegenie-demo.mp4" },
+      { type: "video", src: "/demos/voicegenie-demo.mp4", caption: "Official VoiceGenie demo (voicegenie.ai) — UI designed & built by me" },
+      { type: "image", src: "/images/voicegenie-cover.jpg", caption: "AI assistant script builder — VoiceGenie dashboard" },
     ],
     highlights: [
       "Sole frontend engineer — designed and built the entire platform, dashboard, and marketing site from 0",
@@ -170,7 +186,7 @@ export const projects: Project[] = [
       "0 → $10K MRR in 11 months · 30–50% faster page loads via code splitting and caching",
     ],
     stack: ["React", "Next.js", "TypeScript", "Ant Design", "Tailwind", "Redux", "ElevenLabs", "HubSpot", "GoHighLevel", "Cal.com"],
-    links: { live: "", github: "" },
+    links: { live: "https://voicegenie.ai", github: "" },
   },
   {
     slug: "motionstudio",
@@ -180,7 +196,10 @@ export const projects: Project[] = [
     role: "Personal project",
     featured: false,
     wip: true,
-    media: [],
+    caseStudy: "/projects/motionstudio",
+    media: [
+      { type: "image", src: "/images/MotionStudio.png", caption: "The editor today — canvas, properties panel, frame-accurate timeline" },
+    ],
     highlights: [
       "Early stage — timeline engine actively in progress",
       "Programmatic video generation in the browser via Remotion",
