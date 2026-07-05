@@ -21,6 +21,7 @@ import {
 
 export default function Home() {
   const featured = projects.filter((p) => p.featured);
+  const wip = projects.find((p) => p.wip);
 
   return (
     <>
@@ -193,6 +194,45 @@ export default function Home() {
             );
           })}
         </div>
+
+        {/* BUILDING NOW */}
+        {wip && (
+          <Reveal>
+            <Link href={wip.caseStudy || `/projects#${wip.slug}`} className="mt-5 block">
+              <TiltCard className="grid overflow-hidden transition-colors hover:border-accent/40 sm:grid-cols-[1fr_1.1fr]" max={3}>
+                <div className="flex flex-col justify-center p-7 sm:p-8">
+                  <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-xs">
+                    <span className="text-accent">{wip.year}</span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-0.5 text-[11px] font-medium text-amber-400">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
+                      Building now
+                    </span>
+                  </div>
+                  <h3 className="mb-2.5 text-lg font-semibold tracking-tight">{wip.title}</h3>
+                  <p className="text-sm leading-relaxed text-ink-dim">{wip.blurb}</p>
+                  <div className="mt-4 text-xs text-accent-2">
+                    {wip.caseStudy ? "Read the case study →" : "View details →"}
+                  </div>
+                </div>
+                {(() => {
+                  const wipCover = wip.media.find((m) => m.type === "image");
+                  return wipCover ? (
+                    <div className="relative min-h-[220px] border-t border-panel-border sm:border-l sm:border-t-0">
+                      <Image
+                        src={wipCover.src}
+                        alt={wipCover.caption || wip.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 55vw"
+                        className="object-cover object-left-top"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-bg/40 to-transparent" />
+                    </div>
+                  ) : null;
+                })()}
+              </TiltCard>
+            </Link>
+          </Reveal>
+        )}
       </section>
 
       {/* SKILLS */}
