@@ -167,3 +167,81 @@
 | AWS pipeline uptime | 99%+ |
 | Backend endpoints | 40+ |
 | SMS providers integrated | 3 (Twilio, Telnyx, Vonage) |
+
+---
+
+## Job Application Answer: Most Impactful Backend Project
+
+> Written for a job application form question — plain, human tone. Structured as
+> Problem → Approach → Solution → Implementation → Impact → Tech & Skills.
+
+**Problem**
+At my last job (Diagna AI, building a product called FAXFlo), clinics received hundreds of
+medical faxes and documents every day — referrals, lab reports, prior authorizations, etc.
+Someone on staff had to manually open each fax, read it, and type the patient details into
+the EHR system. It was slow, error-prone, and didn't scale as we onboarded more clinics. My
+job was to build the backend that could do this automatically, all the way through to the
+data actually landing in the EHR.
+
+**Approach**
+I broke it down into four parts: get the raw fax into a readable format, turn that into
+structured patient data using AI, reliably queue and process all of this in the background at
+scale, and then actually get the structured data written into the clinic's EHR system — which
+turned out to be its own hard problem, since not every EHR has a usable API. Since faxes
+arrive at random times in inconsistent formats, AI output isn't always reliable, and the EHR
+write-back had its own failure modes, I knew error-handling and retries had to be designed in
+everywhere, not added as an afterthought.
+
+**Solution**
+I built an end-to-end pipeline: incoming faxes get pulled from S3, run through AWS Textract
+for OCR to extract the raw text, then passed through an AI layer (AWS Bedrock running Claude,
+with GPT-4o as a cross-check) that converts that raw text into structured fields — patient
+name, DOB, referral info, and a document category out of 40+ possible types. Low-confidence
+extractions get flagged for a quick human review instead of going straight into the patient's
+chart.
+
+The last mile — actually getting that structured data into the EHR — was the trickiest part,
+because the clinic's EHR system (MDLand) doesn't expose a usable API for writing data. So I
+built an integration layer that hands off the structured result to an RPA (robotic process
+automation) service I also built: it logs into the EHR (handling OTP/2FA), navigates the UI,
+and fills in the patient data automatically, essentially replacing what a staff member used to
+type in by hand. That job gets queued, and my backend polls for its completion status and
+syncs the result back, so the whole thing — fax in, EHR filled out — happens with no manual
+step.
+
+**Implementation**
+For the async processing, I used SQS in front of BullMQ (backed by Redis) so every document
+and every EHR-write job runs as a background job instead of a live request. Each job gets a
+retry budget — a few attempts with backoff before we give up on it. If it still fails after
+retries, it goes to a Dead Letter Queue instead of just vanishing, which triggers an SNS alert
+and a Slack notification, so someone finds out within minutes and can inspect the failure. On
+top of that, I built a scheduled auto-retry mechanism that sweeps the DLQ every few hours (on
+a cron-style interval) and automatically re-attempts the stuck jobs — a lot of DLQ failures
+are transient (a token expired, the EHR was briefly unreachable, Textract rate-limited us), so
+by the time the retry sweep runs, the job often just succeeds on its own. That meant most DLQ
+entries resolved themselves without anyone touching them, and manual intervention was only
+needed for the smaller set of jobs that kept failing after the scheduled retries too. Batches
+were also built to support partial success, so if 8 out of 10 documents in a batch process
+cleanly, they go through immediately instead of getting stuck waiting on the 2 that failed. On
+the EHR side specifically, I used Redis to cache the RPA service's auth tokens (with
+auto-refresh) so we weren't re-authenticating on every single job, and built a status-polling
+service that checks in on the RPA job until it reports success or failure.
+
+I also built a patient-matching algorithm to link extracted data to existing records without
+creating duplicate charts — handling messy real-world stuff like middle-name variants — since
+a bad match at this stage means the EHR write-back lands on the wrong patient.
+
+**Impact**
+The system processes 1,000+ medical faxes a day at over 99% uptime, with around 95% accuracy
+on document classification across 40+ categories. It removed manual data entry end-to-end —
+not just extracting the data, but actually getting it filled into the EHR — and the DLQ +
+scheduled auto-retry setup meant most failures resolved themselves within hours with zero
+manual intervention, with alerting catching only the genuine edge cases that needed a human
+look.
+
+**Tech & skills used:**
+Node.js, TypeScript, Express, AWS Bedrock (Claude), AWS Textract, GPT-4o, SQS, BullMQ, Redis,
+SNS, Python (Robocorp, Playwright for the RPA layer), FastAPI, PostgreSQL, Prisma, Medplum
+EHR, Docker. Skills: distributed async job architecture with retry/DLQ handling and scheduled
+self-healing jobs, LLM integration and prompt reliability, browser automation/RPA, error
+handling and observability, and data-matching logic.
