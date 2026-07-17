@@ -3,6 +3,7 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import Gallery from "@/components/Gallery";
+import ExportDiagram from "@/components/ExportDiagram";
 import { Eyebrow } from "@/components/Section";
 import { HL } from "@/lib/highlight";
 import { motionstudio as ms } from "@/content/motionstudio";
@@ -10,7 +11,7 @@ import { motionstudio as ms } from "@/content/motionstudio";
 export const metadata: Metadata = {
   title: "MotionStudio — a Remotion video editor, built in public",
   description:
-    "Case study of MotionStudio: a browser-based programmatic video editor built on Remotion. Architecture, engineering decisions, and the bugs along the way.",
+    "Case study of MotionStudio: a browser-based programmatic video editor built on Remotion, with dual export paths (browser WebCodecs + AWS Lambda cloud render) and full auth. Architecture, engineering decisions, and the bugs along the way.",
   alternates: { canonical: "https://www.shivamgovindrao.com/projects/motionstudio" },
 };
 
@@ -95,6 +96,62 @@ export default function MotionStudioPage() {
               <div className="rounded-2xl border border-panel-border bg-panel p-5">
                 <p className="text-[15px] leading-relaxed text-ink-dim"><HL text={p} /></p>
               </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* EXPORT */}
+      <section className="mb-24">
+        <Reveal><Eyebrow>Export</Eyebrow></Reveal>
+        <Reveal>
+          <h2 className="mb-4 font-serif text-[clamp(28px,4.5vw,44px)] font-normal tracking-tight">
+            {ms.export.heading}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <p className="mb-8 max-w-2xl text-[15px] leading-relaxed text-ink-dim">{ms.export.story}</p>
+        </Reveal>
+        <div className="grid gap-5 sm:grid-cols-2">
+          {ms.export.paths.map((p, i) => (
+            <Reveal key={p.name} delay={i * 0.05}>
+              <TiltCard className="h-full p-6 sm:p-7" max={2}>
+                <h3 className="mb-1 text-lg font-semibold tracking-tight">{p.name}</h3>
+                <div className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-2">{p.subtitle}</div>
+                <p className="mb-3 text-sm leading-relaxed text-ink-dim">{p.how}</p>
+                <p className="mb-3 text-sm leading-relaxed text-ink-dim">{p.why}</p>
+                <p className="text-[13px] leading-relaxed text-ink-faint"><span className="text-amber-400">Limits: </span>{p.limits}</p>
+              </TiltCard>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.1}>
+          <ExportDiagram />
+        </Reveal>
+      </section>
+
+      {/* AUTH */}
+      <section className="mb-24">
+        <Reveal><Eyebrow>Auth & infrastructure</Eyebrow></Reveal>
+        <Reveal>
+          <h2 className="mb-4 font-serif text-[clamp(28px,4.5vw,44px)] font-normal tracking-tight">
+            {ms.auth.heading}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <p className="mb-8 max-w-2xl text-[15px] leading-relaxed text-ink-dim">{ms.auth.body}</p>
+        </Reveal>
+        <div className="grid gap-5">
+          {[
+            { title: "Preventing guest abuse", body: ms.auth.guestAbuse },
+            { title: "The API layer", body: ms.auth.apiLayer },
+            { title: "Account isolation", body: ms.auth.accountIsolation },
+          ].map((s, i) => (
+            <Reveal key={s.title} delay={i * 0.03}>
+              <TiltCard className="p-6 sm:p-7" max={2}>
+                <h3 className="mb-3 text-lg font-semibold tracking-tight">{s.title}</h3>
+                <p className="max-w-3xl text-[15px] leading-relaxed text-ink-dim">{s.body}</p>
+              </TiltCard>
             </Reveal>
           ))}
         </div>

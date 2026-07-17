@@ -191,7 +191,7 @@ export const projects: Project[] = [
   {
     slug: "motionstudio",
     title: "MotionStudio",
-    blurb: "A browser-based video editor built on Remotion — early stage, timeline engine in progress. A deep exploration of programmatic video generation and creative tooling.",
+    blurb: "A browser-based video editor built on Remotion — real auth, a free in-browser export path, and a cloud render pipeline on AWS Lambda. A deep exploration of programmatic video generation and creative tooling.",
     year: "2026",
     role: "Personal project",
     featured: false,
@@ -201,12 +201,12 @@ export const projects: Project[] = [
       { type: "image", src: "/images/MotionStudio.png", caption: "The editor today — canvas, properties panel, frame-accurate timeline" },
     ],
     highlights: [
-      "Early stage — timeline engine actively in progress",
-      "Programmatic video generation in the browser via Remotion",
-      "Thinking in frames, keyframes, and composition engines — not just features",
+      "Two export paths — free in-browser (WebCodecs) and cloud render via AWS Lambda",
+      "Full auth system — Google OAuth, email/password, and abuse-resistant guest access",
+      "Production infra: Supabase (auth + quota), Vercel serverless, AWS Lambda",
     ],
-    stack: ["Remotion", "React", "TypeScript", "Tailwind"],
-    links: { live: "", github: "" },
+    stack: ["Remotion", "React", "TypeScript", "Tailwind", "Supabase", "AWS Lambda"],
+    links: { live: "https://motionstudio-six.vercel.app/", github: "https://github.com/BLAZE7SHADOW/MotionStudio" },
   },
 ];
 
