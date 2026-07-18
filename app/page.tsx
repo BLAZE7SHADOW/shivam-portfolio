@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
@@ -20,9 +19,6 @@ import {
   skills,
 } from "@/content/data";
 
-export const metadata: Metadata = {
-  title: "Home",
-};
 
 export default function Home() {
   const featured = projects.filter((p) => p.featured);
