@@ -1,0 +1,147 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{parskip}
+\usepackage{hologo}
+
+%other packages for formatting
+\RequirePackage{color}
+\RequirePackage{graphicx}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[scale=0.92, top=.4in, bottom=.4in]{geometry}
+
+%tabularx environment
+\usepackage{tabularx}
+
+%for lists within experience section
+\usepackage{enumitem}
+
+% centered version of 'X' col. type
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+
+%to prevent spillover of tabular into next pages
+\usepackage{supertabular}
+\usepackage{tabularx}
+\newlength{\fullcollw}
+\setlength{\fullcollw}{0.42\textwidth}
+
+%custom \section
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{multirow}
+
+%CV Sections
+\titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{5pt}{5pt}
+
+%Setup hyperref package, and colours for links
+\usepackage[unicode, draft=false]{hyperref}
+\definecolor{linkcolour}{rgb}{0,0.2,0.6}
+\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour}
+
+% Use Helvetica
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+% non-numbered pages
+\pagestyle{empty}
+
+\begin{tabularx}{\linewidth}{@{} C @{}}
+\Huge{\textbf{SHIVAM GOVIND RAO}} \\[6pt]
+\normalsize{\href{mailto:ishivamgovindrao@gmail.com}{ishivamgovindrao@gmail.com} $|$ +91-6386220277 $|$ \href{https://www.shivamgovindrao.com}{www.shivamgovindrao.com}} \\
+\normalsize{\href{https://github.com/BLAZE7SHADOW}{github.com/BLAZE7SHADOW} $|$ \href{https://www.linkedin.com/in/shivam-govind-rao-138881157/}{linkedin.com/in/shivam-govind-rao-138881157} $|$ Gurugram, India}
+\end{tabularx}
+
+\vspace{3pt}
+
+\section{SUMMARY}
+
+Backend-focused engineer with 2.5+ years designing and operating production distributed systems --- async job queues, multi-model AI inference pipelines, and browser-automation integrations processing 1,000+ transactions daily at 99\%+ uptime. Owned services end-to-end: API design, queue architecture, failure recovery, and observability, as the sole backend engineer on the team, with working fluency in the React frontends those services power.
+
+\section{EXPERIENCE}
+
+\textbf{Software Development Engineer} \hfill \textit{Jan 2025 -- April 2026}\\
+\textbf{Diagna AI (FAXFlo)} $|$ Gurugram, India \hfill \textit{First Engineer $\cdot$ Backend \& Systems Owner}
+
+\vspace{2pt}
+\begin{itemize}[leftmargin=0.15in, itemsep=1pt]
+    \small{\item
+    Architected a \textbf{distributed AWS document pipeline} (S3 $\cdot$ SQS $\cdot$ Textract $\cdot$ SNS $\cdot$ Bedrock) processing \textbf{1,000+ medical documents daily} at 99\%+ uptime, with a \textbf{dead-letter queue} and idempotency keys for exactly-once processing guarantees; designed a \textbf{scheduled auto-retry sweep} (every $\sim$5 hours) that re-drives stuck DLQ jobs automatically, so most transient failures self-heal without manual intervention.
+    }
+
+    \small{\item
+    Built the production \textbf{Node.js/Express/PostgreSQL} backend --- \textbf{40+ REST endpoints}, JWT/RBAC auth, input validation, \textbf{Redis-backed BullMQ} queues, and Prisma ORM --- documented with \textbf{Swagger/OpenAPI} and covered by a \textbf{Jest + Supertest} integration-test suite.
+    }
+
+    \small{\item
+    Integrated \textbf{Claude (Sonnet), GPT-4o, and AWS Bedrock} for multi-model document classification at \textbf{$\sim$95\% accuracy across 40+ categories}, extracting structured patient data with custom prompting, confidence scoring, and retry logic for malformed model outputs.
+    }
+
+    \small{\item
+    Engineered a \textbf{Python RPA automation suite} (Robocorp $\cdot$ Playwright $\cdot$ FastAPI $\cdot$ Redis RQ) to write structured data into an EHR with no usable API --- OTP/2FA login, patient search with disambiguation, and document upload via a deeply nested iframe UI, treated as a systems-integration problem rather than a scripting one.
+    }
+
+    \small{\item
+    Built an \textbf{AI SMS/Voice orchestration layer} (Twilio, Telnyx, Vonage, VAPI, ElevenLabs) for automated appointment scheduling and follow-up, cutting manual outreach by $\sim$\textbf{70\%}; instrumented a \textbf{HIPAA-compliant PostHog analytics dashboard} for pipeline and EMR-sync observability.
+    }
+
+    \small{\item
+    Also shipped the \textbf{React 19 frontend} consuming these APIs (110+ components, $\sim$60\% bundle reduction) when the team had no dedicated frontend engineer --- full API-to-UI ownership when needed.
+    }
+\end{itemize}
+
+\vspace{3pt}
+
+\textbf{Frontend Developer} \hfill \textit{Dec 2023 -- Jan 2025}\\
+\textbf{Oriserve (\href{https://voicegenie.ai/}{VoiceGenie.ai})} $|$ Noida, India
+
+\vspace{2pt}
+\begin{itemize}[leftmargin=0.15in, itemsep=1pt]
+    \small{\item
+    Sole frontend engineer --- grew \textbf{VoiceGenie from 0 to \$10K MRR in 11 months}; integrated \textbf{HubSpot CRM, ElevenLabs, GoHighLevel, and Cal.com} into a single workflow with a live per-contact variable-resolution system for AI voice scripts.
+    }
+
+    \small{\item
+    Cut page load times \textbf{30--50\%} through code-splitting, lazy loading, and intelligent caching. \textbf{Stack:} React, Redux, TypeScript, Material UI, Netlify.
+    }
+\end{itemize}
+
+\vspace{3pt}
+
+\section{PROJECTS}
+
+\textbf{MotionStudio} \hfill \href{https://motionstudio-six.vercel.app/}{Live} $|$ \href{https://github.com/BLAZE7SHADOW/MotionStudio}{GitHub}\\
+\textit{Personal project, 2026}
+
+\vspace{2pt}
+\begin{itemize}[leftmargin=0.15in, itemsep=1pt]
+    \small{\item
+    Browser-based video editor (Remotion, React 19, TypeScript strict). Designed around a \textbf{single-mutation-point / aggregate-root} state architecture --- one \texttt{Project} object owns all data, mutated through one function --- so undo/redo, autosave, and WYSIWYG preview fell out of the data model instead of being built per-feature. \textbf{Stack:} Remotion, React, TypeScript, Zustand, Vite.
+    }
+\end{itemize}
+
+\vspace{3pt}
+
+\section{SKILLS}
+
+\textbf{Backend:} Node.js, Express.js, FastAPI, PostgreSQL, Prisma, Redis, BullMQ, JWT Auth, RBAC, Swagger/OpenAPI
+
+\textbf{Cloud \& Infra:} AWS (S3, SQS, SNS, Bedrock, Textract, Lambda, EC2), Docker, CI/CD, Git
+
+\textbf{Distributed Systems:} Async Job Queues, Dead-Letter Queues \& Retry Design, Idempotency, Rate Limiting, Observability (PostHog)
+
+\textbf{AI \& Automation:} Claude, GPT-4o, AWS Bedrock, Prompt Engineering, RPA (Robocorp, Playwright), VAPI, ElevenLabs, Twilio
+
+\textbf{Languages:} Python, TypeScript, JavaScript, SQL, C/C++
+
+\textbf{Frontend:} React 19, Next.js, Redux, Zustand, Tailwind CSS, PDF.js
+
+\vspace{3pt}
+
+\section{EDUCATION}
+
+\textbf{B.Tech in Computer Science \& Engineering} \hfill \textit{2019 - 2023}\\
+IET, Dr. Ram Manohar Lohia Awadh University, Ayodhya \hfill \textit{81\%}
+
+\end{document}

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
@@ -18,6 +19,10 @@ import {
   projects,
   skills,
 } from "@/content/data";
+
+export const metadata: Metadata = {
+  title: "Home",
+};
 
 export default function Home() {
   const featured = projects.filter((p) => p.featured);
@@ -157,8 +162,8 @@ export default function Home() {
             const cover = p.media.find((m) => m.type === "image");
             return (
             <Reveal key={p.slug} delay={i * 0.05}>
-              <Link href={`/projects#${p.slug}`} className="block h-full">
-                <TiltCard className="flex h-full flex-col transition-colors hover:border-accent/40">
+              <TiltCard className="flex h-full flex-col transition-colors hover:border-accent/40">
+                <Link href={`/projects#${p.slug}`} className="block">
                   {cover ? (
                     <div className="relative aspect-[16/9] w-full border-b border-panel-border">
                       <Image
@@ -175,21 +180,45 @@ export default function Home() {
                       <span className="font-serif text-3xl italic text-ink-dim/80">{p.title.split(" ")[0]}</span>
                     </div>
                   )}
-                  <div className="flex flex-1 flex-col p-7">
-                    <div className="mb-3 font-mono text-xs text-accent">{p.year}</div>
+                </Link>
+                <div className="flex flex-1 flex-col p-7">
+                  <div className="mb-3 font-mono text-xs text-accent">{p.year}</div>
+                  <Link href={`/projects#${p.slug}`} className="block">
                     <h3 className="mb-2.5 text-lg font-semibold tracking-tight">{p.title}</h3>
                     <p className="text-sm leading-relaxed text-ink-dim">{p.blurb}</p>
-                    <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
-                      {p.stack.slice(0, 4).map((t) => (
-                        <span key={t} className="rounded-md bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-ink-faint">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="mt-4 text-xs text-accent-2">View details →</div>
+                  </Link>
+                  <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                    {p.stack.slice(0, 4).map((t) => (
+                      <span key={t} className="rounded-md bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-ink-faint">
+                        {t}
+                      </span>
+                    ))}
                   </div>
-                </TiltCard>
-              </Link>
+                  <div className="mt-4 flex flex-wrap items-center gap-4 text-xs">
+                    <Link href={`/projects#${p.slug}`} data-mag className="text-accent-2 hover:underline">
+                      View details →
+                    </Link>
+                    {p.links.live && (
+                      <a
+                        href={p.links.live}
+                        target="_blank"
+                        rel="noopener"
+                        data-mag
+                        className="text-ink-dim hover:text-ink"
+                      >Live →</a>
+                    )}
+                    {p.links.github && (
+                      <a
+                        href={p.links.github}
+                        target="_blank"
+                        rel="noopener"
+                        data-mag
+                        className="text-ink-dim hover:text-ink"
+                      >GitHub →</a>
+                    )}
+                  </div>
+                </div>
+              </TiltCard>
             </Reveal>
             );
           })}
@@ -198,39 +227,62 @@ export default function Home() {
         {/* BUILDING NOW */}
         {wip && (
           <Reveal>
-            <Link href={wip.caseStudy || `/projects#${wip.slug}`} className="mt-5 block">
-              <TiltCard className="grid overflow-hidden transition-colors hover:border-accent/40 sm:grid-cols-[1fr_1.1fr]" max={3}>
-                <div className="flex flex-col justify-center p-7 sm:p-8">
-                  <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-xs">
-                    <span className="text-accent">{wip.year}</span>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-0.5 text-[11px] font-medium text-amber-400">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
-                      Building now
-                    </span>
-                  </div>
+            <TiltCard className="mt-5 grid overflow-hidden transition-colors hover:border-accent/40 sm:grid-cols-[1fr_1.1fr]" max={3}>
+              <div className="flex flex-col justify-center p-7 sm:p-8">
+                <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-xs">
+                  <span className="text-accent">{wip.year}</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-0.5 text-[11px] font-medium text-amber-400">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
+                    Building now
+                  </span>
+                </div>
+                <Link href={wip.caseStudy || `/projects#${wip.slug}`} className="block">
                   <h3 className="mb-2.5 text-lg font-semibold tracking-tight">{wip.title}</h3>
                   <p className="text-sm leading-relaxed text-ink-dim">{wip.blurb}</p>
-                  <div className="mt-4 text-xs text-accent-2">
+                </Link>
+                <div className="mt-4 flex flex-wrap items-center gap-4 text-xs">
+                  <Link href={wip.caseStudy || `/projects#${wip.slug}`} data-mag className="text-accent-2 hover:underline">
                     {wip.caseStudy ? "Read the case study →" : "View details →"}
-                  </div>
+                  </Link>
+                  {wip.links.live && (
+                    <a
+                      href={wip.links.live}
+                      target="_blank"
+                      rel="noopener"
+                      data-mag
+                      className="text-ink-dim hover:text-ink"
+                    >Live →</a>
+                  )}
+                  {wip.links.github && (
+                    <a
+                      href={wip.links.github}
+                      target="_blank"
+                      rel="noopener"
+                      data-mag
+                      className="text-ink-dim hover:text-ink"
+                    >GitHub →</a>
+                  )}
                 </div>
-                {(() => {
-                  const wipCover = wip.media.find((m) => m.type === "image");
-                  return wipCover ? (
-                    <div className="relative min-h-[220px] border-t border-panel-border sm:border-l sm:border-t-0">
-                      <Image
-                        src={wipCover.src}
-                        alt={wipCover.caption || wip.title}
-                        fill
-                        sizes="(max-width: 640px) 100vw, 55vw"
-                        className="object-cover object-left-top"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-r from-bg/40 to-transparent" />
-                    </div>
-                  ) : null;
-                })()}
-              </TiltCard>
-            </Link>
+              </div>
+              {(() => {
+                const wipCover = wip.media.find((m) => m.type === "image");
+                return wipCover ? (
+                  <Link
+                    href={wip.caseStudy || `/projects#${wip.slug}`}
+                    className="relative block min-h-[220px] border-t border-panel-border sm:border-l sm:border-t-0"
+                  >
+                    <Image
+                      src={wipCover.src}
+                      alt={wipCover.caption || wip.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 55vw"
+                      className="object-cover object-left-top"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-bg/40 to-transparent" />
+                  </Link>
+                ) : null;
+              })()}
+            </TiltCard>
           </Reveal>
         )}
       </section>

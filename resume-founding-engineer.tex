@@ -1,0 +1,151 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{parskip}
+\usepackage{hologo}
+
+%other packages for formatting
+\RequirePackage{color}
+\RequirePackage{graphicx}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[scale=0.92, top=.4in, bottom=.4in]{geometry}
+
+%tabularx environment
+\usepackage{tabularx}
+
+%for lists within experience section
+\usepackage{enumitem}
+
+% centered version of 'X' col. type
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+
+%to prevent spillover of tabular into next pages
+\usepackage{supertabular}
+\usepackage{tabularx}
+\newlength{\fullcollw}
+\setlength{\fullcollw}{0.42\textwidth}
+
+%custom \section
+\usepackage{titlesec}
+\usepackage{multicol}
+\usepackage{multirow}
+
+%CV Sections
+\titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{5pt}{5pt}
+
+%Setup hyperref package, and colours for links
+\usepackage[unicode, draft=false]{hyperref}
+\definecolor{linkcolour}{rgb}{0,0.2,0.6}
+\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour}
+
+% Use Helvetica
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+% non-numbered pages
+\pagestyle{empty}
+
+\begin{tabularx}{\linewidth}{@{} C @{}}
+\Huge{\textbf{SHIVAM GOVIND RAO}} \\[6pt]
+\normalsize{\href{mailto:ishivamgovindrao@gmail.com}{ishivamgovindrao@gmail.com} $|$ +91-6386220277 $|$ \href{https://www.shivamgovindrao.com}{www.shivamgovindrao.com}} \\
+\normalsize{\href{https://github.com/BLAZE7SHADOW}{github.com/BLAZE7SHADOW} $|$ \href{https://www.linkedin.com/in/shivam-govind-rao-138881157/}{linkedin.com/in/shivam-govind-rao-138881157} $|$ Gurugram, India}
+\end{tabularx}
+
+\vspace{3pt}
+
+\section{SUMMARY}
+
+Founding/first engineer with 2.5+ years taking an early-stage AI product from zero to its first paying customer as the sole engineer on the team. Owned the entire stack end-to-end --- React frontend, Node.js/Python backend, distributed AWS pipeline, multi-model AI inference, and browser-based RPA automation --- with no specialized teams to hand off to. Comfortable with ambiguity, fast iteration, and shipping directly to production; equally comfortable presenting outcomes to investors and clinic stakeholders.
+
+\section{EXPERIENCE}
+
+\textbf{Founding Engineer} \hfill \textit{Jan 2025 -- April 2026}\\
+\textbf{Diagna AI (FAXFlo)} $|$ Gurugram, India \hfill \textit{First Engineer $\cdot$ Sole IC}
+
+\vspace{2pt}
+\begin{itemize}[leftmargin=0.15in, itemsep=1pt]
+    \small{\item
+    \textbf{Full-stack owner from day one}: shipped the entire product solo --- a React 19 frontend (110+ components, $\sim$60\% bundle reduction via code-splitting) \textbf{and} a production Node.js/Express/PostgreSQL backend (40+ REST endpoints, JWT/RBAC auth, Redis-backed BullMQ queues) --- with no dedicated frontend, backend, or DevOps engineer on the team.
+    }
+
+    \small{\item
+    Architected a \textbf{distributed AWS document pipeline} (S3 $\cdot$ SQS $\cdot$ Textract $\cdot$ SNS $\cdot$ Bedrock) processing \textbf{1,000+ medical documents daily} at 99\%+ uptime; designed a dead-letter-queue with a \textbf{scheduled auto-retry sweep} (every $\sim$5 hours) that self-heals stuck jobs so most transient failures resolve without manual intervention.
+    }
+
+    \small{\item
+    Integrated \textbf{Claude (Sonnet), GPT-4o, and AWS Bedrock} for multi-model document classification at \textbf{$\sim$95\% accuracy across 40+ categories}, with custom prompting, confidence scoring, and retry logic for malformed model outputs --- a build-vs-buy call made solo, with no ML team to consult.
+    }
+
+    \small{\item
+    Engineered a \textbf{Python RPA automation suite} (Robocorp $\cdot$ Playwright $\cdot$ FastAPI) to write structured data into an EHR with no usable API --- OTP/2FA login, patient search with disambiguation, and document upload via browser automation; paired with an \textbf{AI SMS/Voice orchestrator} (Twilio, Telnyx, Vonage, VAPI, ElevenLabs) that cut manual outreach by $\sim$\textbf{70\%}.
+    }
+
+    \small{\item
+    Built the \textbf{HIPAA-compliant PostHog analytics dashboard} and personally ran the investor and clinic demos that closed the \textbf{first paying US clinic} --- the founding-engineer work that doesn't show up in a ticket tracker: picking what to build next, and proving it works to the people writing the checks.
+    }
+
+    \small{\item
+    Wrote a custom \textbf{Zustand + Immer} document-editing engine with field-level diff/patch updates and a \textbf{PDF.js} viewer at 300 DPI for multi-page medical fax preview; $\sim$80\% image-size reduction via pipeline-side compression.
+    }
+\end{itemize}
+
+\vspace{3pt}
+
+\textbf{Frontend Developer} \hfill \textit{Dec 2023 -- Jan 2025}\\
+\textbf{Oriserve (\href{https://voicegenie.ai/}{VoiceGenie.ai})} $|$ Noida, India
+
+\vspace{2pt}
+\begin{itemize}[leftmargin=0.15in, itemsep=1pt]
+    \small{\item
+    Sole frontend engineer --- grew \textbf{VoiceGenie from 0 to \$10K MRR in 11 months}; the dashboard and marketing site I shipped directly closed the first enterprise customers.
+    }
+
+    \small{\item
+    Built a \textbf{live variable composer} for AI voice scripts (drop \texttt{@name} / \texttt{@appointment} tokens that resolve per-contact at call time) and integrated \textbf{HubSpot CRM, ElevenLabs, GoHighLevel, and Cal.com} into a single workflow.
+    }
+
+    \small{\item
+    Cut page load times \textbf{30--50\%} through code-splitting, lazy loading, and intelligent caching. \textbf{Stack:} React, Redux, TypeScript, Material UI, Netlify.
+    }
+\end{itemize}
+
+\vspace{3pt}
+
+\section{PROJECTS}
+
+\textbf{MotionStudio} \hfill \href{https://motionstudio-six.vercel.app/}{Live} $|$ \href{https://github.com/BLAZE7SHADOW/MotionStudio}{GitHub}\\
+\textit{Personal project, 2026}
+
+\vspace{2pt}
+\begin{itemize}[leftmargin=0.15in, itemsep=1pt]
+    \small{\item
+    Browser-based video editor (React 19, TypeScript strict, Zustand), built solo from an architectural decision outward: a single-mutation-point / aggregate-root state design that made undo-redo, autosave, and WYSIWYG preview fall out for free instead of being built feature-by-feature. \textbf{Stack:} Remotion, React, TypeScript, Tailwind, Vite.
+    }
+\end{itemize}
+
+\vspace{3pt}
+
+\section{SKILLS}
+
+\textbf{Languages:} Python, TypeScript, JavaScript, SQL, C/C++, HTML5, CSS3
+
+\textbf{Frontend:} React 19, Next.js, Redux, Zustand, Tailwind CSS, Material UI, Ant Design, Framer Motion, Vite, PDF.js
+
+\textbf{Backend:} Node.js, Express.js, FastAPI, PostgreSQL, Prisma, Redis, BullMQ, JWT Auth, RBAC, Swagger/OpenAPI
+
+\textbf{Cloud \& Infra:} AWS (S3, SQS, SNS, Bedrock, Textract, Lambda, EC2), Docker, CI/CD, Git
+
+\textbf{AI \& Automation:} Claude, GPT-4o, AWS Bedrock, VAPI, ElevenLabs, Twilio, Robocorp, RPA, Prompt Engineering
+
+\textbf{Ownership:} 0$\to$1 Product Delivery, Cross-Functional Execution, Stakeholder \& Investor Demos, Solo Full-Stack Shipping
+
+\vspace{3pt}
+
+\section{EDUCATION}
+
+\textbf{B.Tech in Computer Science \& Engineering} \hfill \textit{2019 - 2023}\\
+IET, Dr. Ram Manohar Lohia Awadh University, Ayodhya \hfill \textit{81\%}
+
+\end{document}
