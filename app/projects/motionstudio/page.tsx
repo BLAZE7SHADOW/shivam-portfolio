@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Github, ExternalLink } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import Gallery from "@/components/Gallery";
@@ -47,7 +48,29 @@ export default function MotionStudioPage() {
         </div>
       </Reveal>
       <Reveal delay={0.1}>
-        <p className="mb-14 max-w-2xl text-lg text-ink-dim">{ms.intro}</p>
+        <p className="mb-6 max-w-2xl text-lg text-ink-dim">{ms.intro}</p>
+      </Reveal>
+      <Reveal delay={0.14}>
+        <div className="mb-14 flex flex-wrap items-center gap-3">
+          <a
+            href={ms.links.live}
+            target="_blank"
+            rel="noopener"
+            data-mag
+            className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4.5 py-2.5 text-sm text-ink transition-all hover:-translate-y-0.5 hover:border-accent hover:bg-accent/20"
+          >
+            <ExternalLink className="h-4 w-4" /> Live demo
+          </a>
+          <a
+            href={ms.links.github}
+            target="_blank"
+            rel="noopener"
+            data-mag
+            className="inline-flex items-center gap-2 rounded-full border border-panel-border px-4.5 py-2.5 text-sm text-ink-dim transition-all hover:-translate-y-0.5 hover:border-accent hover:text-ink"
+          >
+            <Github className="h-4 w-4" /> GitHub
+          </a>
+        </div>
       </Reveal>
 
       {/* QUICK FACTS */}
