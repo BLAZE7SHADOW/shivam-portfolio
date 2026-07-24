@@ -191,21 +191,21 @@ export const projects: Project[] = [
   {
     slug: "motionstudio",
     title: "MotionStudio",
-    blurb: "A browser-based video editor built on Remotion — real auth, a free in-browser export path, and a cloud render pipeline on AWS Lambda. A deep exploration of programmatic video generation and creative tooling.",
+    blurb: "A full browser-based video compositor built on Remotion — canvas editing, a frame-accurate timeline, keyframe animation, 22 text effects and 18 shader backgrounds, with a free in-browser (WebCodecs) export and a cloud render pipeline on AWS Lambda. Real auth and cross-device project sync. A deep exploration of programmatic video and creative tooling.",
     year: "2026",
     role: "Personal project",
     featured: false,
     wip: true,
     caseStudy: "/projects/motionstudio",
     media: [
-      { type: "image", src: "/images/MotionStudio.png", caption: "The editor today — canvas, properties panel, frame-accurate timeline" },
+      { type: "image", src: "/images/canvas-editor-screenshot.png", caption: "The editor — assets, canvas, live properties, and a frame-accurate timeline" },
     ],
     highlights: [
-      "Two export paths — free in-browser (WebCodecs) and cloud render via AWS Lambda",
-      "Full auth system — Google OAuth, email/password, and abuse-resistant guest access",
-      "Production infra: Supabase (auth + quota), Vercel serverless, AWS Lambda",
+      "Full compositor — canvas editing, frame-accurate timeline, keyframe animation, 22 text effects, 18 shader backgrounds",
+      "Two export paths — free in-browser (WebCodecs) and cloud render via AWS Lambda, both driving the same Remotion composition",
+      "Production infra — Supabase (auth · quota · cross-device sync), Vercel Functions, AWS Lambda + S3",
     ],
-    stack: ["Remotion", "React", "TypeScript", "Tailwind", "Supabase", "AWS Lambda"],
+    stack: ["Remotion", "React 19", "TypeScript", "Tailwind", "Zustand", "Supabase", "AWS Lambda"],
     links: { live: "https://motionstudio-six.vercel.app/", github: "https://github.com/BLAZE7SHADOW/MotionStudio" },
   },
 ];
@@ -219,7 +219,7 @@ export const now = {
   intro:
     "A living snapshot of what I'm building, learning, and thinking about right now. Updated regularly.",
   building: [
-    { title: "MotionStudio", note: "A Remotion-based browser video editor — early stage, timeline engine in progress." },
+    { title: "MotionStudio", note: "A Remotion-based browser video compositor — live, and actively growing (keyframes, text effects, shader backgrounds, cloud render)." },
     { title: "What's next", note: "Actively exploring founding engineer and senior full-stack roles. If you're building something ambitious in AI or product, let's talk." },
   ],
   learning: [
