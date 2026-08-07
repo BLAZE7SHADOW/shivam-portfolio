@@ -55,15 +55,15 @@ export const metadata: Metadata = {
     siteName: profile.name,
     title: `${profile.name} — ${profile.role}`,
     description: profile.intro,
-    images: [{ url: "/images/avatar.jpg", width: 400, height: 400, alt: profile.name }],
+    // Share image comes from app/opengraph-image.tsx (1200×630, generated).
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     site: "@BLAZE07SHADOW",
     creator: "@BLAZE07SHADOW",
     title: `${profile.name} — ${profile.role}`,
     description: profile.intro,
-    images: ["/images/avatar.jpg"],
+    // Falls back to the generated OpenGraph image.
   },
   alternates: {
     canonical: BASE_URL,
@@ -77,22 +77,36 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: profile.name,
-  url: BASE_URL,
-  email: profile.email,
-  jobTitle: profile.role,
-  description: profile.intro,
-  image: `${BASE_URL}/images/avatar.jpg`,
-  address: { "@type": "PostalAddress", addressLocality: "Gurugram", addressCountry: "IN" },
-  sameAs: [
-    profile.socials.github,
-    profile.socials.linkedin,
-    profile.socials.twitter,
-  ],
-  knowsAbout: [
-    "React", "Next.js", "TypeScript", "Node.js", "AWS", "AI Engineering",
-    "Full Stack Development", "Voice AI", "Healthcare AI", "RPA Automation",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${BASE_URL}/#person`,
+      name: profile.name,
+      url: BASE_URL,
+      email: profile.email,
+      jobTitle: profile.role,
+      description: profile.intro,
+      image: `${BASE_URL}/images/avatar.jpg`,
+      address: { "@type": "PostalAddress", addressLocality: "Gurugram", addressCountry: "IN" },
+      sameAs: [
+        profile.socials.github,
+        profile.socials.linkedin,
+        profile.socials.twitter,
+      ],
+      knowsAbout: [
+        "React", "Next.js", "TypeScript", "Node.js", "AWS", "AI Engineering",
+        "Full Stack Development", "Voice AI", "Healthcare AI", "RPA Automation",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${BASE_URL}/#website`,
+      url: BASE_URL,
+      name: `${profile.name} — ${profile.role}`,
+      description: profile.intro,
+      publisher: { "@id": `${BASE_URL}/#person` },
+      inLanguage: "en",
+    },
   ],
 };
 
