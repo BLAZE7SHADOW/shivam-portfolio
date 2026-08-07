@@ -10,11 +10,11 @@ use it) and `docs/adrs/` (formal decision records).
 
 A **browser-based, programmatic video editor** built on [Remotion](https://remotion.dev).
 Place text / image / video / audio on a canvas, arrange them on a frame-accurate
-timeline, animate them (keyframes + 22 Remocn text effects), and export — in-browser
+timeline, animate them (keyframes + 34 Remocn text effects, 18 shaders, 4 UI blocks), and export — in-browser
 via WebCodecs, or on AWS via Remotion Lambda. Backed by a small serverless layer:
 Vercel Functions (render/quota/upload/contact API), Supabase (auth + project sync), S3.
 
-- ~5K+ lines of TypeScript, 7 engines, 85+ logically-grouped commits.
+- ~5K+ lines of TypeScript, 7 engines, 95+ logically-grouped commits.
 - React 19 · TypeScript (strict) · Vite · Tailwind v4 · Zustand · React Router v7 ·
   Remotion (Player + Lambda) · Mediabunny (WebCodecs muxer) · react-moveable · shadcn/ui ·
   Remocn · Supabase · AWS (Lambda, S3) · IndexedDB · localStorage.
@@ -34,8 +34,10 @@ Vercel Functions (render/quota/upload/contact API), Supabase (auth + project syn
 | **Supabase** | Auth (OAuth / email / anonymous guest) + Postgres with RLS for render quotas and project cloud sync — no auth server to build or run. |
 | **Vercel Functions** | The API is 4 endpoints (`render`, `quota`, `upload-url`, `contact`); serverless means zero infrastructure for that footprint. |
 | **Remotion Lambda + S3** | Production export path: headless render on AWS, output to S3. A cloud render pipeline for ~20 minutes of config instead of months of infra. |
-| **Remocn** | 22 copy-paste Remotion text-effect components — animation polish bought, not built, and owned as source in the repo. |
+| **Remocn** | 57 copy-paste Remotion components (text effects, shaders, UI blocks) — animation polish bought, not built, and owned as source in the repo. |
+| **PostHog** | Product analytics *and* exception capture. A dedicated error vendor (Sentry) would buy a nicer stack-trace UI for a second script on every page load; `__APP_VERSION__` already carries the Vercel commit SHA, so the "release = git SHA" half was free. Signed-in users are identified (`App.tsx`'s `AuthBridge`) by their stable Supabase UUID with `email` as a person property — not by email itself, which can change — so events for a real account show that person's email in the Persons view instead of an anonymous device id. Guests (no email) stay anonymous, and `posthog.reset()` on sign-out stops the next session on a shared device from inheriting the previous person's identity. |
 | **Resend** | Transactional email for the contact form — a single `emails.send()` call instead of managing SMTP or a mail server. |
+| **driver.js** | Drives the guided quick start — spotlighting one control at a time, keeping it clickable through the overlay. Loaded lazily, only for that once-per-user walkthrough. (Its `hints` entry point drove an earlier version of helper mode; that surface is now built directly on `@radix-ui/react-popper` instead — see the onboarding section.) |
 
 ---
 
@@ -160,6 +162,115 @@ immutably, snapshots **share unchanged sub-objects** (cheap — no deep copies).
 edits within ~500ms **coalesce** into one step, so a whole drag or typing burst = one
 undo. **Why it was nearly free:** every edit already flows through `updateProject`.
 
+### Templates — starting points, not a second data model
+A template is just **a project's element list, authored ahead of time**
+(`src/content/templates/`). No new rendering path, no template runtime: a
+`TemplateDefinition` holds plain `CanvasElement`s minus their ids, and
+`instantiateTemplate()` mints a fresh `crypto.randomUUID()` per element at
+create time so two projects never share ids. `createProject` grew two optional
+fields (`elements`, `durationInFrames`); the blank path is byte-identical to
+before. **Why it stayed this small:** the `Project` aggregate root already is
+the whole document — so "a template" and "a project someone made" are the same
+shape, and the editor can't tell them apart.
+
+Two constraints worth knowing:
+- **Templates ship text and shaders only — never media.** Image/video/audio
+  elements point at an `assetId` whose bytes live in IndexedDB and S3, which a
+  static definition can't supply; a media-bearing template would apply as a
+  broken canvas. Text, the 18 shaders and the 4 blocks render instantly with
+  nothing to upload.
+- **The picker shows one live preview, not a grid of them.** Each shader is its
+  own WebGL context and browsers cap those (~8–16), so a dozen autoplaying cards
+  would exhaust the limit. The selected template previews beside the list —
+  the same pattern the Properties panel already uses for effects and shaders,
+  and it renders the real `MotionComposition`, so the preview *is* the output.
+
+`track.projectCreated` carries `template_id` / `template_category` (both
+`'blank'` for an empty project) — deliberate instrumentation, since which
+templates get used is the evidence for who the product is actually for.
+
+### Blocks — a registry instead of another hardcoded union
+Text effects and shaders are string-literal unions with a hand-maintained lazy map
+(`engines/rendering/textEffects.ts`), which is fine for "one component, one string"
+but can't express components that take arrays and objects (a terminal's lines, a
+pipeline's steps).
+
+That map is grouped by the *shape of input* an effect takes — a single string, a
+from/to pair, a numeric from/to, or a list — across four separate objects, which is
+a trap for anything rendering an effect: the Properties preview checked only the
+first and so rendered nothing for eleven of the thirty-four. Splitting the maps out
+of `TextRenderer` into their own module was as much about making all four visible at
+the import site as about fast refresh. Those became a sixth
+element type, `BlockElement`, backed by `src/content/blocks/registry.ts`: each entry
+declares its lazy import, defaults, natural length, a **field schema** the Properties
+panel renders inputs from, and a `toProps` translator. Adding a block is a registry
+entry; the renderer and the panel don't change. The panel only grows when a block
+needs an input *kind* that doesn't exist yet — `select` was added for the progress
+pipeline's horizontal/vertical switch, and every block gets it for free.
+
+**Sizing is the registry's job too.** Remocn components carry pixel geometry tuned
+for whatever canvas their author had; dropped into a 1920×1080 composition those
+numbers can be invisible (the progress pipeline shipped with 15px labels — 1.4% of
+the frame height). Blocks therefore take their geometry as props and the registry
+supplies composition-scale defaults, so the sizing decision lives with the rest of
+the block's configuration rather than buried in the component.
+
+Vendored does not mean verified. The same pipeline's nodes were laid out with
+`width: segment` plus `marginRight: -segment`, which cancels each item's own width
+and stacked every node at the same x — it had never drawn correctly, and enlarging
+its numbers only made the broken layout bigger. The component now positions nodes
+absolutely from `trackLength`. Blocks are the one part of the composition with no
+cheap visual check in the editor, so the diagnosis came from rendering the block
+alone through `remotion render` and reading the frame — worth reaching for early
+rather than reasoning about layout from source.
+
+**`blockProps` is deliberately flat and primitive.** A project is persisted as JSON —
+localStorage and a Supabase JSONB column — so nothing non-serializable can live on an
+element. Components wanting arrays-of-objects take a **multiline string** that
+`toProps` parses at render time (a terminal's `$ `/`✓ ` line prefixes become
+`{text, type}`). The editor stays a plain textarea and the data round-trips.
+
+**Natural length is a real constraint, not a style note.** Every Remocn component has
+a length it needs (terminal-simulator 240f, glass-code-block 180f, rolling-number
+150f); a shorter clip cuts the animation off. `addBlock` sizes new clips to at least
+the natural length, the Properties panel warns when a clip is too short, and the
+template check enforces it. Worth knowing: components differ in how they read time —
+some are fixed-length, while others (like `rolling-number`) call
+`useVideoConfig().durationInFrames` and therefore stretch to the **composition**
+length rather than their clip's.
+
+### The undefined CSS variable that made every text effect serif
+Every Remocn text component sets `font-family: var(--font-geist-sans), -apple-system,
+…, sans-serif`. That variable ships with Remocn's own Next.js setup, not with us, and
+CSS treats an undefined `var()` with no fallback as *invalid at computed-value time* —
+which throws away the **entire** declaration rather than falling through to the
+`sans-serif` at the end. So all 30-odd text components silently rendered in the browser
+default, Times. Fixed by defining the variable once on `MotionComposition`'s root
+`AbsoluteFill` — the one component mounted by both the editor `<Player>` and the
+Remotion render, so preview and export stay identical for the same reason `style.ts`
+is shared. Found by rendering a template through the CLI and looking at a frame; it
+had been invisible because "no error" is not the same as "correct."
+
+### Deploy freshness — detecting a stale tab without forcing a reload
+A client-side route change never re-fetches `index.html`, so a tab left open across
+a deploy has nothing telling it to check for new code — it keeps running the old
+bundle indefinitely, cache headers notwithstanding. `vite.config.ts` writes an
+unhashed `dist/version.json` (`{ buildId }`, sourced from `VERCEL_GIT_COMMIT_SHA`)
+at build time via a `closeBundle` plugin hook, alongside injecting the same
+`buildId` into the client as `__APP_VERSION__` via `define`. `useVersionCheck`
+polls that file every 5 minutes and on tab-focus, always with `cache: 'no-store'`
+(the hashed JS/CSS in `/assets/` is cached forever — this one file deliberately
+isn't). On a mismatch it surfaces `<UpdateBanner>` — a dismissible "new version
+available" prompt, never an automatic reload, because this is an editor with
+in-progress work an unannounced reload would destroy. Separately, `main.tsx`
+listens for Vite's own `vite:preloadError` event and *does* reload automatically
+there — that only fires when a lazy-loaded chunk (one of the 34 text effects,
+18 shaders or 4 blocks) already failed to load, so there's nothing left to lose.
+**Gotcha:** the SPA catch-all rewrite in root `vercel.json` excludes only
+`api/`, `assets/`, and the two icon files — `version.json` had to be added to
+that exclusion list too, or the rewrite silently serves `index.html` for it
+instead of real JSON, breaking the check without ever erroring.
+
 ### Export — two production paths
 
 **Path 1: in-browser (WebCodecs + Mediabunny)** — free, unlimited, Chrome/Edge only:
@@ -195,6 +306,35 @@ before invoking (uploaded in the background at import time via presigned PUTs fr
 > that command re-run, or cloud renders keep executing the old bundle while
 > the rest of the app looks fully deployed and up to date.
 
+### Cloud render: the client polls, the server doesn't wait
+`api/render.ts` queues a Lambda render and returns the `renderId` **immediately**
+(202); the browser then polls `api/render-status.ts`, which does one fast
+progress check per call. It previously polled inside the request for up to 6
+minutes — which silently capped renders at whatever Vercel allowed (~60s, since
+no `maxDuration` was ever configured). Lambda would finish and write to S3 while
+the caller saw a timeout. Polling from the client removes the ceiling entirely
+rather than raising it, and it's why the progress bar can show real percentages
+instead of an indefinite spinner.
+
+Device-locking for guests moved to the status endpoint, because success is only
+observable there. A guest who abandons the tab mid-render therefore isn't
+charged — deliberate, and the per-user monthly quota still applies.
+
+### Browser export is NOT the same renderer (a real WYSIWYG gap)
+The claim that all three paths run one composition holds for the editor preview
+and Lambda. It does **not** hold for browser export: `engines/export/canvasFrame.ts`
+paints each frame onto a 2D canvas with `fillText`/`drawImage`, handling only
+text, image and video plus the shared keyframe evaluator. Anything React-rendered
+— all 34 text effects, all 18 shaders, all 4 blocks — is absent from the output.
+
+That was acceptable when elements were plain text and images; adding Remocn
+components made it wrong, and it stayed invisible because the editor preview uses
+the real renderer, so a project looks right until it's exported. Reimplementing
+those components in canvas 2D isn't viable, so the export dialog now inspects the
+project and warns when it contains something the canvas path can't draw. The
+honest long-term options are to drop the path or move it to real composition
+capture; neither is done.
+
 ### Auth, quota & the serverless guard
 Three sign-in paths (Google OAuth, email/password, anonymous guest with 1 free cloud
 render), all owned by a single `useAuth` hook — components never touch supabase
@@ -205,6 +345,316 @@ confirmed output URL, so failed renders don't consume the slot. On account switc
 `AuthBridge` wipes the local store + IndexedDB so users on a shared device never see
 each other's projects. **Why this order:** never trust the client — identity first,
 then abuse checks, then spend.
+
+### Shots: a labelling of time, not a container for it
+
+A video is a sequence of shots, and the timeline needs to say so — one row per
+element costs sixteen rows for a sixteen-cut reel. The obvious model is
+`scene.elements[]` with `startFrame` relative to each shot.
+
+**We didn't do that.** The render contract is a flat array with *absolute*
+`startFrame`s: `MotionComposition` maps elements to `<Sequence from={...}>`, and
+`CanvasPanel` hands `{ elements, assets }` to the Player as the same `inputProps`
+shape `api/render.ts` forwards untouched to Lambda. Nesting would have forced
+every consumer to flatten first — and the consumers are `exporter.ts`,
+`webRenderer.ts`, `canvasFrame.ts`, `audioMix.ts` and the Lambda site, which is
+the code least worth destabilising.
+
+So elements stay flat and absolute, and gain a `sceneId`. `Project` gains an
+ordered `scenes[]`. **A shot is a labelled span of time**, and not one line of
+the render path changed.
+
+The price is that two invariants are enforced rather than structural — an
+element must lie inside its shot, and the total must equal the sum of the shots
+— and that ripple (resize shot 2, everything after moves) is an explicit
+recompute instead of falling out of the data shape. Both live in
+`engines/project/scenes.ts` as pure functions with no React and no store, and
+are covered by `npm test`. That trade is deliberate: ripple is twenty lines in
+one file, whereas a render-path regression is the failure mode this codebase has
+been bitten by most.
+
+**Some elements belong to the video, not a shot.** A background, a soundtrack,
+a watermark. Skipping this made the model wrong within five minutes of real
+use: a project's shader lived in shot 1, so adding shot 2 gave a black screen
+with no music — and it would have made beat-syncing shots to a track
+impossible. Those elements carry the `ALL_SHOTS` sentinel as their `sceneId`,
+and `respanGlobals()` re-derives their timing after anything that changes the
+total, because covering the video is the whole point and so that timing is
+derived rather than authored. A sentinel rather than `null`, because absent
+already means "not migrated" and would have been silently adopted into a shot.
+
+**The version belongs on the project, not on the store.** There was already a
+version — zustand `persist`'s `version` on the store envelope — and it covers
+IndexedDB and nothing else. A project pushed to Supabase and pulled back down
+arrives as a bare `Project` with no version anywhere on it, so the cloud path
+could only run the migration and hope. That works while there is exactly one
+migration and it is idempotent; the second one would have no way to tell whether
+a given cloud project had already had it. `Project.schemaVersion` travels with
+the data, so every path can answer the question.
+
+`migrateProject()` (`engines/project/migrations.ts`) walks a ladder of steps
+whose `to` exceeds the project's version, then stamps the result — *even when no
+step ran*, because an unversioned project that already has the right shape is
+version 1 and saying so is what lets the next migration skip it. `ensureScenes()`
+is step 1: it gives a pre-shot project one shot spanning its length and touches
+no element's timing, so nothing renders differently after the upgrade. Steps must
+be pure and idempotent, because `migrateProject` runs at all three entry points —
+the `persist` `migrate` (IndexedDB), `setProjects` (the cloud load, which
+bypasses `persist`), and `createProject` (templates, which stay authored flat and
+shot-unaware). Asserted in `tests/migrations.test.mjs` and `tests/scenes.test.mjs`.
+
+A version is for changes older code would *misread*, not for every addition —
+`beatGrid`, `Scene.transition` and `Animation.source` are all optional and read
+as absent, so none of them needed a bump.
+
+**A project from a newer build is left alone.** Two devices, one updated, is not
+hypothetical. Running such a project through the ladder would match no step and
+then stamp it with *our lower* version, quietly telling the next load it is older
+than it is. `isFromFuture()` catches it: `migrateProject` returns it untouched
+and unstamped, autosave skips it (`App.tsx`), and a notice says so — so the
+newer device's copy is never overwritten by the older one.
+
+### Beat detection: infer a grid, don't report the onsets
+
+Cutting to music is the point of the shot model, and the naive build is to
+detect onsets, draw a tick at each and snap to those. It is wrong. Onset
+detection is jittery — tens of milliseconds — and misses beats wherever the kick
+drops out, and **a jittery grid is worse than no grid**: a clip lands two frames
+off and the user cannot tell whether that was them or the tool.
+
+So peaks are only ever *evidence* for two numbers, **BPM and first-beat
+offset**, and the grid generated from them is perfectly regular. It is more
+accurate than the detections it came from, survives passages with no kick, and
+yields bars and sub-beats for free.
+
+**Everything is in seconds.** A beat is 14.06 frames at 128 BPM/30fps, so frames
+are computed at the moment of snapping and never stored. A grid stored in frames
+puts beat 32 two frames late, which looks fine in a five-second test and is
+broken in a real edit; `tests/beatDetect.test.mjs` asserts precisely that gap.
+
+`engines/audio/beatDetect.ts` is pure — samples in, numbers out — so the half
+holding all the judgement is tested against click tracks whose tempo we chose.
+`analyzeAudio.ts` is the Web Audio plumbing around it, using the same
+`OfflineAudioContext` route as `audioMix.ts` but sharing no code with it:
+mixing and measuring want different things, and coupling them means a change to
+one can break the other.
+
+Three things the tests forced, none of which were obvious:
+
+- **Only adjacent peaks are compared.** Comparing all pairs in a window looks
+  more thorough; at 160 BPM the two-beat gap *is* 80 BPM and outvoted the truth.
+- **Peaks must be true local maxima.** "First sample over the threshold, then
+  skip ahead" manufactures a peak every refractory period, so white noise came
+  back as a rock-solid tempo.
+- **The tempo is refined by fitting the grid back to the peaks.** The envelope
+  quantises peak positions, so a period that isn't a whole number of hops gives
+  alternating intervals — 158 and 162 for a 160 BPM track — and no amount of
+  binning recovers the truth. Phase coherence does, because a 1% tempo error
+  walks a whole beat away over a hundred peaks.
+
+`snapFrameToBeat()` in `scenes.ts` is the single place seconds become frames.
+Shots snap on their **end**, not their length, because the boundary is what has
+to meet the music; `+ Add shot` sizes itself so the new boundary lands on a
+beat, which aligns later shots even when the first one isn't aligned.
+
+### Transitions are animations, so the render path never learned about them
+
+A transition *is* an animation: a zoom punch is `scale 1.18 → 1`, a whip is
+`x +768 → 0`. `evaluateAnimations` is already called by the Remotion renderer
+**and** by `canvasFrame.ts`, so materialising a shot's transition as animations
+on its elements means it renders and exports everywhere with nothing else
+changing — the same property that kept shots and beat snapping cheap.
+
+`Animation.source: 'transition'` tags the generated ones, which is what lets a
+transition be replaced without disturbing anything hand-made, and what keeps
+them out of the Motion panel. The subtlety there: that panel's `anims` array
+feeds its writes as well as its list, so filtering the display alone would have
+silently deleted the shot's transition the first time anyone edited Motion.
+
+The cost of the choice is that a true cross-dissolve is impossible — shots never
+overlap, so two can't be on screen at once. Accepted deliberately: it is the
+least useful transition for beat-cut editing, and `fade` still rises out of
+black.
+
+### One editor per project, across tabs
+
+Both persistence paths serialise the **whole** projects array: zustand's
+`persist` middleware to IndexedDB, and the cloud autosave in `App.tsx`, which
+pushed every project every two seconds. Neither reconciles, so a second tab
+holding a stale copy silently overwrote the first tab's work — and because the
+cloud save iterates all projects, a tab left idle on the *dashboard* could
+clobber edits to a project it wasn't even showing. Last writer won, and the
+loser was never told.
+
+*(2026-07-30 — the autosave now pushes only projects whose `updatedAt` has moved
+since the last successful write, which narrows the blast radius but does not
+replace the lock: the tab still holds a full stale copy of anything it has
+touched.)*
+
+**A lock, not a merge.** Merging concurrent edits to a video composition has no
+obvious right answer — whose element position wins? — while "this is open
+somewhere else, take over or look without touching" is a question a user can
+actually answer. `lib/projectLock.ts` keeps a per-project claim in
+**localStorage**, chosen over IndexedDB for two reasons: it is synchronous, and
+a lock you have to `await` has a race in it; and its `storage` event fires in
+*other* tabs, which is exactly who needs to know they have been taken over.
+
+Three decisions worth keeping:
+
+- **Claims expire (75 s).** A crashed or force-quit tab never releases, and
+  without an expiry the project would be locked forever. The window has to
+  clear a minute because **Chrome clamps `setInterval` in a hidden tab to about
+  once a minute** — a shorter one silently evicted every backgrounded tab,
+  which is exactly the case the lock exists for. Being generous is nearly free:
+  a stale claim shows a dialog with "Take over here" one click away.
+- **The guard sits on `updateProject`**, the single chokepoint every element
+  mutation already passes through, rather than being spread across the panels —
+  and on `undo`/`redo`, which restore the entire projects array and so would
+  clobber every project, not just the one on screen.
+- **`release()` only drops our own claim.** Removing the key unconditionally
+  would hand the project to nobody and discard the guard of whichever tab had
+  since taken over.
+- **The heartbeat re-asserts rather than refreshes.** Rewriting the claim only
+  `if (holder === 'me')` reads as careful and is fatal: StrictMode mounts, runs
+  cleanup — which releases — then mounts again, leaving the tab believing it
+  owns a project it is no longer holding, with a guard that prevents recovery.
+  Claiming whenever no *other* tab holds it makes it self-healing; backing off
+  when one does is what stops two tabs ping-ponging.
+
+When localStorage is unusable (private mode, quota) `isLockable()` returns
+false and the editor opens unguarded. Refusing to open at all would be a worse
+failure than the one being prevented.
+
+### Onboarding: two surfaces, one registry
+
+The editor used to explain itself with a 21-step first-run tour. The information
+was right; the *timing* was the bug. Everything the app knew was delivered as a
+compulsory wall before the user had touched anything, and a wall of correct prose
+is a wall nobody finishes. It split into two:
+
+- **A six-step quick start** (`tour/quickStart.ts`, an instance of the `Flow`
+  primitive in `tour/flow.ts`) that waits for the user to do each thing and
+  advances off live store state, driven by `driver.js`.
+- **Helper mode** (`hooks/useHelperLayer.ts` + `tour/HelperCard.tsx`) — a
+  border flash and a card on whichever of the 21 explainable controls the
+  cursor is currently resting on, on demand, blocking nothing.
+
+Both read their words from **one registry**, `content/help.ts`, keyed by the
+`data-tour` attributes already on the components. Two descriptions of one feature
+is two things to keep true and one of them always rots — the same reasoning as
+the living-docs rule. `Record<HelpId, HelpEntry>` makes a forgotten entry a
+compile error rather than a blank popover.
+
+**Helper mode went through two designs before this one**, both proven wrong
+live rather than in review, which is worth recording precisely because neither
+mistake was obvious in advance:
+
+1. A **floating beacon beside the control** (built on `driver.js`'s `hints`
+   module), positioned on a guessed `side`. Two of the twenty-one landed wrong
+   (the toolbar's at `y = -3`, half off-screen; one directly on top of another,
+   hiding it) — not a tuning problem, the wrong interaction model: a beacon
+   *beside* an element is a position to get right, and there were 21 chances to
+   get it wrong.
+2. An **ambient ring on every control, always present** while the mode was on.
+   Fixed the position bugs — the ring is drawn from the control's own bounding
+   box via `outline`, so there's no `side` decision left to make — but
+   reproduced the beacons' real problem in a new shape: several things visible
+   and competing for attention at once, and a ring around the entire canvas
+   read as "the whole screen is highlighted" rather than pointing at anything.
+
+The current version fixes both at once: **the border only exists on the one
+control currently hovered**, appearing and disappearing with the hover itself.
+An idle screen has none of it anywhere. `Popper.Anchor`'s `virtualRef` — accepts
+anything with a `getBoundingClientRect()`, so a plain
+`document.querySelector('[data-tour="…"]')` result qualifies — is what
+positions the card without requiring any of the 21 components to know
+onboarding exists, the same way `HoverCard`/`Popover`/`Tooltip` position
+themselves; using `Popper` directly rather than the packaged `HoverCard` is what
+avoids wrapping each anchor in `<HoverCardTrigger asChild>`.
+
+The decisions worth recording:
+
+- **The quick start's completion predicates are pure functions over plain
+  data** — no store, no DOM, no React. The expensive failure here is a step
+  that never completes, leaving the user staring at an instruction they have
+  already followed, so all six are driven headlessly by
+  `tests/quickStart.test.mjs` against fixtures. The store subscription that
+  feeds them lives in `useEditorTour.ts`.
+- **They compare against a snapshot taken when the step opened**, not against
+  absolute state. "A text element exists" is already true when a returning user
+  replays on a finished project, and the whole thing would flash past untouched.
+- **A test enforces the shape of the copy** (`tests/help.test.mjs`): 5-word
+  titles, single-sentence bodies, ≤2 chips of ≤4 words. It cannot tell you the
+  words are good, but it refuses the shape that made the last version unreadable
+  — and the old version got that way one reasonable sentence at a time.
+- **An interactive step must be anchored to a container holding what the user has
+  to click.** driver.js makes everything outside the highlight
+  `pointer-events: none`; `effects-section` is a header `<div>` whose *sibling*
+  holds the picker, so spotlighting it would have stranded the step forever.
+  Hence `FlowStep.anchor`, which decouples where a step points from whose words
+  it borrows.
+- **A click on a control closes its own card, but never intercepts the
+  click.** An earlier version let a click *pin* the hover card open, on the
+  control itself — clicking `export` to pin its card also fired the real
+  Export button underneath it. Pinning was removed rather than patched: the
+  card shows everything on hover, so there was nothing left to click *for*.
+  But a plain click still reaches the control (nothing stops it existing
+  entirely), and a second bug showed up once every control had a card:
+  clicking the **`?`** button opened its own menu underneath its own
+  still-open card, since the card's `z-index` simply outranked the menu's.
+  Rather than chase z-index ordering against every present and future
+  overlay, any click on a hovered control now closes that control's card
+  immediately — the click means the user is doing the thing, not asking
+  about it. The listener only reads the event and calls `close()`; it never
+  calls `preventDefault`/`stopPropagation`, so the control's real handler
+  still runs exactly as it would with helper mode off.
+- **That click-close only covers the opening click.** Leaving `?` and
+  hovering it again while its menu was still open re-triggered the card on
+  top of the open menu a second time — a different path through the same
+  collision, not fixed by the bullet above. Fixed generically rather than as
+  an id check: Radix sets `aria-expanded="true"` on any popover trigger
+  while its own content is open — `help`, `blocks`, `project-settings`, and
+  any future one — and `onEnter` now reads that before opening anything. No
+  entry in `content/help.ts` needs to know it also happens to be a trigger.
+- **`canvas` needed a different kind of anchor, not a different `side`.** Its
+  card clipped off the right of the viewport with `side: 'left'`, then off
+  the *bottom* once that was fixed to `side: 'bottom'` — the element is
+  nearly the full width **and** height of the editor, so no `side` has real
+  room on both axes relative to its own edges, whichever one is picked.
+  `HelpEntry.anchorMode: 'cursor'` (checked only for this one entry, same
+  generic-flag shape as `requiresSelection`) anchors the card to a point
+  captured where the pointer entered instead of the element's bounding box —
+  a point near the cursor has room on some side almost anywhere on screen,
+  which the element's own edges don't. `HelperCard` builds a synthetic
+  `Measurable` (anything with a `getBoundingClientRect()`) for that point and
+  hands it to `Popper.Anchor` exactly as it would a real DOM node.
+- **The flash's `outline-offset` is negative (inset), not positive.** Several
+  anchors (`properties`, `assets`, `timeline`) clip their own overflow; an
+  outward offset draws past the border box and gets clipped on whichever edges
+  the surrounding flex layout squeezes closest, leaving a partial border instead
+  of a rectangle. Inset can never be clipped by an element's own overflow,
+  regardless of layout.
+- **Behavior differences are data on `HelpEntry`, not branches in the hook.**
+  The Properties panel only makes sense to explain once something is selected —
+  unlike the conditional sections below it, its wrapper always renders, so the
+  DOM alone can't gate it. That's `requiresSelection?: boolean` on the registry
+  entry, checked generically in `useHelperLayer`'s registration loop; a future
+  entry needing the same treatment is a data change, not a hook edit. In the
+  same spirit, the hoverable id set is `Object.keys(HELP)`, not a hand-maintained
+  list — a new `HelpId` is covered with nothing else to update.
+- **Closing is a derivation, not a reset.** `useHelperLayer` captures the shot
+  and the `requiresSelection` fact at the moment a card opens, then compares
+  both at *read* time against current state — a shot change or a selection
+  clearing mid-hover (with no `mouseleave` to trigger anything, since the mouse
+  never moved) simply stops matching, and the card disappears without a second
+  effect hunting for another way state could go stale.
+- **Standing down for the quick start is a reactive store, not an imperative
+  pair of calls.** `tour/tourActive.ts` is a one-boolean zustand store;
+  `useEditorTour` sets it, `useHelperLayer` reads it as an ordinary dependency.
+  The `driver.js`-hints version of this used module-level `pause`/`resume`
+  functions because the hints instance lived outside React; once the hover
+  layer became a real hook, a plain reactive value it can read like any other
+  piece of state was the better fit.
 
 ---
 
@@ -284,6 +734,32 @@ Added `paths` so `@/` resolves to `src/`.
 **White-on-white text.** Default text color was `#ffffff` on a white canvas — invisible,
 no error. A reminder that "no crash" ≠ "correct."
 
+**Cloud project sync silently never worked — the table didn't exist.**
+`cloudSync.ts` was written correctly against a `projects` table that was
+never actually created in Supabase; every save/load failed with a
+table-not-found error that only reached `console.error`, so the UI never
+showed a problem — projects just quietly never made it further than
+`localStorage`, meaning a new browser always looked empty. Confirmed by
+querying the Supabase REST API directly with the service-role key. → Created
+the table with RLS scoped to `auth.uid() = user_id`, plus an explicit
+`GRANT … TO authenticated, service_role` (same class of gotcha as the
+Supabase-permissions bullet above — this project's `public` schema didn't
+have the usual default privilege grants applied). A reminder that
+`console.error` on a persistence path is invisible until someone goes
+looking — it should have surfaced as user-facing state instead.
+**Closed 2026-07-30:** `saveProject` now returns a `SaveResult` rather than
+logging and returning `void`, and `lib/saveState.ts` puts it in the toolbar.
+The lesson took two goes to land: the same swallowed-error shape survived in
+that function for months *after* this war story was written about it.
+
+**A prop name mismatch silently ate a color setting.** `TextRenderer.tsx`
+passes every text effect a shared `{ text, fontSize, color, speed }` object,
+but `ShimmerSweep` declared its own prop as `baseColor` — so the `color`
+value was passed, matched nothing, and was dropped without a TypeScript
+error (excess/mismatched props on a spread aren't checked the way an object
+literal would be). → Renamed the prop to `color` to match the shared shape
+every other effect in the `Effects` map already uses.
+
 ---
 
 ## 7. Trade-offs & limitations (honest)
@@ -294,9 +770,28 @@ no error. A reminder that "no crash" ≠ "correct."
   render (device-tracked), signed-in users a monthly quota.
 - **Editor audio preview** is muted / browser-autoplay-dependent; the export
   is authoritative for sound and timing.
-- **Asset bytes don't follow you across devices** — project JSON syncs via Supabase,
-  but media blobs live in local IndexedDB (S3 copies exist only for Lambda's use).
+- **Asset bytes follow you only as far as the S3 copy got.** Project JSON syncs
+  via Supabase and media blobs live in local IndexedDB, but the background
+  upload also puts every file in S3 — and `rehydrateAssets` falls back to that
+  `storageUrl` when there is no local blob, so media *does* survive a move to
+  another device once the upload has landed. A file whose upload never
+  completed is local-only, and shows "Re-upload needed" elsewhere. The upload is
+  fire-and-forget with no user-visible state, so there is currently no way to
+  tell which of your files are safe to leave the machine.
 - **No scene grouping yet** — sequencing is done by positioning clips on the timeline.
+- **Tests cover the engines, not the components** — the suite exercises the pure
+  modules (`scenes`, `scale`, `beatDetect`, `transitions`, `projectLock`,
+  `notices`, `migrations`), which is where the logic that is expensive to get
+  wrong lives. `PropertiesPanel` and `CanvasPanel` have no tests, and both have
+  produced real bugs: six hooks below an early return, and `Add shot` leaving
+  the playhead in the previous shot. CI's typecheck and lint catch a useful
+  slice of that class, but not behaviour.
+- **Vendored components are exempt from two lint rules.** `components/remocn`
+  and `components/ui` are copy-paste installs from registries and are replaced
+  wholesale on re-sync, so `eslint.config.js` turns off `no-empty-object-type`
+  and `react-refresh/only-export-components` for those paths rather than
+  carrying edits that the next install would silently discard. Everything the
+  project actually authors is held to zero problems.
 - **Dashboard and editor are desktop-only** — both rely on fixed multi-panel
   layouts (220px+260px side panels, 224px timeline) that assume a laptop-sized
   viewport; below `1024px` a `DesktopOnlyGate` (`components/DesktopOnlyGate.tsx`,

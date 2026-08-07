@@ -21,6 +21,9 @@ editor later on a bigger screen.
 1. On the landing page, **sign in** (Google, email, or **Continue as guest**) —
    then on the **Dashboard**, click **New Project**, give it a name, pick an aspect
    ratio (16:9 / 9:16 / 1:1) and a frame rate (24 / 30 / 60), then **Create**.
+   *In a hurry?* Before you have any projects the Dashboard shows a
+   **Try a demo project** button — one click builds a finished template project
+   and opens it in the editor, so you can skip straight to step 3.
 2. In the editor, click the **T** button in the top toolbar → a text box appears
    on the canvas.
 3. Double-click the text to type your own words. Click once to select it, then
@@ -31,6 +34,52 @@ editor later on a bigger screen.
 6. Click **Export** → pick a format → follow the two steps to render a video.
 
 That's the whole loop: **add → arrange → animate → preview → export.**
+
+### The quick start
+
+**Six short steps run the first time you open the editor**, and each one waits
+for you to actually do the thing before moving on — there is no reading ahead:
+
+1. ✨ **Put words on screen** — click **T**
+2. 🖐️ **Your actual video** — drag it somewhere else
+3. 🎬 **34 ways text moves** — pick an effect for it
+4. ▶️ **Watch the real thing** — press play
+5. 🎞️ **Build it shot by shot** — add a second shot
+6. 🎁 **Turn it into a file** — where your video leaves
+
+Ninety seconds later you have a title that animates, over two shots, and plays
+back. Any step can be passed with **Skip**, and the ✕ closes the whole thing.
+
+Replay it any time from the **?** menu in the toolbar → **Quick start**; that
+also brings back any hint you dismissed with "don't show again".
+
+### Helper mode
+
+Everything the quick start *doesn't* cover is one hover away instead. Rest the
+pointer on any of the 21 controls that has something to say — across the
+toolbar, both side panels, the canvas and the timeline — and its border
+flashes gently while a card opens beside it: what it is, the one thing worth
+knowing, and a longer answer underneath. Move on, and it closes.
+
+**Only one shows at a time**, and **nothing blocks a click.** There's no
+dimming, nothing goes grey, and the control itself still works exactly as
+normal while its card is open — hovering complements what you're doing rather
+than getting in its way.
+
+What's hoverable comes and goes with the app. Select a music clip and **Sound**
+becomes reachable; select text and **Effects** and **Motion** do too; open a
+second shot and the transition picker joins them. The Properties panel itself
+only responds once something is selected — before that there's nothing there
+for it to describe.
+
+It's **on to begin with**. Turn it off with the 💡 in the toolbar, or under
+**?** → **Helper mode**, and it stays off until you ask for it back.
+
+**Hints.** When something changes on its own — a tempo detected, another tab
+taking over the project, a title/background/block landing on the canvas from
+one of the toolbar's one-click buttons or an asset tile — MotionStudio says so
+in the top-right corner rather than leaving you to work it out. Each one can be
+dismissed for good.
 
 ---
 
@@ -59,8 +108,37 @@ That's the whole loop: **add → arrange → animate → preview → export.**
 
 ## 3. Projects
 
-- **Create**: Dashboard → **New Project**. Choose name, aspect ratio, frame rate.
-- **Open**: click a project card on the Dashboard.
+- **Create**: Dashboard → **New Project**. Pick a **template** from the list on the
+  left — a live preview of it plays on the right — then click **Use Template**.
+  The template sets the aspect ratio, frame rate and length for you, and the
+  project opens with its text and background already animated; edit the text and
+  you have a finished clip. Choose **Blank project** instead for an empty canvas,
+  where you pick aspect ratio and frame rate yourself.
+- **Templates available**: *Announce* (Feature shipped, Now live, Coming soon,
+  Metric milestone, Milestone counter, Changelog drop) · *Dev & Product* (CLI
+  demo, Code drop, How it works, Stack marquee) · *Hooks* (Bold question, Quote
+  card, Stat drop, Wait for it, Before → after) · *Offers* (New offer, Product
+  drop, Testimonial, Price reveal) · *Basics* (Title card, Outro/CTA).
+- **Your first project**: with nothing saved yet, the Dashboard shows a
+  first-run page instead of an empty grid — a live-playing template preview, a
+  three-step summary of how a video gets made, and two ways in: **Try a demo
+  project** (creates a filled-in project and opens the editor immediately) or
+  **New Project** (the full template picker).
+- **While you still have only a few projects** (fewer than five), a compact
+  version of that three-step summary sits under the grid, with a shortcut to
+  open a demo project. It's there as a refresher if you come back after a while
+  and don't remember the flow. Dismiss it with the **×** and it won't return; it
+  also disappears on its own once you have five projects.
+- **Open**: click a project card on the Dashboard. Each card shows a real frame
+  of that project, and animates (muted) when you hover it — so you can tell your
+  projects apart at a glance instead of reading names.
+- **Grouped by shape**: the Dashboard splits your projects into **Landscape**,
+  **Portrait** and **Square** sections, so cards of the same format line up
+  instead of making a ragged grid. A section only appears when you have
+  projects in it.
+- **Leaving the editor**: the **←** button or the **MotionStudio logo** in the
+  editor toolbar takes you back to your projects. Nothing needs saving first —
+  edits autosave a couple of seconds after you stop.
 - **Change aspect ratio / frame rate anytime**: toolbar → the **`16:9 · 30 fps`**
   chip → adjust in the popover. The canvas updates instantly.
 - **Autosave**: your projects **and** uploaded media are saved automatically in
@@ -68,8 +146,31 @@ That's the whole loop: **add → arrange → animate → preview → export.**
 - **Cloud sync**: when signed in, projects also save to your account a couple of
   seconds after every edit, and load back on any device you log in from. Media
   files stay on the device you uploaded them from (cloud renders can still use them).
-- **Duration**: 10 seconds by default. Change it (5 / 10 / 15 / 30s) in the same
-  settings popover. Changing the frame rate keeps the length in seconds.
+- **Knowing where you stand**: the toolbar says **Saving… / Saved just now /
+  Offline — saved on this device / Couldn't save to the cloud**. Offline is not
+  a crisis — your work is still saved *on this device*, and MotionStudio pushes
+  it to the cloud by itself the moment you reconnect. Nothing is shown while
+  there is nothing to report.
+- **A project from a newer version**: if you edit on two devices and one is on a
+  newer build, the older one will show that project but refuse to save over it,
+  and tells you why. Reload to get the newer version.
+- **One tab at a time**: a project can only be *edited* in one tab. Open the
+  same project in a second tab and it asks whether to **take over here** or
+  **open read-only**. Take over and the first tab switches to read-only with a
+  banner, so it stops saving rather than overwriting your newer work — this used
+  to lose changes silently. A read-only tab can take the project back at any
+  time with **Edit here**, and picks it up automatically if the editing tab
+  closes. Different projects in different tabs are unaffected.
+- **Duration**: 10 seconds by default. Change it (5 / 10 / 15 / 30 / 60 / 90s) in
+  the same settings popover. Changing the frame rate keeps the length in seconds —
+  for the project **and** for every clip on the timeline, so nothing speeds up or
+  slows down when you switch between 30 and 60 fps.
+  **Note for 60s and 90s projects:** use **Cloud Render**. Browser export can't
+  draw text effects, animated backgrounds or blocks (see §12), so a long project
+  built from templates would export missing most of what you see.
+- **Delete**: hover a project card on the Dashboard → trash icon → confirm.
+  Removes the project and its media everywhere it's stored — this device,
+  the cloud, and any other browser you've signed into. Can't be undone.
 
 ---
 
@@ -78,9 +179,17 @@ That's the whole loop: **add → arrange → animate → preview → export.**
 ### Text
 Toolbar → **T**. A text box appears centered on the canvas.
 
+**While an element is selected its motion is paused** so you can position it —
+an entrance effect starts fully transparent, which would make the thing you're
+dragging invisible. A note on the canvas says so when it applies; press
+**Preview** to watch the motion play.
+
 ### Images, video, audio
 1. Open the **Assets** panel → **Upload** tab.
-2. **Drag files** onto the drop zone, or click **Browse Images / Videos / Audio**.
+2. **Drag files** onto the drop zone, or click **Browse Images / Videos / Audio**
+   — or just **paste**: copy an image (a screenshot, say) and press **⌘V /
+   Ctrl+V** anywhere in the editor and it lands in your library, no trip through
+   a file picker. (Pasting inside a text box still pastes text.)
 3. Your uploads appear as thumbnails under the **Images / Videos / Audio** tabs.
 4. To place one on the canvas:
    - **Click** a thumbnail → it's added centered, or
@@ -88,6 +197,12 @@ Toolbar → **T**. A text box appears centered on the canvas.
 5. **Audio** has no on-screen visual — it drops straight onto the timeline as a
    sound clip.
 6. Remove an asset from the library with the **×** on its thumbnail (hover).
+7. **"Re-upload needed"** on a tile means the file isn't on this device *and*
+   has no cloud copy to fall back on — usually because it was added on another
+   machine and its background upload never finished. Elements using it render as
+   empty rather than breaking the project. Re-add the file, or remove the tile.
+   Opening a project you made on this machine should never show this: media is
+   relinked from local storage on every load.
 
 ### Stock photos & video (Pexels)
 Open the **Assets** panel → **Stock** tab. Search, toggle **Photos**/**Videos**,
@@ -110,7 +225,7 @@ Supported: common image (png/jpg/gif/webp), video (mp4/webm/mov), and audio
 | Rotate | Drag the rotation handle above it |
 | Edit text | **Double-click** the text, type, then Esc or click away |
 | Deselect | Click empty canvas, or press **Esc** |
-| Delete | Select it, press **Delete** / **Backspace** |
+| Delete | The trash icon in the Properties panel header or on the timeline row — or select it and press **Delete** / **Backspace** |
 
 The percentage at the bottom of the canvas is the current zoom-to-fit scale.
 
@@ -120,10 +235,21 @@ The percentage at the bottom of the canvas is the current zoom-to-fit scale.
 
 Shows controls for the selected element. Sections vary by type:
 
+**Transform**, **Layer** and **Motion** start collapsed, so the controls that
+say what an element *is* are on screen without scrolling. Click a header to
+open it; your choice is remembered. Headers that can be cleared show a **↺** on
+hover — currently Motion, which resets to no animations.
+
 **Text** — Content, Font size, Color, and **Text Effect** (see §7a).
 
 **Transform** (text / image / video) — X, Y, Width, Height, Rotation, Opacity.
 Values are in composition pixels (e.g. 1920×1080).
+
+> **Every number here can be dragged.** Press on a value and slide sideways to
+> scrub it; hold **Shift** to move ten times faster. Click without dragging and
+> it becomes a text field, so you can still type an exact number and press
+> Enter (or Escape to cancel). Bounded values like Opacity show a filled track
+> behind them so you can see where you are in the range.
 
 **Layout** (image / video) — **Make Background**: one click resizes the element
 to fill the whole canvas, resets its position/rotation, and sends it behind
@@ -144,23 +270,46 @@ background.
 
 Animations make a property change **over time** — fade, slide, scale, spin.
 
-### Add a preset
-Properties → **Animation**:
+The section is **Animation** in Properties (**Motion** on text elements), and it
+has two tabs: **Presets** and **Manual**.
+
+### Presets
 - **Enter**: Fade In, Slide Up, Slide In, Pop In
 - **Exit**: Fade Out, Slide Out, Pop Out
 
 Presets **stack** — click several and they combine (e.g. Fade In + Slide Up).
 
-### Add a single property
-Use **＋ Add property…** to add one bare animation (Opacity, Position X/Y, Scale,
-Rotate) and dial it in yourself.
+Clicking one **switches you to Manual**, showing the exact animations it just
+created. That is the quickest way to learn what these dials do: apply Slide Up,
+then look at the Position Y and Opacity it wrote.
 
-### Edit an animation (each card)
+### Manual
+The tab label carries a count — **Manual (2)** means two animations on this
+element. Use **＋ Add property…** to add one bare animation (Opacity,
+Position X/Y, Scale, Rotate) and dial it in yourself.
+
+Each animation card has:
 - **From / To** — start and end value (opacity 0→1, y 60→0)
 - **Start** — how many frames after the clip begins it fires
 - **Dur** — how many frames it lasts
 - **easing** — `linear` (constant), `ease` (smooth), `spring` (bouncy)
 - **×** — remove just that animation · **Clear all** — remove them all
+
+The **↺** on the section header clears every animation in one click; it only
+appears when there is something to clear.
+
+### Which values are animated
+A small **diamond ◆** next to a property means that value changes during
+playback. Without it the panel is misleading: a rotation reading `0°` that spins
+for the whole video looks identical to one that never moves.
+
+The diamond also appears on the **section header** — including when the section
+is collapsed, which matters because Transform, Layer and Motion start closed. It
+is also the only place a **Scale** animation shows up, since Transform has width
+and height rows rather than a scale factor.
+
+Transitions don't get a diamond. They belong to the shot, not the element, so
+marking every element in a zoom-punch shot would make the diamond mean nothing.
 
 ### Sequence effects
 Give animations different **Start** values to play them in order — e.g. Fade In at
@@ -173,7 +322,7 @@ element gives a fade-in-hold-fade-out.
 
 ---
 
-## 7a. Text effects (22 presets)
+## 7a. Text effects (34 presets)
 
 Text elements have a second, richer animation system: **Properties → Text Effect**.
 Pick one from the dropdown, grouped by style:
@@ -185,9 +334,27 @@ Pick one from the dropdown, grouped by style:
   Inline / Marker Highlight…
 - **Tech / Glitch** — Typewriter, Matrix Decode, RGB Glitch.
 
-A live loop preview shows above the picker once an effect is selected, so you
-can see how it moves before committing to it — same idea as the shader
-preview in §7b.
+**Every effect previews, and every effect explains itself.** A live looping
+preview shows above the picker once an effect is selected, with a one-line
+description underneath saying what it's for and what input it expects. Use the
+↺ button in the corner to replay it — most entrance effects finish in under a
+second, so the loop leaves them sitting on a static end frame.
+
+The list and two-value effects preview with sample data ("Before" → "After",
+0 → 100, three list items) rather than your text, precisely because that's what
+shows you the shape they need: a **list** effect reads one item per line of the
+text box, and a **two-value** effect animates from the text box to the **To**
+field beneath it.
+
+**Number effects (Rolling Number, Number Wheel) count between two numbers**, so
+they can't display words. The two fields become **Count from** and **Count to**,
+and if what's in them isn't a number the panel says so and tells you it will
+render as `0` — rather than letting you find out on the canvas. Symbols and
+separators are stripped, so `$1,200` counts as 1200; if you need the `$` visible
+on screen, use **Slot Machine Roll** instead. Your original text is never
+overwritten — switch to a different effect and it comes straight back.
+
+Same idea as the shader preview in §7b.
 
 Controls:
 - **Speed** — multiplies the effect's pace (1 = normal, 2 = twice as fast).
@@ -199,6 +366,29 @@ Controls:
 
 A text effect **replaces** the element's plain rendering — it plays every time the
 clip starts, both in the editor preview and in the export.
+
+---
+
+## 7c. Blocks (terminal, code, steps, confetti)
+
+Toolbar → the **terminal icon (Add Block)** → pick one. Blocks are structured
+components that a text effect can't express:
+
+- **Terminal** — a window that types commands and streams output. In
+  **Properties → Lines**, write one line each; prefix `$ ` for a command,
+  `✓ ` for a success line, `✗ ` for an error. Everything else is plain output.
+- **Code block** — a frosted editor window revealing your code line by line.
+- **Progress steps** — a pipeline whose steps light up in order, one per line.
+  **Direction** switches between horizontal and vertical, and **Track length**,
+  **Node size** and **Label size** control how big it draws — raise them if the
+  step names look small against a 1920×1080 frame.
+- **Confetti** — a celebratory burst. Drop it on top of a finished scene and set
+  its clip to start at the moment you want it to fire.
+
+**Watch the clip length.** Each block needs a minimum number of frames to play in
+full (the terminal needs the most). If its clip is too short the animation gets
+cut off part-way, and the Properties panel will warn you with the number of
+frames it needs — lengthen the clip on the timeline to fix it.
 
 ---
 
@@ -225,6 +415,81 @@ to send one further back / bring one forward.
 ---
 
 ## 8. The timeline
+
+### Beats
+
+**One track under the whole video is the normal way to work.** Audio you add
+plays across every shot automatically, and keeps covering new shots as you add
+them — up to the length of the track itself. If the video ends up longer than
+the music, the music simply stops; nothing is stretched.
+
+Add a music track and MotionStudio measures its tempo in the background, then
+marks the beats along the timeline — a brighter line every fourth beat, so you
+can count bars at a glance. This is how you cut in time with the music instead
+of guessing.
+
+The **♪ button** in the timeline header shows the tempo it found, and opens the
+controls:
+
+- **Show beats on the timeline** — turn the marks on or off.
+- **Tempo** — drag the number or click to type it.
+- **Offset** — where the first beat sits, in milliseconds. Nudge it if the marks
+  sit slightly ahead of or behind the music.
+- **Tap along** — click in time with the track for a few beats and it takes the
+  tempo from you. Often the fastest fix when the reading is wrong.
+
+**Shots cut in time with the track.** Once the beats are showing:
+
+- **Add shot** makes a new shot about a bar long, adjusted so it *ends* on a
+  beat — so shots line up with the music even if the video didn't start out
+  that way.
+- **Dragging a shot's edge** snaps it to the nearest beat. Hold **Alt** while
+  dragging if you want a length that deliberately isn't on the beat.
+- Each shot in the Sequence view says how long it is in **beats** as well as
+  seconds — "4 beats · 2.0s" — because with music that's the unit you're really
+  choosing.
+
+Detection works best on music with a strong, steady kick — dance, pop, hip-hop.
+It's less reliable on ambient, orchestral, live-played music or speech, and when
+it isn't confident it says so and asks you to tap or type instead. A wrong tempo
+is always yours to correct; nothing is locked in.
+
+### Shots
+
+A video is a sequence of moments, and the strip above the timeline is where you
+arrange them.
+
+- **Add shot** appends a new one and makes the video that much longer (up to the
+  90s maximum — past that it tells you to shorten a shot first). It opens the
+  new shot and moves the playhead to its first frame, so the canvas shows the
+  shot you are about to fill rather than the one before it.
+- **Click a shot** to work on it. The timeline below then shows *only* that
+  shot's clips, and the ruler covers only its span — so a video made of twenty
+  quick cuts doesn't become twenty rows to scroll through.
+- **Sequence** steps back to the whole video, drawn as its shots end to end.
+  From there, **drag a shot's right edge** to change how long it lasts;
+  everything after it moves along to make room. **Drag the shot itself** to
+  reorder it — a line shows where it will land, and everything inside it moves
+  with it.
+- **Double-click a shot** to rename it. Leave the name empty and it goes back to
+  "Shot 1", "Shot 2" and so on by position.
+- **Transitions**: with a shot open, the control in the strip sets how that shot
+  *arrives* — **Cut** (nothing), **Fade**, **Zoom punch**, **Whip** or **Spin**.
+  With beats showing, a transition lasts half a beat, so it lands with the music.
+  The first shot has no incoming cut, so it has no control. Transitions don't
+  appear in the Motion section — they belong to the shot, and that's where you
+  change them.
+- **Hover a shot and click ×** to delete it — this removes everything inside it
+  too, and the video gets shorter. The last remaining shot can't be deleted.
+- Anything you add lands in the shot you're looking at, and spans it.
+- **Some things belong to the whole video, not one shot** — a background, a
+  music track, a watermark. Animated backgrounds and audio are set that way
+  automatically when you add them. Anything else can be switched with the small
+  **layers icon** on its timeline row: click it to play that element through
+  every shot, click again to keep it to the current shot. Video-wide elements
+  show up in every shot's timeline, because that's where they actually are.
+- Existing projects are one shot covering the whole video, so nothing you have
+  already made looks or behaves differently.
 
 The timeline controls **time** and **layers**.
 
@@ -282,6 +547,13 @@ clip in a different part of the timeline — e.g. an intro clip at 0–2s, the n
 | **Double-click** (text) | Edit text |
 | **Delete / Backspace** | Delete selected element |
 | **Esc** | Deselect / stop editing text |
+| **Shift** + drag a number | Move it in steps of ten |
+| **Alt** + drag a shot's edge | Resize without snapping to the beat |
+| **Double-click** (shot) | Rename it in the sequence |
+
+The same list is in the app under **? → Keyboard shortcuts**. The last three are
+worth knowing because you cannot discover them by looking — they change what an
+existing drag means rather than adding a control.
 
 Undo/redo covers **every** edit — move, resize, trim, animate, reorder, add,
 delete. A single drag counts as one undo step. The toolbar's **↶ / ↷** buttons do
@@ -302,10 +574,25 @@ Renders entirely inside your browser — no server, no terminal.
 3. Click **Export & download** — a progress bar fills while every frame is rendered
    offline, then the finished MP4 downloads automatically.
 
+**Include effects (Beta).** There are two browser paths. The plain one flattens
+each frame onto a canvas, which is fast and dependable but drops text effects,
+animated backgrounds and blocks. **Include effects** renders the real
+composition and keeps them.
+
+It is **ticked automatically when your project uses any of those**, and left off
+when it doesn't — on a plain text-and-images project it would only make the
+export slower for an identical file. Untick it any time.
+
+It's slower, and a few things still differ from Cloud Render: gradient-filled
+text, 3D transforms and blend modes. If it can't finish, the export falls back
+to the plain path so you still get a video, and the dialog tells you that's what
+happened.
+
 Under the hood: every frame is drawn to an off-screen canvas in exact order, source
 videos are seeked frame-by-frame, all audio is mixed sample-exact
 (`OfflineAudioContext`), and the browser's hardware encoder (WebCodecs / H.264)
-compresses it. **Requires Chrome or Edge** — Safari doesn't support WebCodecs yet.
+compresses it. Nothing is uploaded and no quota is used. **Requires Chrome or
+Edge** — Safari doesn't support WebCodecs yet.
 
 ### Cloud Render tab (any device, quota-based)
 Renders on AWS instead of your machine — works in any browser, uses no local CPU,
@@ -334,6 +621,10 @@ npm run render    # render the default composition to out/video.mp4
   full size and pixel-identical to what you see.
 - **One source of truth** — the canvas, timeline, and properties are three views
   of the same element. Change it anywhere, everywhere updates.
+- **Update banner** — if a tab's been open across a new deploy, a small "new
+  version available" banner appears at the bottom of the screen. It never
+  reloads on its own (so it won't interrupt an edit or export in progress) —
+  click Refresh whenever it's convenient.
 
 ---
 
@@ -350,21 +641,59 @@ npm run render    # render the default composition to out/video.mp4
 
 ---
 
+## 14a. Feedback and "What's new"
+
+Both live under the **?** button in the toolbar, just left of Preview (and in
+the dashboard header). Your avatar next to it is identity and sign-out only —
+help and identity are separate jobs, and hiding one behind the other made it
+undiscoverable.
+
+**Failure surfaces carry a "Report this" link** — a failed browser export, a
+failed cloud render, the beta-renderer fallback notice, and a file marked
+"Re-upload needed" in the Assets panel. Clicking it opens the feedback form with
+the problem already described, so you only add what happened from your side.
+
+- **Send feedback** — pick whether something broke, you want a feature, or it's
+  something else, describe it, and send. It reaches a real inbox and replies come
+  back to the address you give. Guests have no address on file, so you'll need to
+  type one — without it there's no way to tell you it's fixed.
+  The form attaches your build, browser, screen size and (in the editor) the
+  current project's format and contents. **Click the line above the Send button
+  to read exactly what's attached before you send it** — nothing is collected
+  that you can't see.
+- **What's new** — a short list of what changed recently, in plain terms. It
+  opens by itself once per release, and a dot sits on the **?** button until
+  you've read it. Brand-new accounts never see it: a changelog needs a "before".
+- **Quick start** and **Helper mode** — the two ways the app explains itself, both
+  covered in §1. The menu row shows whether helper mode is on, so it matches
+  the 💡 in the toolbar whichever one you used last.
+
+---
+
 ## 15. Current limitations
 
 - **Dashboard and editor require a laptop/desktop-sized viewport** (≥1024px
   wide) — they're not usable on phones or small tablets, and show a
   "use a bigger screen" message below that width. The landing page and
   sign-in work on any screen size.
-- Project length is chosen from presets (5 / 10 / 15 / 30s); no custom value yet.
+- Project length is chosen from presets (5 / 10 / 15 / 30 / 60 / 90s); no custom
+  value yet.
+- **Browser export doesn't include text effects, animated backgrounds or
+  blocks.** It draws frames onto a plain canvas rather than running the real
+  renderer, so those are missing from the file — the export dialog warns you
+  when your project uses them. Use **Cloud Render** for anything with effects.
+  Browser export is still fine for plain text, images and video, and it's free
+  and unlimited.
 - **Scene grouping** (moving several elements as one unit) isn't built yet — use
   timeline positioning to sequence.
 - **Browser export** requires Chrome or Edge (WebCodecs). On Safari or other
   browsers, use the **Cloud Render** tab instead.
 - **Cloud renders are limited** — 1 free for guests, a monthly quota when signed in.
-- **Media doesn't follow you across devices** — projects sync to your account, but
-  image/video/audio files stay on the device that uploaded them (cloud renders can
-  still use them from anywhere).
+- **Media mostly follows you across devices when signed in** — uploads sync to S3
+  in the background, and the editor preview falls back to that copy on a device
+  that doesn't have the file locally. It only stays device-only if you're signed
+  out when you upload, or open the project elsewhere before the background
+  upload finishes.
 - Editor preview audio/video may be muted depending on the browser; the export
   always has correct sound and timing.
 

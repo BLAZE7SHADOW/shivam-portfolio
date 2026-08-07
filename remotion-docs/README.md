@@ -1,6 +1,8 @@
 # MotionStudio
 
-**A browser-based motion graphics editor built on [Remotion](https://remotion.dev)** — compose text, image, video, audio, and shader backgrounds on a frame-accurate timeline, animate with keyframes and 22 text effects, and export to MP4 in the browser or on the cloud.
+**A browser-based motion graphics editor built on [Remotion](https://remotion.dev)** — compose text, image, video, audio, and shader backgrounds on a frame-accurate timeline, animate with keyframes and 34 text effects, and export to MP4 in the browser or on the cloud.
+
+[![CI](https://github.com/BLAZE7SHADOW/MotionStudio/actions/workflows/ci.yml/badge.svg)](https://github.com/BLAZE7SHADOW/MotionStudio/actions/workflows/ci.yml)
 
 **Live demo → [motionstudio-six.vercel.app](https://motionstudio-six.vercel.app/)**
 
@@ -10,22 +12,29 @@ Built by [Shivam Govind Rao](https://shivamgovindrao.com/) · [get in touch](htt
 
 ## What it is
 
-MotionStudio is a full video compositor that runs in the browser. You place elements on a canvas, arrange them on a timeline, animate them per-property, and export real video. The editor preview, the in-browser export, and the AWS Lambda cloud render all run the **same React composition** — what you see while editing is exactly what renders.
+MotionStudio is a full video compositor that runs in the browser. You place elements on a canvas, arrange them on a timeline, animate them per-property, and export real video. The editor preview and the AWS Lambda cloud render run the **same React composition** — what you see while editing is exactly what renders. (The free in-browser export draws to a 2D canvas instead, so it omits text effects, shader backgrounds and blocks; the export dialog says so when it applies.)
 
-~5K+ lines of strict TypeScript · 7 engines · 85+ logically-grouped commits · 5 element types.
+~21K lines of strict TypeScript · 9 engines · 220+ logically-grouped commits · 6 element types · 21 templates.
 
 ## Features
 
+- **In-app feedback + release notes** — a feedback form that auto-attaches build, browser and project context, and a "What's new" dialog shown once per release
+- **Hands-on quick start** — a six-step first run that waits for you to *do* each thing (add text, drag it, animate it, press play, add a shot) and advances off live store state rather than a Next button; the completion predicates are pure functions over plain data, unit-tested headlessly
+- **Helper mode** — an opt-out mode where any of the 21 explainable controls flashes and opens a card while the cursor rests on it, closes the instant it doesn't, and never intercepts a click; built on the same `data-tour` anchors as the quick start, positioned with `@radix-ui/react-popper`
+- **One copy registry** — both surfaces read `content/help.ts`, so a control cannot be described two different ways; a test enforces the shape of the writing (5-word titles, one-sentence bodies, ≤2 chips) so it can't drift back into prose
+- **Contextual hints** — the app says what just changed on its own (tempo detected, another tab taking over), each dismissable for good and restored by replaying the quick start
+- **21 ready-made templates** — announcement clips, dev/product demos, hooks, offers, title cards; pick one and you have an animated composition in three clicks instead of twenty
 - **Canvas editing** — drag / resize / rotate / inline text edit, layer ordering, drag-and-drop asset placement
 - **Frame-accurate timeline** — per-element clips (move/trim), scrubbing, time-based playback clock
 - **Keyframe animation** — opacity, position, scale, rotation via `interpolate`/`spring`, with presets and a draggable keyframe strip
-- **22 text effects** — Remocn animation components (per-character rise, typewriter, glitch, shimmer, highlights…), lazy-loaded per effect
+- **34 text effects** — Remocn animation components (per-character rise, typewriter, glitch, shimmer, odometers, value swaps, marquees…), lazy-loaded per effect
 - **18 shader backgrounds** — full-bleed, frame-synced WebGL backdrops (gradients, noise, warp, particles…), lazy-loaded per preset
+- **4 UI blocks** — terminal window, frosted code editor, progress pipeline, confetti; structured components a text effect can't express
 - **Media** — image, video (`OffthreadVideo`), audio elements with library, probing, and thumbnails
 - **Stock media** — search and import free Pexels photos/videos directly into a project (server-proxied, auth-gated)
 - **One-click backgrounds** — turn any image/video into a full-canvas background (resize, reposition, send to back)
-- **Two export paths** — in-browser WebCodecs (free, Chrome/Edge) and Remotion Lambda cloud render (any device, 1080p)
-- **Accounts & sync** — Google OAuth / email / guest; projects auto-save to Supabase and restore on any device
+- **Two export paths** — Remotion Lambda cloud render (full fidelity, any device, 1080p) and free in-browser WebCodecs (Chrome/Edge; plain text/image/video only)
+- **Accounts & sync** — Google OAuth / email / guest; projects auto-save to Supabase, restore on any device, delete anytime from the Dashboard
 - **Persistence** — project JSON in localStorage + cloud, asset bytes in IndexedDB, S3 for cloud renders
 - **Responsive landing + auth, desktop-only editor** — sign up from any device; the dashboard and editor gate below 1024px with a "use a bigger screen" message
 
@@ -34,7 +43,7 @@ MotionStudio is a full video compositor that runs in the browser. You place elem
 Two layers, one rule:
 
 ```
-engines/    own DATA + LOGIC   (no UI)      project · editor · canvas · rendering
+engines/    own DATA + LOGIC   (no UI)      project · editor · canvas · rendering · audio
 features/   own UI             (compose)    · timeline · animation · asset · export
 ```
 
@@ -43,7 +52,7 @@ features/   own UI             (compose)    · timeline · animation · asset ·
 **One rendering pipeline everywhere:**
 
 ```
-MotionComposition → <Sequence> per element → ElementRenderer → Text/Image/Video/Audio renderer
+MotionComposition → <Sequence> per element → ElementRenderer → Text/Image/Video/Audio/Shader/Block renderer
         ▲                        ▲                          ▲
   editor <Player>       WebCodecs export             Remotion Lambda
 ```
@@ -62,7 +71,7 @@ Deep dives: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/adrs/](docs/adrs/) · [U
 | Browser export | WebCodecs + Mediabunny | Frame-perfect encode + MP4 mux, no server |
 | Text effects & shaders | Remocn (+ `@paper-design/shaders-react`) | Copy-paste Remotion animation components and frame-synced WebGL backgrounds |
 | Backend | Vercel Functions · Supabase · AWS (Lambda, S3) | Auth, quota, cloud render, asset storage |
-| Analytics | PostHog · Vercel Analytics | Product + performance insight |
+| Analytics | PostHog · Vercel Analytics | Product + performance insight, plus unhandled-exception capture tagged with the build SHA |
 
 ## Backend
 
@@ -77,15 +86,24 @@ Deep dives: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/adrs/](docs/adrs/) · [U
 git clone <repo-url> && cd MotionStudio/motionStudio
 npm install
 npm run dev          # http://localhost:5173
+npm test             # headless unit tests for the pure engine modules
+npm run lint         # zero problems is the gate — CI runs with --max-warnings=0
 ```
+
+CI (`.github/workflows/ci.yml`) runs typecheck, lint, tests and a production
+build on every push and PR, plus a separate typecheck for the `api/` functions,
+which are their own npm project and would otherwise never be compiled.
 
 Frontend env (`motionStudio/.env.local`):
 
 ```
 VITE_SUPABASE_URL=
 VITE_SUPABASE_PUBLISHABLE_KEY=
-VITE_POSTHOG_KEY=          # optional
-VITE_POSTHOG_HOST=         # optional
+VITE_POSTHOG_KEY=            # optional
+VITE_POSTHOG_HOST=           # optional
+VITE_REMOTION_LICENSE_KEY=   # optional — defaults to "free-license" for the
+                             # experimental in-browser effects export. Check
+                             # https://remotion.dev/license that you qualify.
 ```
 
 API env (Vercel project settings — only needed for cloud renders / stock search):
@@ -105,9 +123,10 @@ api/                    Vercel serverless functions (render, quota, upload-url, 
 motionStudio/
   src/
     engines/            data + logic: project, editor, canvas, rendering, timeline,
-                        animation, asset, export
+                        animation, asset, audio, export
     features/           UI: landing, dashboard, workspace (canvas/timeline/panels)
-    components/remocn/  22 text-effect components
+    content/            templates + block registry
+    components/remocn/  57 Remocn components (text effects, shaders, UI blocks)
     remotion/           composition entry for Lambda/CLI rendering
 docs/adrs/              architecture decision records
 ```
