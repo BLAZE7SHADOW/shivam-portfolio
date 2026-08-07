@@ -1,9 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Github, ExternalLink } from "lucide-react";
+import {
+  Github,
+  ExternalLink,
+  MousePointer2,
+  Sparkles,
+  LayoutTemplate,
+  Music,
+  Download,
+  Cloud,
+  HelpCircle,
+  type LucideIcon,
+} from "lucide-react";
 import Reveal from "@/components/Reveal";
 import TiltCard from "@/components/TiltCard";
 import Gallery from "@/components/Gallery";
+import Collapse from "@/components/Collapse";
 import ExportDiagram from "@/components/ExportDiagram";
 import { Eyebrow } from "@/components/Section";
 import { HL } from "@/lib/highlight";
@@ -12,8 +24,18 @@ import { motionstudio as ms } from "@/content/motionstudio";
 export const metadata: Metadata = {
   title: "MotionStudio — a Remotion video editor, built in public",
   description:
-    "Case study of MotionStudio: a browser-based programmatic video editor built on Remotion, with dual export paths (browser WebCodecs + AWS Lambda cloud render) and full auth. Architecture, engineering decisions, and the bugs along the way.",
+    "Case study of MotionStudio: a browser-based programmatic video editor built on Remotion, with two export paths (free in-browser WebCodecs + full-fidelity AWS Lambda cloud render), beat-synced shots, and full auth. Architecture, engineering decisions, and the bugs along the way.",
   alternates: { canonical: "https://www.shivamgovindrao.com/projects/motionstudio" },
+};
+
+const FEATURE_ICONS: Record<string, LucideIcon> = {
+  MousePointer2,
+  Sparkles,
+  LayoutTemplate,
+  Music,
+  Download,
+  Cloud,
+  HelpCircle,
 };
 
 function CodeBlock({ code }: { code: string }) {
@@ -24,7 +46,37 @@ function CodeBlock({ code }: { code: string }) {
   );
 }
 
+function SystemCard({ s }: { s: { title: string; body: string; code?: string } }) {
+  return (
+    <TiltCard className="p-6 sm:p-7" max={2}>
+      <h3 className="mb-3 text-lg font-semibold tracking-tight">{s.title}</h3>
+      <p className="mb-4 max-w-3xl text-[15px] leading-relaxed text-ink-dim">{s.body}</p>
+      {s.code && <CodeBlock code={s.code} />}
+    </TiltCard>
+  );
+}
+
+function BugCard({ p }: { p: { problem: string; fix: string } }) {
+  return (
+    <div className="rounded-2xl border border-panel-border bg-panel p-5 sm:p-6">
+      <div className="mb-2 flex items-start gap-3">
+        <span className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-amber-400">Bug</span>
+        <p className="text-[15px] leading-relaxed text-ink-dim">{p.problem}</p>
+      </div>
+      <div className="flex items-start gap-3">
+        <span className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-2">Fix</span>
+        <p className="text-[15px] leading-relaxed text-ink">{p.fix}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function MotionStudioPage() {
+  const shallowSystems = ms.systems.filter((s) => !s.deep);
+  const deepSystems = ms.systems.filter((s) => s.deep);
+  const topBugs = ms.problems.slice(0, 3);
+  const restBugs = ms.problems.slice(3);
+
   return (
     <div className="pt-32">
       {/* HERO */}
@@ -73,13 +125,13 @@ export default function MotionStudioPage() {
         </div>
       </Reveal>
 
-      {/* QUICK FACTS */}
+      {/* QUICK FACTS — capabilities, not vanity metrics */}
       <Reveal>
         <div className="mb-24 grid grid-cols-2 gap-5 sm:grid-cols-4">
           {ms.facts.map((f) => (
             <div key={f.label}>
-              <div className="font-serif text-[clamp(30px,4.5vw,44px)] leading-none grad-text">{f.num}</div>
-              <div className="mt-2.5 text-[13px] text-ink-dim">{f.label}</div>
+              <div className="font-serif text-[clamp(24px,3.6vw,36px)] leading-none grad-text">{f.num}</div>
+              <div className="mt-2.5 text-[13px] leading-relaxed text-ink-dim">{f.label}</div>
             </div>
           ))}
         </div>
@@ -100,6 +152,36 @@ export default function MotionStudioPage() {
             </div>
           )}
         </Reveal>
+      </section>
+
+      {/* WHAT YOU CAN DO — the human tier */}
+      <section className="mb-24">
+        <Reveal><Eyebrow>What you can actually do</Eyebrow></Reveal>
+        <Reveal>
+          <h2 className="mb-8 max-w-2xl font-serif text-[clamp(28px,4.5vw,44px)] font-normal tracking-tight">
+            A full editor, <span className="grad-text italic">no install required.</span>
+          </h2>
+        </Reveal>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {ms.features.map((f, i) => {
+            const Icon = FEATURE_ICONS[f.icon] ?? Sparkles;
+            return (
+              <Reveal key={f.title} delay={i * 0.04}>
+                <div className="h-full rounded-2xl border border-panel-border bg-panel p-5 transition-colors hover:border-accent/40">
+                  <div className="mb-3 flex items-center gap-2.5">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-panel-border bg-black/30 text-accent-2">
+                      <Icon className="h-[18px] w-[18px]" />
+                    </span>
+                    <span className="text-base font-semibold tracking-tight text-ink">
+                      {f.emoji} {f.title}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-ink-dim">{f.blurb}</p>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
       </section>
 
       {/* WHY REMOTION */}
@@ -149,6 +231,12 @@ export default function MotionStudioPage() {
           ))}
         </div>
         <Reveal delay={0.1}>
+          <div className="mt-5 rounded-2xl border border-accent-2/25 bg-accent-2/[0.06] p-5 sm:p-6">
+            <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-2">The honest bit</div>
+            <p className="max-w-3xl text-[15px] leading-relaxed text-ink-dim"><HL text={ms.export.honestNote} /></p>
+          </div>
+        </Reveal>
+        <Reveal delay={0.14}>
           <ExportDiagram />
         </Reveal>
       </section>
@@ -166,7 +254,7 @@ export default function MotionStudioPage() {
         </Reveal>
         <div className="grid gap-5">
           {[
-            { title: "Preventing guest abuse", body: ms.auth.guestAbuse },
+            { title: "Keeping guests honest", body: ms.auth.guestAbuse },
             { title: "The API layer", body: ms.auth.apiLayer },
             { title: "Account isolation", body: ms.auth.accountIsolation },
           ].map((s, i) => (
@@ -222,7 +310,7 @@ export default function MotionStudioPage() {
 
       {/* ENGINES */}
       <section className="mb-24">
-        <Reveal><Eyebrow>The seven engines</Eyebrow></Reveal>
+        <Reveal><Eyebrow>The engines</Eyebrow></Reveal>
         <div className="mb-6 grid gap-3">
           {ms.engines.map((e, i) => (
             <Reveal key={e.name} delay={i * 0.03}>
@@ -243,16 +331,25 @@ export default function MotionStudioPage() {
       <section className="mb-24">
         <Reveal><Eyebrow>Core systems & decisions</Eyebrow></Reveal>
         <div className="grid gap-5">
-          {ms.systems.map((s, i) => (
+          {shallowSystems.map((s, i) => (
             <Reveal key={s.title} delay={i * 0.03}>
-              <TiltCard className="p-6 sm:p-7" max={2}>
-                <h3 className="mb-3 text-lg font-semibold tracking-tight">{s.title}</h3>
-                <p className="mb-4 max-w-3xl text-[15px] leading-relaxed text-ink-dim">{s.body}</p>
-                {s.code && <CodeBlock code={s.code} />}
-              </TiltCard>
+              <SystemCard s={s} />
             </Reveal>
           ))}
         </div>
+        {deepSystems.length > 0 && (
+          <Reveal>
+            <div className="mt-5">
+              <Collapse label="Dig deeper — the harder decisions" hint={`${deepSystems.length} more`}>
+                <div className="grid gap-5">
+                  {deepSystems.map((s) => (
+                    <SystemCard key={s.title} s={s} />
+                  ))}
+                </div>
+              </Collapse>
+            </div>
+          </Reveal>
+        )}
       </section>
 
       {/* PROBLEMS & FIXES */}
@@ -264,21 +361,25 @@ export default function MotionStudioPage() {
           </h2>
         </Reveal>
         <div className="grid gap-4">
-          {ms.problems.map((p, i) => (
+          {topBugs.map((p, i) => (
             <Reveal key={i} delay={i * 0.03}>
-              <div className="rounded-2xl border border-panel-border bg-panel p-5 sm:p-6">
-                <div className="mb-2 flex items-start gap-3">
-                  <span className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-amber-400">Bug</span>
-                  <p className="text-[15px] leading-relaxed text-ink-dim">{p.problem}</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-2">Fix</span>
-                  <p className="text-[15px] leading-relaxed text-ink">{p.fix}</p>
-                </div>
-              </div>
+              <BugCard p={p} />
             </Reveal>
           ))}
         </div>
+        {restBugs.length > 0 && (
+          <Reveal>
+            <div className="mt-4">
+              <Collapse label="Show the rest of the war stories" hint={`${restBugs.length} more`}>
+                <div className="grid gap-4">
+                  {restBugs.map((p, i) => (
+                    <BugCard key={i} p={p} />
+                  ))}
+                </div>
+              </Collapse>
+            </div>
+          </Reveal>
+        )}
       </section>
 
       {/* PAYOFFS */}

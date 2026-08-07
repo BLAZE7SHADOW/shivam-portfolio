@@ -1,6 +1,8 @@
 // ============================================================================
 //  MOTIONSTUDIO CASE STUDY  —  /projects/motionstudio
-//  Sourced from ARCHITECTURE.md. Edit this file to grow the page over time.
+//  Sourced from remotion-docs/ (README · ARCHITECTURE · CHANGELOG · USER_GUIDE),
+//  which is the single source of truth for this project. Written to read like me
+//  talking: plain-English lead, **bold** for the technical substance. Edit here.
 //  Add demo videos/screenshots to `media` (files go in /public/demos).
 // ============================================================================
 import type { Media } from "./data";
@@ -10,13 +12,13 @@ export const motionstudio = {
   status: "Live · Actively Building",
   year: "2026",
   role: "Personal project · solo build",
-  tagline: "A browser-based video editor, built on Remotion.",
+  tagline: "A real video editor, right in your browser.",
   links: {
     live: "https://motionstudio-six.vercel.app/",
     github: "https://github.com/BLAZE7SHADOW/MotionStudio",
   },
   intro:
-    "Place text, images, video, audio and shader backgrounds on a canvas, arrange them on a frame-accurate timeline, animate them with keyframes and 22 text effects, and export to MP4 — in the browser or on the cloud. Projects auto-save locally and sync across devices when you're signed in. This page is the living build journal: the architecture, the decisions, and the bugs that taught me something.",
+    "Think of it as Canva for programmatic video. You drop text, images, video, audio and animated backgrounds onto a canvas, arrange them on a timeline, animate them, and export a real MP4 — all without leaving the browser. It's built on Remotion, so what you see while editing is what actually renders. This page is my living build journal: what it does, the decisions behind it, and the bugs that taught me something.",
 
   // Drop demo videos / screenshots here as the build progresses.
   media: [
@@ -26,86 +28,143 @@ export const motionstudio = {
     { type: "image", src: "/images/MotionStudio.png", caption: "The editor today — canvas, properties panel, frame-accurate timeline" },
   ] as Media[],
 
+  // ————— Capability facts (what it can do — not vanity metrics) —————
   facts: [
-    { num: "~5K+", label: "Lines of strict TypeScript" },
-    { num: "7", label: "Engines — data & logic, zero UI" },
-    { num: "85+", label: "Logically-grouped commits" },
-    { num: "4", label: "Infrastructure layers — Vercel · Supabase · AWS Lambda · S3" },
+    { num: "In-browser", label: "A full video editor — no install, no server needed to create" },
+    { num: "6", label: "Element types — text, image, video, audio, shaders, blocks" },
+    { num: "34 + 18", label: "Text effects and animated shader backgrounds" },
+    { num: "2 ways", label: "To export — free in your browser, or full-fidelity on the cloud" },
   ],
+
+  // ————— The human tier: what you can actually do (for everyone) —————
+  features: [
+    {
+      icon: "MousePointer2",
+      emoji: "🎨",
+      title: "Compose on a canvas",
+      blurb:
+        "Drag, resize, rotate and edit text, images, video and audio right on the frame — the way you'd expect any editor to work.",
+    },
+    {
+      icon: "Sparkles",
+      emoji: "✨",
+      title: "Animate anything",
+      blurb:
+        "Keyframe opacity, position, scale and rotation, or grab one of 34 ready-made text effects and 18 animated backgrounds. Every one previews live before you commit.",
+    },
+    {
+      icon: "LayoutTemplate",
+      emoji: "⚡",
+      title: "Start from a template",
+      blurb:
+        "21 ready-made templates — announcements, product demos, hooks, title cards. Pick one and you've got an animated video in three clicks instead of twenty.",
+    },
+    {
+      icon: "Music",
+      emoji: "🎵",
+      title: "Cut in time with music",
+      blurb:
+        "Drop in a track and it finds the beat, then your shots snap to it — so cuts land on the music instead of you eyeballing it.",
+    },
+    {
+      icon: "Download",
+      emoji: "🎬",
+      title: "Two ways to export",
+      blurb:
+        "Render for free right in your browser, or send it to the cloud for full-fidelity 1080p from any device — even your phone.",
+    },
+    {
+      icon: "Cloud",
+      emoji: "☁️",
+      title: "Sign in & pick up anywhere",
+      blurb:
+        "Google, email, or jump in as a guest. Signed-in projects auto-save to the cloud and come back on any device you log into.",
+    },
+    {
+      icon: "HelpCircle",
+      emoji: "🧭",
+      title: "It explains itself",
+      blurb:
+        "A hands-on quick start walks you through your first video, and a hover-anywhere helper mode explains any control — without ever blocking a click.",
+    },
+  ] as { icon: string; emoji: string; title: string; blurb: string }[],
 
   // ————— Why Remotion is the foundation —————
   remotion: {
     heading: "Why Remotion is the core bet",
     body:
-      "The product renders real video. Remotion gives me frames as a first-class unit, <Sequence> for temporal composition, <Player> for in-app preview, and renderMedia for the actual encode — building a renderer and encoder myself would be months of work that teaches nothing about this product. The interesting engineering is everything I built on top of it:",
+      "The whole product hinges on one thing: it renders real video. Remotion gives me frames as a first-class unit, <Sequence> for laying things out in time, <Player> for the in-app preview, and a real render pipeline — building a renderer and encoder from scratch would be months of work that teaches nothing about this product. So I bought that, and spent my time on everything built on top of it:",
     points: [
-      "**Frame-based temporal model** — every element carries `startFrame` + `durationInFrames`, mapped 1:1 onto `<Sequence from={startFrame}>`. Visibility is the half-open window `[start, start + duration)`. Frames, not seconds, because Remotion is frame-based and frames are exact — no floating-point drift.",
-      "**One shared renderer = guaranteed WYSIWYG** — the editor canvas renders the *same* `MotionComposition` through a single Remotion `<Player>` (synced to the timeline frame), with selection, drag and resize as a transparent overlay on top. Preview, WebCodecs export and Lambda now run the *identical* component tree — WYSIWYG isn't \"we tried to match,\" the preview *is* the export pipeline.",
-      "**Effects bought as source** — 22 Remocn text-effect components (per-character rise, typewriter, glitch, shimmer, highlights…) and 18 frame-synced WebGL shader backgrounds (mesh gradients, noise, warp, particles…), each lazy-loaded per preset and previewed live in a looping `<Player>` before you commit to it.",
-      "**Animation on Remotion's primitives** — `interpolate` with `extrapolate: 'clamp'` so animations finish instead of extrapolating to infinity, and `spring` for physics (it needs `fps`, because a bounce is real-time). Multiple animations accumulate into one transform — factors multiply, offsets add — the same algebra compositors use.",
-      "**Two export paths, one dialog** — a Browser tab (WebCodecs + OfflineAudioContext, in-process, Chrome/Edge only) and a Cloud Render tab (Remotion Lambda on AWS, any device, full 1080p, no local CPU). The same MotionComposition component powers both — the browser path encodes frames directly, the Lambda path renders the same composition in headless Node.",
-      "**DOM video vs Remotion video** — the editor previews with a DOM `<video>` (seek on scrub for exact frames, play natively during playback, muted for reliable autoplay); the export uses `<OffthreadVideo>`, which is authoritative.",
+      "**Frames, not seconds** — every element carries a `startFrame` and `durationInFrames`, mapped 1:1 onto `<Sequence from={startFrame}>`. Frames because Remotion is frame-based and frames are exact — no floating-point drift creeping into your timing.",
+      "**One renderer for the preview and the cloud** — the editor canvas renders the *same* `MotionComposition` through a Remotion `<Player>`, with drag/resize as a transparent overlay on top. The editor preview and the AWS Lambda render run the **identical component tree**, so what you see is genuinely what the cloud renders. (The free in-browser export is a separate, faster path — see below.)",
+      "**Effects bought as source, not built** — 34 Remocn text-effect components (per-character rise, typewriter, glitch, shimmer, counting numbers…), 18 frame-synced WebGL shader backgrounds, and 4 structured UI blocks (terminal, code editor, progress steps, confetti) as a 6th element type. Each is vendored into the repo and lazy-loaded per preset, so I own the code but didn't write the polish.",
+      "**Animation on Remotion's primitives** — `interpolate` with `extrapolate: 'clamp'` so animations *finish* instead of running off to infinity, and `spring` for real physics (it needs `fps`, because a bounce happens in real time). Stack several on one element and they **accumulate** — scale factors multiply, offsets add — the same algebra a compositor uses.",
+      "**DOM video for scrubbing, Remotion for the truth** — the editor previews with a plain `<video>` (seek on scrub for exact frames, play natively during playback, muted for reliable autoplay); the export uses `<OffthreadVideo>`, which is authoritative.",
     ],
   },
 
   // ————— The export pivot: from a CLI command to two production paths —————
   export: {
-    heading: "The export pivot — from CLI to two production paths",
+    heading: "The export pivot — from a CLI command to two real paths",
     story:
-      "The original export was a Remotion CLI command generated by the app. It worked — if you were a developer willing to run a terminal command. For an actual end user it was unusable. That gap forced two separate solutions, each with a different tradeoff.",
+      "The first version of export was a Remotion CLI command the app generated for you. It worked — if you were a developer happy to run a terminal command. For an actual end user, unusable. That gap is the real story: the missing piece wasn't a feature, it was a way for normal people to get a finished video out. So it became two paths, each with an honest trade-off.",
 
     paths: [
       {
         name: "Browser export (WebCodecs)",
-        subtitle: "Free · unlimited · Chrome/Edge only",
+        subtitle: "Free · unlimited · Chrome/Edge",
         how:
-          "Each frame is rendered to a canvas using the same style.ts function the editor preview uses, then pushed into a VideoEncoder (WebCodecs API). Audio tracks are mixed frame-perfectly using OfflineAudioContext — a Web Audio context that renders faster than real-time, producing a precise AudioBuffer. Video frames and the audio buffer are muxed into an MP4 container using Mediabunny and downloaded directly to the user's device. No server, no round-trip.",
+          "Renders entirely inside your browser — no server, no terminal. Each frame is drawn to an off-screen canvas, audio is mixed sample-exact with OfflineAudioContext, and the browser's hardware encoder (WebCodecs / H.264) compresses it, muxed to MP4 with Mediabunny and downloaded straight to your device. Zero infrastructure cost. There's a beta 'Include effects' mode that renders the real composition so text effects, shaders and blocks survive — it's ticked automatically when your project needs it.",
         why:
-          "WebCodecs gives hardware-accelerated encoding in the browser. OfflineAudioContext eliminates the timing drift of real-time audio. Mediabunny handles the muxing complexity. The result is frame-perfect, audio-included output with zero infrastructure cost.",
-        limits: "Chrome and Edge only (WebCodecs is not in Firefox/Safari). Large projects encode slowly on low-end hardware.",
+          "Free, instant, private, and it works offline. The plain path is fast and dependable; the beta effects path closes most of the fidelity gap without a round-trip to a server.",
+        limits: "Chrome and Edge only (WebCodecs isn't in Safari yet). The fast path draws to a 2D canvas, so it drops the 34 text effects, animated backgrounds and blocks unless you turn on the slower 'Include effects' mode — and the dialog warns you when your project needs it.",
       },
       {
         name: "Cloud render (Remotion Lambda)",
-        subtitle: "Quota-based · any device · 1080p · AWS Lambda",
+        subtitle: "Full fidelity · any device · 1080p · AWS Lambda",
         how:
-          "The user clicks Render in the Cloud Render tab. A Vercel serverless function verifies their JWT, checks their monthly quota against a Supabase renders table, and calls renderMediaOnLambda() from @remotion/lambda-client. A pre-deployed Lambda function (2GB memory, 120s timeout) renders the Remotion composition in headless Node, writes the output MP4 to S3, and returns a download URL. The serverless function polls getRenderProgress() until done, then returns the URL to the client. Media imported into the editor uploads to S3 in the background as soon as it's added — the browser keeps the blob: URL for local preview, and a storageUrl (a public S3 https:// link) is patched onto the asset once the upload completes, so Lambda has a real URL to fetch when it renders.",
+          "Click Render in the Cloud tab and a Vercel function verifies your login, checks your monthly quota in Supabase, and kicks off a Remotion Lambda render on AWS. It returns immediately with a render ID; the browser polls for progress, so you get a real percentage instead of a spinner, and the render is never silently capped by a serverless timeout. Media you imported is uploaded to S3 in the background, so Lambda has real URLs to fetch. Out comes a 1080p MP4.",
         why:
-          "This is the production path — the one that works on every device including mobile, Safari, low-end laptops. The render happens on dedicated infrastructure, not in the user's browser tab. The Lambda function is a standard Remotion deployment; the real engineering was the quota gate, the auth layer, and the background S3 upload around it.",
-        limits: "2GB memory / 120s Lambda timeout caps how long or heavy a composition can be per render.",
+          "This is the path that just works — on every device, including Safari and phones, and with every effect, shader and block intact because it runs the exact same composition as the editor. The render happens on dedicated infrastructure, not your laptop.",
+        limits: "Quota-based — Lambda costs real money, so guests get 1 free render and signed-in users get a monthly allowance.",
       },
     ],
+    honestNote:
+      "The honest bit: 'what you see is what you get' holds for the editor preview and the cloud render — they're the same component tree. It does **not** fully hold for the fast browser export, which paints to a 2D canvas and can't draw React-rendered effects. Rather than pretend otherwise, the export dialog inspects your project and warns you, and the beta effects path exists to close the gap. Being upfront about the seam beat quietly shipping a broken file.",
   },
 
   // ————— Auth, quota, and guest access —————
   auth: {
-    heading: "Auth, quota, and guest access",
+    heading: "Auth, quota, and keeping guests honest",
     body:
-      "Three sign-in paths — Google OAuth, email/password (Supabase, with email confirmation flow), and anonymous guest (no sign-up required, 1 cloud render free). All auth state and actions live in a single useAuth hook; UI components call hook methods and never touch the Supabase client directly.",
+      "Three ways in — Google, email/password, or anonymous guest with no sign-up at all. All of it lives behind a single useAuth hook, so no UI component ever touches the Supabase client directly. The interesting engineering isn't the login button; it's making a free cloud render abuse-resistant and keeping people's projects from bleeding into each other on a shared computer.",
 
     guestAbuse:
-      "Anonymous sessions persist in localStorage — clearing it would give a user a new session and another free render. Solved with a device ID cookie: crypto.randomUUID() written to a 1-year cookie on first visit. The cookie survives localStorage clears. The API checks the device_renders table before allowing any anonymous render and records the device ID only after a confirmed successful output URL — failed renders don't consume the free slot.",
+      "Guests get 1 free cloud render — and the obvious cheat is to clear localStorage and get another. So the free slot is tracked by a **device ID cookie** (a `crypto.randomUUID()` in a 1-year cookie) that survives a localStorage wipe. The slot is only spent **after a confirmed successful render**, so a failed or abandoned render never burns your one free try.",
 
     apiLayer:
-      "Four Vercel serverless functions (/api/render, /api/quota, /api/upload-url, /api/contact) sit between the client and AWS. Every render request is validated in four ordered gates: (1) JWT verified via Supabase admin client, (2) device cookie checked for anonymous users, (3) monthly render count checked against the renders table, (4) Lambda started — and only after all four pass. A failed render never consumes quota. Shared helpers in api/_lib/ (auth.ts, db.ts, device.ts) keep the handler logic thin and eliminate duplication across endpoints.",
+      "Four small Vercel functions sit between the browser and AWS — `/api/render`, `/api/quota`, `/api/upload-url`, `/api/contact`. Every render runs a **4-gate guard, strictly in order**: verify the login → check the device (guests only) → check the monthly quota → *then* start Lambda. And because a render can outlast a serverless request, `/api/render` returns a render ID immediately and the client polls a status endpoint — which is what removed the silent ~60s timeout cap and gave the progress bar real numbers.",
 
     accountIsolation:
-      "Projects are stored locally in IndexedDB. On every auth state change, AuthBridge (a non-rendering component in App.tsx) compares the new user ID to ms_last_user in localStorage. If they differ — a different account logged in, or a sign-out happened — it calls clearAll(), which resets the Zustand store and calls persist.clearStorage() to immediately wipe IndexedDB. User B never sees User A's projects.",
+      "Projects live locally in IndexedDB. On any auth change, a tiny non-rendering AuthBridge compares the new user to the last one and, if it's different (or a sign-out), wipes the local store and IndexedDB. User B never opens their laptop to find User A's projects sitting there.",
   },
 
   // ————— Tech stack, with the why —————
   stack: [
-    { name: "Remotion", why: "Frames, <Sequence>, <Player>, renderMedia — the video engine. The one dependency the product is genuinely built around." },
-    { name: "React 19 + TypeScript (strict)", why: "Discriminated-union element types; adding a new element type = one type + one renderer." },
-    { name: "Zustand", why: "Global state with zero boilerplate: one create() → a hook + selectors. No providers, no reducers." },
-    { name: "React Router v7", why: "/ dashboard, /editor/:projectId — the URL is the single input that selects a project." },
+    { name: "Remotion", why: "Frames, <Sequence>, <Player>, and real Lambda rendering — the video engine, and the one dependency the whole product is built around." },
+    { name: "React 19 + TypeScript (strict)", why: "Elements are a discriminated union, so adding a new element type is one type plus one renderer — the compiler tells you everything you forgot." },
+    { name: "Zustand", why: "Global state with zero boilerplate: one create() gives a hook and selectors. No providers, no reducers." },
+    { name: "React Router v7", why: "/ is the dashboard, /editor/:projectId is the editor — the URL is the single input that picks a project." },
     { name: "react-moveable", why: "Drag/resize/rotate handles are a solved problem; rebuilding them is weeks of hit-testing math that teaches nothing about this product." },
-    { name: "Remocn + shaders-react", why: "22 copy-paste Remotion text-effect components and 18 frame-synced WebGL shader backgrounds — animation polish bought as source in the repo and lazy-loaded per preset, not built from scratch." },
-    { name: "Tailwind v4 + shadcn/ui", why: "Fast, consistent dark UI via design tokens; accessible primitives (Dialog, Popover, Select) without reinventing them." },
-    { name: "IndexedDB + localStorage", why: "Client-only persistence, split by data shape: small JSON state in localStorage, large media blobs in IndexedDB." },
-    { name: "Supabase", why: "Auth (Google OAuth, email/password, anonymous) + a renders table for quota, plus per-user JSONB project sync (RLS-scoped, 2s-debounced upsert). Service-role key stays server-side; publishable key in the browser." },
-    { name: "Vercel Functions", why: "Four API endpoints — /api/render (Lambda trigger + quota gate), /api/quota (render count), /api/upload-url (presigned S3 PUTs), /api/contact (Resend email). Node.js, deployed alongside the SPA." },
-    { name: "Remotion Lambda", why: "Cloud render path — headless Node on AWS Lambda, returns an S3 MP4 URL. Setup was configuration, not infrastructure engineering." },
-    { name: "PostHog + Vercel Analytics", why: "Typed analytics.ts module captures every key event (auth methods, export starts/completions with duration, tab switches, undo/redo). PageTracker fires $pageview on every SPA route change." },
+    { name: "Remocn + shaders-react", why: "34 copy-paste Remotion text effects, 18 WebGL shader backgrounds and 4 UI blocks — animation polish vendored as source and lazy-loaded per preset, not built from scratch." },
+    { name: "Tailwind v4 + shadcn/ui", why: "Fast, consistent dark UI from design tokens, plus accessible primitives (Dialog, Popover, Select) I didn't have to reinvent." },
+    { name: "IndexedDB + localStorage", why: "Local persistence split by shape: small JSON state in localStorage, large media blobs in IndexedDB (which is built for Blobs)." },
+    { name: "Supabase", why: "Auth (Google / email / guest) + Postgres with row-level security for render quotas and per-user project sync (a JSONB row, 2s-debounced) — no auth server to build or run." },
+    { name: "Vercel Functions", why: "Four Node endpoints (render, quota, upload-url, contact) deployed alongside the SPA — zero standing infrastructure for that footprint." },
+    { name: "AWS Lambda + S3", why: "The cloud render path: headless render on Lambda, output and media stored in S3. A cloud pipeline for ~20 minutes of config instead of months of infra." },
+    { name: "Pexels (stock)", why: "Search and import free stock photos/video straight into a project — proxied through a server function, auth-gated." },
+    { name: "PostHog + Vercel Analytics", why: "Product analytics and unhandled-exception capture tagged with the build SHA. Signed-in users are identified by their stable Supabase UUID (not email, which can change); guests stay anonymous." },
+    { name: "driver.js + Radix Popper", why: "The guided quick start and the hover-anywhere helper mode — spotlighting and positioning that don't require any of the 21 explained controls to know onboarding exists." },
   ],
 
   // ————— Architecture —————
@@ -114,40 +173,43 @@ export const motionstudio = {
     diagram: `engines/   own DATA + LOGIC   (no UI)
 features/  own UI             (compose engines)`,
     rule:
-      "The Project is the aggregate root. One Project object owns all data — elements, assets, settings. Engines don't keep their own copies; they expose verbs that read and write the one Project through a single mutation point (updateProject). Everything downstream falls out of this: undo/redo hooks the one mutation point and covers every edit automatically, autosave persists the one Project with nothing to wire per-feature, and state drift is impossible because there's only ever one source of truth.",
+      "The whole thing rests on one rule: the Project is the aggregate root. One Project object owns all the data — every element, asset and setting. Engines don't keep their own copies; they expose verbs that read and write the one Project through a single mutation point (updateProject). Everything good falls out of that: undo/redo hooks that one point and covers every edit for free, autosave persists the one Project with nothing wired per-feature, and state can't drift because there's only ever one source of truth.",
     movesTitle: "The three data moves — immutability everywhere",
     moves: `add     → [...arr, x]
 remove  → arr.filter(x => x.id !== id)
 update  → arr.map(x => x.id === id ? { ...x, ...patch } : x)`,
     movesWhy:
-      "React and Zustand detect change by reference identity, and undo snapshots must stay frozen. A single .push() would skip re-renders and corrupt history.",
+      "React and Zustand detect change by reference identity, and undo snapshots have to stay frozen. A single .push() would skip re-renders and quietly corrupt the undo history.",
   },
 
   engines: [
     { name: "project", owns: "The projects array (aggregate root) + undo history + persistence", note: "The only real store" },
     { name: "editor", owns: "Ephemeral view state: selection, current frame, playing, zoom", note: "Deliberately not persisted" },
-    { name: "canvas", owns: "Verbs: addText/Image/Video/Audio, updateElement, removeElement, reorderLayer", note: "A hook, not a store — owns no data" },
+    { name: "canvas", owns: "Verbs: addText/Image/Video/Audio/Block, updateElement, removeElement, reorderLayer", note: "A hook, not a store" },
     { name: "timeline", owns: "Pure frame ↔ pixel math", note: "Stateless helpers" },
     { name: "animation", owns: "interpolate / spring evaluation + presets", note: "Pure functions" },
-    { name: "rendering", owns: "The shared style.ts + Remotion MotionComposition", note: "One renderer, two consumers" },
+    { name: "rendering", owns: "The shared style.ts + Remotion MotionComposition", note: "One renderer, many consumers" },
     { name: "asset", owns: "Upload, metadata probing, blob persistence", note: "Reads/writes project.assets" },
+    { name: "audio", owns: "Beat detection + the offline audio mix for export", note: "Pure analysis + Web Audio plumbing" },
+    { name: "export", owns: "The browser render loop + frame drawing + muxing", note: "The free in-browser path" },
   ],
   enginesWhy:
-    "Why some engines are stores and others are hooks: a store owns state (Project, Editor). A hook owns verbs over state it doesn't hold — Canvas and Asset read the active project and write back via updateProject. Keeping element data on the Project, not in the Canvas engine, is the aggregate root enforced.",
+    "Some engines are stores and some are hooks, on purpose. A store owns state (Project, Editor). A hook owns verbs over state it doesn't hold — Canvas and Asset read the active project and write it back through updateProject. Keeping element data on the Project, not scattered in the Canvas engine, is the aggregate-root rule actually enforced in code.",
 
   // ————— Core systems —————
+  // `deep: true` entries render inside a collapsible "dig deeper" block.
   systems: [
     {
       title: "Composition-space coordinates",
       body:
-        "Elements are stored in output resolution (16:9 = 1920×1080), not screen pixels; the editor renders a scaled view. The export must match the editor — store coordinates once at final resolution and every view (editor at ~50%, Remotion at 100%) just multiplies by its own scale. This one conversion powers canvas dragging, drop-to-canvas, and scrubbing.",
+        "Coordinates are stored once, in the real output resolution (1920×1080), never in screen pixels — the editor just shows a scaled-down view. That's why the export always matches the editor: every view (editor at ~50%, the render at 100%) just multiplies by its own scale. This one conversion powers canvas dragging, drop-to-canvas, and scrubbing.",
       code: `data → screen : × scale   (shrink to fit the window)
 screen → data : ÷ scale   (grow a drag back to real coords)`,
     },
     {
       title: "Timeline coordinate math",
       body:
-        "The same idea, on the time axis. Dragging a clip to retime it is updateElement(id, { startFrame }) — the same verb as canvas dragging, through the same door.",
+        "Same idea, on the time axis. Retiming a clip by dragging it is `updateElement(id, { startFrame })` — the exact same verb as dragging it on the canvas, through the exact same door.",
       code: `pxPerFrame  = trackWidth / totalFrames
 frameToX(f) = f × pxPerFrame          (draw a clip / ruler tick)
 xToFrame(x) = round(x / pxPerFrame)   (scrub / drag)`,
@@ -155,38 +217,92 @@ xToFrame(x) = round(x / pxPerFrame)   (scrub / drag)`,
     {
       title: "Time-based playback clock",
       body:
-        "Playback advances by real elapsed time × fps, not currentFrame++ per animation frame. requestAnimationFrame fires at the monitor's rate — 60 or 120Hz, dropping under load — so frame++ would play 30fps content at 60fps on a 60Hz screen. Measuring wall-clock time keeps speed correct on any hardware.",
+        "Playback advances by real elapsed time × fps, not `currentFrame++` per frame. `requestAnimationFrame` fires at the monitor's rate — 60 or 120Hz, and it drops under load — so counting frames would play 30fps content at 60fps on a 60Hz screen. Measuring wall-clock time keeps the speed correct on any hardware.",
     },
     {
       title: "Animation engine — accumulate, don't replace",
       body:
-        "Built on Remotion's interpolate (with extrapolate: 'clamp' so animations finish instead of running off to infinity) and spring (physics/overshoot — it needs fps because a bounce is real-time). Multiple animations on one element accumulate into a single transform: scale factors multiply, position offsets add — the same algebra a compositor uses. That's why a Fade In and a Slide Up stack cleanly instead of one clobbering the other.",
+        "Built on Remotion's interpolate (clamped so animations finish instead of running to infinity) and spring (real physics, which needs fps because a bounce is real-time). The key call: multiple animations on one element accumulate into a single transform — scale factors multiply, position offsets add — the same algebra a compositor uses. That's why Fade In and Slide Up stack cleanly instead of one clobbering the other.",
       code: `value  = base × Π(scaleFactors) + Σ(offsets)
 finish = extrapolate:'clamp'   (no infinite extrapolation)`,
     },
     {
       title: "Persistence, split by data shape",
       body:
-        "Object URLs die on reload, so the bytes are persisted and a fresh URL is minted each session. localStorage can't hold large binaries; IndexedDB is built for Blobs. Editor view state is intentionally not persisted — you don't want to reopen frozen mid-playback. For signed-in users, projects also sync to Supabase: on login the cloud copy is the source of truth, and a 2s-debounced upsert pushes each project as a JSONB row (RLS-scoped per user), so work survives session expiry, localStorage wipes and device switches. Because everything is one Project object, cloud sync was one table and ~40 lines.",
+        "Object URLs die on reload, so I persist the raw bytes and mint a fresh URL each session. localStorage can't hold large binaries; IndexedDB is built for Blobs. Signed in, projects also sync to Supabase: on login the cloud copy is the source of truth, and a 2s-debounced upsert pushes each project as a JSONB row (scoped per user). Because everything is one Project object, cloud sync was one table and about 40 lines.",
       code: `metadata (JSON, small)  → localStorage (Zustand persist) + Supabase (cloud, per user)
 media bytes (binary)    → IndexedDB (local) + S3 (public URL for Lambda)`,
     },
     {
       title: "Undo/redo — snapshots + coalescing",
       body:
-        "History is snapshots of the projects array. Because edits build new objects immutably, snapshots share unchanged sub-objects — no deep copies. Rapid edits within ~500ms coalesce into one step, so a whole drag or a typing burst is one undo. It was nearly free to build, because every edit already flows through updateProject.",
+        "History is snapshots of the projects array. Because edits build new objects immutably, snapshots share the unchanged sub-objects — cheap, no deep copies. Rapid edits within ~500ms coalesce into one step, so a whole drag or a typing burst is a single undo. It was nearly free to build, because every edit already flows through updateProject.",
     },
-  ],
+    {
+      deep: true,
+      title: "Shots — a label on time, not a box around it",
+      body:
+        "A video is a sequence of shots, and the timeline needs to say so. The obvious model is nested `scene.elements[]` — but I didn't do that. The render contract is a **flat array with absolute startFrames**, and nesting would force every consumer (the exporter, the web renderer, the audio mix, the Lambda site) to flatten first — the code least worth destabilising. So elements stay flat and just gain a `sceneId`, and a shot becomes a labelled span of time. Not one line of the render path changed. The price is that two invariants (an element lies inside its shot; the total equals the sum of shots) are enforced in ~20 lines of pure, tested code instead of falling out of the shape — a deliberate trade, because a render-path regression is the failure mode this codebase has been bitten by most.",
+    },
+    {
+      deep: true,
+      title: "Beat detection — infer a grid, don't report the onsets",
+      body:
+        "Cutting to music is the point of shots, and the naive build — detect each onset, draw a tick, snap to it — is wrong. Onset detection is jittery, and a jittery grid is worse than none: a clip lands two frames off and you can't tell if that was you or the tool. So the peaks are only ever *evidence* for two numbers — **BPM and first-beat offset** — and the grid drawn from them is perfectly regular, more accurate than the detections it came from, and survives passages with no kick. Everything's kept in seconds and converted to frames only at the moment of snapping, because a grid stored in frames drifts a couple of frames out by beat 32 — fine in a five-second test, broken in a real edit.",
+    },
+    {
+      deep: true,
+      title: "Transitions are just animations",
+      body:
+        "A transition *is* an animation — a zoom punch is `scale 1.18 → 1`, a whip is `x +768 → 0`. The animation evaluator is already called by both the Remotion renderer and the browser export, so materialising a shot's transition as animations on its elements means it renders and exports everywhere with nothing else changing — the same trick that kept shots and beat-snapping cheap. A `source: 'transition'` tag keeps the generated ones out of the Motion panel and lets them be swapped without touching anything hand-made. The cost, accepted on purpose: no true cross-dissolve, because shots never overlap.",
+    },
+    {
+      deep: true,
+      title: "One editor per project, across tabs",
+      body:
+        "Both persistence paths serialise the whole projects array, and neither reconciles — so a second tab holding a stale copy silently overwrote the first tab's work, and last-writer-won never told the loser. Merging concurrent edits to a video has no obvious right answer, so I chose a **lock, not a merge**: a per-project claim in localStorage (synchronous, and its `storage` event fires in *other* tabs — exactly who needs to know). Claims expire after 75s (a crashed tab never releases, and Chrome clamps background timers to ~once a minute, so a shorter window evicted every backgrounded tab). The guard sits on `updateProject` — the one chokepoint — plus undo/redo, which restore the whole array.",
+    },
+    {
+      deep: true,
+      title: "Blocks — a registry, not another hardcoded union",
+      body:
+        "Text effects and shaders are string unions with a lazy map — fine for 'one component, one string,' but useless for components that take arrays and objects (a terminal's lines, a pipeline's steps). Those became a 6th element type backed by a **registry**: each entry declares its lazy import, defaults, natural length, a field schema the Properties panel renders inputs from, and a `toProps` translator. Adding a block is a registry entry — the renderer and the panel don't change. Two things the registry also owns: composition-scale sizing (a component tuned for someone else's canvas can render at 1.4% of the frame), and enforcing each block's natural length so a too-short clip doesn't cut the animation off.",
+    },
+    {
+      deep: true,
+      title: "The app reports its own bugs",
+      body:
+        "A tool people actually use needs a way to tell you when it breaks — so there's an **in-app feedback form** that auto-attaches the build SHA, browser, screen size and (in the editor) the current project's format and contents, and you can read exactly what's attached before you hit send. Every failure surface — a failed export, a failed cloud render, a file that needs re-uploading — carries a **\"Report this\"** link that opens that form with the problem already described. And a once-per-release **\"What's new\"** dialog (with a dot on the ? button until you read it) keeps people in the loop without nagging. It's the difference between a demo and something you can hand to a stranger.",
+    },
+    {
+      deep: true,
+      title: "Schema migrations that travel with the data",
+      body:
+        "Zustand's persist has a version, but it only covers IndexedDB — a project pushed to Supabase and pulled back down arrives as a bare object with no version anywhere on it, so the cloud path could only run the migration and hope. So the version lives on the Project itself (`schemaVersion`), and `migrateProject()` walks a ladder of steps and stamps the result — even when no step ran, because saying 'this is version 1' is what lets the next migration skip it. It runs at all three entry points (IndexedDB restore, cloud load, template create), and a project from a *newer* build is detected and left untouched rather than stamped backwards.",
+    },
+  ] as { title: string; body: string; code?: string; deep?: boolean }[],
 
   // ————— Problems & fixes (the war stories) —————
   problems: [
     {
-      problem: "Every cloud render crashed with a raw \"supabaseUrl is required.\" on every single frame — while the browser app worked fine. Root.tsx imported getCompositionDimensions from the engines/project barrel, which also re-exported cloudSync.ts, which imported a Supabase client built with createClient() at module top-level. Remotion's bundler doesn't replace Vite's import.meta.env.VITE_* syntax, so the URL came through undefined in the Lambda/CLI bundle — throwing on construction before a frame rendered.",
-      fix: "Made the client a lazy getSupabase() instead of an eager top-level singleton, so importing the module transitively (via a barrel) no longer has a side effect. Lesson: a top-level createClient() in a file a render entry can reach is a landmine — the render bundle isn't the app bundle.",
+      problem: "Every cloud render crashed with a raw \"supabaseUrl is required.\" on every single frame — while the browser app worked fine. The render entry imported a helper from a barrel file that also re-exported the cloud-sync module, which built a Supabase client at module top-level. Remotion's bundler doesn't swap Vite's env syntax, so the URL came through undefined in the Lambda bundle and threw before a frame rendered.",
+      fix: "Made the client a lazy getSupabase() instead of an eager top-level singleton, so importing the module (even transitively, via a barrel) no longer has a side effect. Lesson: a top-level createClient() in any file a render entry can reach is a landmine — the render bundle is not the app bundle.",
     },
     {
-      problem: "Fixing the code didn't fix the render. After the lazy-getSupabase() fix shipped to Vercel, cloud renders still failed with the identical error.",
-      fix: "The Lambda-executed bundle is a separate artifact in S3 that a Vercel deploy never rebuilds — REMOTION_SERVE_URL points at it. Added npm run deploy:lambda-site (remotion lambda sites create) and ran it to push the fixed bundle. Any change reachable from src/remotion/index.ts needs that command re-run, or cloud renders keep executing the old bundle while the rest of the app looks fully deployed.",
+      problem: "Fixing the code didn't fix the render. After the lazy-client fix shipped to Vercel, cloud renders still failed with the identical error.",
+      fix: "The Lambda-executed bundle is a separate artifact in S3 that a Vercel deploy never rebuilds. Added `npm run deploy:lambda-site` and ran it to push the fixed bundle. Any change reachable from the render entry needs that command re-run, or the cloud keeps executing the old bundle while the rest of the app looks fully deployed.",
+    },
+    {
+      problem: "Every text effect silently rendered in Times New Roman. The vendored Remocn components set `font-family: var(--font-geist-sans), …, sans-serif` — but that variable ships with Remocn's own Next.js setup, not mine, and CSS throws away the entire declaration when a var() is undefined, sans-serif fallback and all.",
+      fix: "Defined the variable once on the composition's root — the one component mounted by both the editor preview and the render, so they stay identical. Found by rendering a frame through the CLI and looking at it: 'no error' is not 'correct.'",
+    },
+    {
+      problem: "Cloud project sync silently never worked — the table didn't exist. The sync code was written correctly against a projects table that was never actually created in Supabase, and every failure only reached console.error, so the UI showed nothing. A new browser just always looked empty.",
+      fix: "Created the table with RLS and an explicit GRANT (this project's public schema didn't have the default grants). The real lesson took two goes: a console.error on a persistence path is invisible until someone goes looking, so saveProject now returns a result the toolbar actually shows.",
+    },
+    {
+      problem: "A prop-name mismatch silently ate a color. Every text effect gets a shared { text, fontSize, color, speed } object, but one effect declared its prop as baseColor — so color was passed, matched nothing, and was dropped with no TypeScript error (mismatched props on a spread aren't checked the way an object literal is).",
+      fix: "Renamed the prop to color to match the shared shape every other effect already uses.",
     },
     {
       problem: "Omit on a discriminated union silently collapses to common fields — updateElement lost content, assetId, and friends with no error.",
@@ -218,78 +334,71 @@ media bytes (binary)    → IndexedDB (local) + S3 (public URL for Lambda)`,
     },
     {
       problem: "blob: URLs can't be rendered in Node/Lambda — browser-only object URLs are meaningless to a headless renderer on AWS, so cloud renders came out with missing media.",
-      fix: "Assets upload to S3 in the background at import time (presigned PUT from /api/upload-url), the asset is patched with a public storageUrl, and the Export dialog remaps blob: → storageUrl before invoking Lambda. The browser keeps the blob: URL for instant local preview.",
+      fix: "Assets upload to S3 in the background at import (presigned PUT), the asset is patched with a public storageUrl, and the export remaps blob: → storageUrl before invoking Lambda. The browser keeps the blob: URL for instant local preview.",
     },
     {
       problem: "shadcn's CLI wrote generated components to a stray root @/ folder instead of src/.",
-      fix: "The root tsconfig.json was missing paths — added it so @/ resolves to src/, and the CLI landed files where they belong.",
+      fix: "The root tsconfig.json was missing paths — added it so @/ resolves to src/.",
     },
     {
       problem: "White-on-white text: default text color was #ffffff on a white canvas. Invisible, and no error anywhere.",
-      fix: "A default that contrasts with the canvas — and a lesson that \"no crash\" ≠ \"correct.\"",
+      fix: "A default that contrasts with the canvas — and another reminder that \"no crash\" ≠ \"correct.\"",
     },
     {
-      problem: "supabase-js .throwOnError() on count queries returned an error object with an empty message string — impossible to debug.",
-      fix: "Replaced the supabase-js query with a direct fetch() to the Supabase REST API with explicit apikey and Authorization headers. The same query, raw HTTP, returned the actual error. Lesson: the abstraction was hiding the signal.",
+      problem: "supabase-js .throwOnError() returned an error object with an empty message string — impossible to debug.",
+      fix: "Replaced it with a direct fetch() to the Supabase REST API with explicit headers. Same query, raw HTTP, returned the actual error. The abstraction was hiding the signal.",
     },
     {
       problem: "Supabase's new sb_secret_ key format caused 403s on the renders table even with the correct key value.",
-      fix: "Switched back to the older JWT eyJ... format keys from the Supabase dashboard. The new format wasn't compatible with the supabase-js version in use.",
+      fix: "Switched back to the older JWT-format keys from the dashboard — the new format wasn't compatible with the supabase-js version in use.",
     },
     {
-      problem: "renderMediaOnLambda() failed with 'remotion-lambda-role not found' despite correct AWS credentials.",
-      fix: "The IAM role must be created manually: AWS Console → Roles → Create role → Lambda use case → attach the inline policy from npx remotion lambda policies role. The Remotion CLI doesn't create it.",
+      problem: "Remotion version drift broke Lambda — client at 4.0.483, Lambda at 4.0.488 failed at invoke time.",
+      fix: "Pinned all Remotion packages to one exact version (removed the ^). They must match exactly across the tree.",
     },
     {
-      problem: "Version mismatch: remotion at 4.0.483, @remotion/lambda-client at 4.0.488. Silent failures, no helpful error.",
-      fix: "Pinned all Remotion packages to the exact same version (removed ^ prefix in package.json). Remotion packages must be at the exact same version across the tree.",
-    },
-    {
-      problem: "404 after Google OAuth redirect on Vercel — the SPA route /dashboard didn't exist as a file.",
-      fix: "Added a catch-all rewrite to vercel.json: { source: '/(.*)', destination: '/index.html' }. React Router handles routing client-side; Vercel just needs to serve index.html for every non-API path.",
-    },
-    {
-      problem: "RLS blocked the service_role key from inserting into the renders table, even though service_role is supposed to bypass RLS.",
-      fix: "The table was created with 'Automatically expose new tables' OFF, so the service_role had no grants at all. Explicit GRANT SELECT, INSERT, UPDATE, DELETE ON public.renders TO service_role was required.",
+      problem: "RLS blocked even the service_role key from inserting into the renders table, though service_role is supposed to bypass RLS.",
+      fix: "The table was created with grants off, so service_role had none. An explicit GRANT … TO service_role fixed it.",
     },
   ],
 
   // ————— Honest limitations —————
   tradeoffs: [
-    "Browser export needs Chrome or Edge (WebCodecs isn't in Safari yet); the Lambda cloud render covers every other device.",
+    "The fast browser export draws to a 2D canvas, so it drops text effects, shaders and blocks — there's a beta mode that keeps them, and the dialog warns you when your project needs it; the cloud render always has everything.",
+    "Browser export needs Chrome or Edge (WebCodecs isn't in Safari yet); the cloud render covers every other device.",
     "Editor audio/video preview is muted and autoplay-dependent; the export is authoritative for sound and timing.",
-    "Dashboard and editor are desktop-only (≥1024px) — below that a DesktopOnlyGate shows a \"use a bigger screen\" message; the landing page and sign-in stay fully responsive.",
-    "Project JSON syncs across devices, but asset bytes stay in local IndexedDB — S3 copies exist only for Lambda's use.",
-    "No scene grouping yet — sequencing is done by positioning clips on the timeline.",
-    "Fonts fall back to system sans-serif in the Node render (not bundled yet).",
+    "Dashboard and editor are desktop-only (≥1024px) — below that a gate shows a \"use a bigger screen\" message; the landing page and sign-in stay fully responsive, so you can still sign up on a phone.",
+    "Media mostly follows you across devices — uploads sync to S3 in the background and the editor falls back to that copy — but a file whose upload never finished stays on the machine you added it from.",
+    "No scene grouping yet (moving several elements as one unit) — sequencing is done by positioning clips on the timeline.",
+    "Tests cover the pure engines (scenes, beat detection, migrations, scale…), where the expensive-to-get-wrong logic lives; the React panels lean on typecheck + lint rather than component tests.",
   ],
 
   payoffs: [
     { decision: "Project as aggregate root", payoff: "Undo/redo + autosave added at one point, covered everything" },
     { decision: "Engines own verbs, not state", payoff: "No state drift; features stayed thin and composable" },
-    { decision: "One shared renderer", payoff: "WYSIWYG guaranteed, not hoped for" },
-    { decision: "Player-based editor canvas", payoff: "Remocn text effects, video, and audio all preview for free — one render path, no editor/export drift" },
+    { decision: "One shared renderer", payoff: "Editor preview = cloud render, guaranteed — not hoped for" },
+    { decision: "Player-based editor canvas", payoff: "Text effects, video and audio all preview for free — no separate editor render path" },
     { decision: "One Project object", payoff: "Cloud sync was one Supabase table and ~40 lines — nothing wired per feature" },
+    { decision: "Shots as a label on time", payoff: "A whole shot model, and not one line of the render path changed" },
+    { decision: "Transitions are animations", payoff: "They render and export everywhere with no new render code" },
     { decision: "Composition-space coords", payoff: "Editor preview = export, at any zoom" },
     { decision: "Frames + <Sequence>", payoff: "Timeline maps directly onto Remotion; export just works" },
     { decision: "Immutable updates", payoff: "Cheap undo (structural sharing) + reliable re-renders" },
     { decision: "Discriminated-union elements", payoff: "New element type = one type + one renderer" },
-    { decision: "Centralized useAuth hook", payoff: "Zero auth logic leaks into UI components — they call hook methods, never Supabase directly" },
-    { decision: "Typed api client (apiClient.ts)", payoff: "Bearer token injection is automatic — impossible to forget on a new endpoint" },
-    { decision: "Device ID cookie for guest limiting", payoff: "Abuse prevented without requiring accounts — localStorage clears don't help" },
-    { decision: "AuthBridge + clearAll()", payoff: "Data isolation between users on a shared device, with no per-feature wiring" },
-    { decision: "Record device render after success", payoff: "Failed Lambda renders don't consume the guest's one free slot" },
-    { decision: "Background S3 upload + storageUrl patch", payoff: "Uploaded media now renders on Lambda too — blob: URLs stay local for preview, S3 URLs go to the cloud path" },
+    { decision: "Blocks as a registry", payoff: "New block = one registry entry; renderer and panel untouched" },
+    { decision: "Centralized useAuth hook", payoff: "Zero auth logic leaks into UI — components call the hook, never Supabase" },
+    { decision: "Device cookie for guests", payoff: "Abuse prevented without forcing accounts — clearing storage doesn't help" },
+    { decision: "Record device render after success", payoff: "Failed cloud renders don't burn the guest's one free slot" },
   ],
 
   lessons: [
-    "A single mutation path is a superpower — it's what made undo, autosave, and WYSIWYG cheap. Decide where data changes before deciding how.",
+    "A single mutation path is a superpower — it's what made undo, autosave, and WYSIWYG cheap. Decide *where* data changes before deciding *how*.",
     "Store data in the target domain (output resolution, frames), not the view's units — views come and go, the data shouldn't.",
-    "\"No error\" isn't \"correct\" — white-on-white text and silent Omit-on-union both shipped zero warnings.",
-    "Buy the boring parts (moveable handles, encoding) and build the parts that are actually your product: the composition model, the timeline, the animation system.",
-    "The CLI export was always the wrong tool for end users — they can't run terminal commands. The gap wasn't a missing feature; it was a missing distribution model. Building both the browser path and the Lambda path was the actual product work.",
-    "Remotion Lambda: a cloud render pipeline was 20 minutes of configuration, not months of infrastructure. The interesting engineering was the quota gate, the auth layer, and the device cookie — not the renderer itself. Know what to buy.",
-    "Never trust the client. JWT is verified server-side first, quota checked second, Lambda called third — always in that order. The client supplies the token; the server decides what it means.",
-    "Abstractions that hide errors are worse than no abstraction. supabase-js returning an empty error string sent us down a 2-hour debugging path. The direct fetch to the REST API returned the actual problem in 10 seconds.",
+    "\"No error\" isn't \"correct\" — white-on-white text, the silent Omit-on-union, and every effect rendering as Times all shipped zero warnings.",
+    "Buy the boring parts (moveable handles, encoding, Lambda rendering) and build the parts that are actually your product: the composition model, the timeline, the animation system.",
+    "The CLI export was always the wrong tool for real users — they can't run terminal commands. The gap wasn't a missing feature; it was a missing way to get a finished video out.",
+    "Never trust the client — verify the login server-side first, then the abuse checks, then spend money. Always in that order.",
+    "Abstractions that hide errors are worse than no abstraction — a swallowed error string sent me down a two-hour path a raw HTTP call answered in ten seconds.",
+    "Be honest about the seams. The browser export doesn't match the editor perfectly, so the app says so — a warned limitation beats a silent broken file.",
   ],
 };
