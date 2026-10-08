@@ -31,7 +31,7 @@ function Block({ id, active, onHover }: { id: BlockId; active: BlockId | null; o
       onMouseLeave={() => onHover(null)}
       onFocus={() => onHover(id)}
       onBlur={() => onHover(null)}
-      className="h-full rounded-xl border p-4 outline-none transition-all duration-300"
+      className="rounded-xl border p-4 outline-none transition-all duration-300"
       style={{
         borderColor: active === id ? b.color + "90" : isDep ? b.color + "55" : "rgba(255,255,255,0.08)",
         background: active === id ? b.color + "12" : "rgba(255,255,255,0.02)",
