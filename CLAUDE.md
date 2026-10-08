@@ -37,6 +37,8 @@ app/
   page.tsx          Home: hero, stats, experience, featured projects, skills, contact
   journey/page.tsx  Journey: growth path + experience "chapters" + hobbies
   projects/page.tsx Projects: cards with media slots (image/video)
+  projects/payops/page.tsx  PayOps AI flagship case study (interactive agent graph, policy playground)
+  projects/motionstudio/page.tsx  MotionStudio case study
   now/page.tsx      Now: living status (building/learning/reading/interests)
   api/contact/route.ts   Contact form handler (Resend + mailto fallback)
   globals.css       Theme vars, base styles, custom cursor hiding
@@ -53,6 +55,9 @@ components/
   Section.tsx       Eyebrow + SectionHeading primitives
   Footer.tsx
 content/data.ts     ← EDIT THIS for all content
+content/payops.ts   PayOps case-study copy + diagram data (graph nodes, scenarios, evals)
+content/motionstudio.ts  MotionStudio case-study copy
+components/payops/  AgentGraph, StateMatrix, DecisionPipeline, PolicyPlayground, HexArchitecture, ReplayModes
 lib/utils.ts        cn() class merge helper
 public/demos/       Project screenshots/videos go here (blur PHI first)
 public/images/      avatar.jpg + portrait.jpg

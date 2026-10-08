@@ -21,7 +21,8 @@ import {
 
 
 export default function Home() {
-  const featured = projects.filter((p) => p.featured);
+  const flagship = projects.find((p) => p.flagship);
+  const featured = projects.filter((p) => p.featured && !p.flagship);
   const wip = projects.find((p) => p.wip);
 
   return (
@@ -153,6 +154,85 @@ export default function Home() {
             </Link>
           </div>
         </Reveal>
+        {/* FLAGSHIP */}
+        {flagship && (
+          <Reveal>
+            <TiltCard className="mb-5 grid overflow-hidden border-violet-400/20 transition-colors hover:border-violet-400/50 lg:grid-cols-[1fr_1.15fr]" max={2}>
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full opacity-60 blur-3xl"
+                style={{ background: "radial-gradient(closest-side, rgba(167,139,250,0.22), transparent)" }}
+              />
+              <div className="relative flex flex-col justify-center p-7 sm:p-10">
+                <div className="mb-4 flex flex-wrap items-center gap-3 font-mono text-xs">
+                  <span className="text-accent">{flagship.year}</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-400/30 bg-violet-400/10 px-2.5 py-0.5 text-[11px] font-medium text-violet-300">
+                    <span className="h-1.5 w-1.5 rounded-full bg-violet-300 shadow-[0_0_8px_#c4b5fd]" />
+                    Flagship · Agentic AI
+                  </span>
+                </div>
+                <Link href={flagship.caseStudy || `/projects#${flagship.slug}`} className="block">
+                  <h3 className="mb-3 font-serif text-[clamp(30px,4vw,44px)] leading-[1.05] tracking-tight">
+                    {flagship.title}<span className="grad-text">.</span>{" "}
+                    <span className="grad-text italic">An AI investigator that isn&apos;t allowed to touch the money.</span>
+                  </h3>
+                  <p className="text-[15px] leading-relaxed text-ink-dim">{flagship.blurb}</p>
+                </Link>
+                <div className="mt-6 grid grid-cols-3 gap-4 border-t border-panel-border pt-5">
+                  {[
+                    { n: "3 ∥", l: "parallel agents" },
+                    { n: "11/11", l: "live evals pass" },
+                    { n: "$0.004", l: "total eval cost" },
+                  ].map((m) => (
+                    <div key={m.l}>
+                      <div className="font-serif text-2xl leading-none grad-text">{m.n}</div>
+                      <div className="mt-1.5 text-[12px] text-ink-faint">{m.l}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
+                  <Magnetic>
+                    <Link href={flagship.caseStudy || `/projects#${flagship.slug}`} data-mag className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-semibold text-bg transition-shadow hover:shadow-[0_10px_40px_rgba(167,139,250,0.35)]">
+                      Read the case study →
+                    </Link>
+                  </Magnetic>
+                  {flagship.links.github && (
+                    <a href={flagship.links.github} target="_blank" rel="noopener" data-mag className="text-ink-dim hover:text-ink">GitHub →</a>
+                  )}
+                  {flagship.links.live && (
+                    <a href={flagship.links.live} target="_blank" rel="noopener" data-mag className="text-ink-dim hover:text-ink">Live →</a>
+                  )}
+                </div>
+              </div>
+              {(() => {
+                const v = flagship.media.find((m) => m.type === "video");
+                const cover = flagship.media.find((m) => m.type === "image")?.src || v?.poster;
+                return cover ? (
+                  <Link
+                    href={flagship.caseStudy || `/projects#${flagship.slug}`}
+                    className="group/cover relative block min-h-[260px] border-t border-panel-border lg:border-l lg:border-t-0"
+                  >
+                    <Image
+                      src={cover}
+                      alt={`${flagship.title} demo`}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 55vw"
+                      className="object-cover object-left-top transition-transform duration-700 group-hover/cover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-bg/70 via-bg/10 to-transparent lg:bg-gradient-to-r lg:from-bg/50" />
+                    {v && (
+                      <span className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3.5 py-1.5 font-mono text-[11px] text-white backdrop-blur">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[9px] text-black">▶</span>
+                        3-min narrated demo
+                      </span>
+                    )}
+                  </Link>
+                ) : null;
+              })()}
+            </TiltCard>
+          </Reveal>
+        )}
+
         <div className="grid gap-5 sm:grid-cols-2">
           {featured.map((p, i) => {
             const cover = p.media.find((m) => m.type === "image");

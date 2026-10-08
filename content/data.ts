@@ -35,7 +35,7 @@ export const stats = [
 
 export const marquee = [
   "React 19", "TypeScript", "Next.js", "Zustand", "Framer Motion",
-  "GSAP", "Tailwind", "Node.js", "AWS Bedrock", "Remotion", "PostgreSQL", "PDF.js",
+  "GSAP", "Tailwind", "Node.js", "LangGraph", "AWS Bedrock", "Remotion", "PostgreSQL", "PDF.js",
 ];
 
 // ============================================================================
@@ -117,7 +117,7 @@ export const growthPath = [
 //  Drop files in /public/demos and reference them here. Blur PHI before adding.
 //  An empty media array shows a styled "demo coming soon" placeholder.
 // ============================================================================
-export type Media = { type: "image" | "video"; src: string; caption?: string };
+export type Media = { type: "image" | "video"; src: string; caption?: string; poster?: string };
 
 export type Project = {
   slug: string;
@@ -126,6 +126,7 @@ export type Project = {
   year: string;
   role: string;
   featured: boolean;
+  flagship?: boolean; // shown as the full-width hero card on Home
   wip?: boolean;
   caseStudy?: string; // internal deep-dive page, e.g. "/projects/motionstudio"
   media: Media[];
@@ -135,6 +136,32 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  {
+    slug: "payops",
+    title: "PayOps AI",
+    blurb: "Multi-agent payment reconciliation. When a company's gateway, orders, ledger, webhooks and settlement disagree, a LangGraph system of parallel specialists (Jev + Gemini) investigates, cites evidence and proposes a fix. Deterministic policy, four-eyes approvals, exactly-once execution and an independent validator decide what actually happens.",
+    year: "2026",
+    role: "Personal project · solo build, end to end",
+    featured: true,
+    flagship: true,
+    caseStudy: "/projects/payops",
+    media: [
+      { type: "video", src: "/demos/payops-demo.mp4", poster: "/images/payops/poster.jpg", caption: "Narrated 3-minute walkthrough: investigation, evidence, approval, verification" },
+      { type: "image", src: "/images/payops/case-screen.png", caption: "A case: five-system state matrix, lifecycle and detection rules" },
+      { type: "image", src: "/images/payops/phase2-manager-approval.png", caption: "A ₹78,000 refund waits for a manager (four-eyes)" },
+      { type: "image", src: "/images/payops/phase2-verification.png", caption: "Independent validator re-reads every system: PASS" },
+      { type: "image", src: "/images/payops/payments-screen.png", caption: "Payments with cross-system mismatches flagged" },
+    ],
+    highlights: [
+      "**LangGraph** 19-node state machine: Jev plans once, **3 specialists fan out in parallel** via Send(), findings are grounded against cited evidence, with durable **interrupt / resume** for approvals",
+      "**Two models, two jobs**: Jev for 6 typed decisions with coded fallbacks, Gemini for reasoning. A **Jev-first fast path** resolves known faults with zero Gemini calls",
+      "**Models propose, code decides**: a closed catalog of 9 actions, a P0–P11 policy engine, **four-eyes** approvals, idempotent execution, and a validator that re-reads every system",
+      "**11/11 golden scenarios** passing live (100% root-cause, action and tier match) for **$0.004** total; record/replay cassettes make the demo free and deterministic",
+      "Hexagonal TypeScript monorepo: React 19 workbench, Express 5 + Socket.IO + pg-boss, one Postgres for data, queue and checkpoints. Hash-chained audit, MFA, ~460 tests",
+    ],
+    stack: ["LangGraph", "Gemini", "Jev (TypeSafe)", "TypeScript", "React 19", "Node.js", "Express 5", "PostgreSQL", "Drizzle", "pg-boss", "Socket.IO", "Zod"],
+    links: { live: "https://payops-ai.example.com", github: "https://github.com/BLAZE7SHADOW/PayOps-AI" }, // TODO: real live URL
+  },
   {
     slug: "faxflo",
     title: "FAXFlo — Diagna AI",
@@ -219,6 +246,7 @@ export const now = {
   intro:
     "A living snapshot of what I'm building, learning, and thinking about right now. Updated regularly.",
   building: [
+    { title: "PayOps AI", note: "A multi-agent payment investigator: LangGraph specialists find why payment systems disagree, while deterministic policy, human approvals and an independent validator keep the money safe." },
     { title: "MotionStudio", note: "A real video editor that runs in the browser, built on Remotion — live and actively growing (keyframes, 34 text effects, 18 shader backgrounds, beat-synced shots, cloud render)." },
     { title: "What's next", note: "Actively exploring founding engineer and senior full-stack roles. If you're building something ambitious in AI or product, let's talk." },
   ],
@@ -257,7 +285,7 @@ export const skills = [
   { group: "Frontend", items: ["React 19", "Next.js", "TypeScript", "Tailwind", "Framer Motion", "GSAP", "Zustand", "React Query", "MUI", "Ant Design", "shadcn/ui", "Remotion"] },
   { group: "Backend", items: ["Node.js", "Express", "Prisma", "PostgreSQL", "Redis", "BullMQ", "REST APIs", "JWT", "FastAPI", "Python"] },
   { group: "Cloud", items: ["AWS", "S3", "SQS", "SNS", "Textract", "Bedrock", "Lambda", "IAM", "Docker"] },
-  { group: "AI", items: ["Claude", "GPT-4o", "Llama", "AWS Bedrock", "VAPI", "ElevenLabs", "Twilio", "Prompt Engineering", "Document Intelligence"] },
+  { group: "AI", items: ["LangGraph", "Multi-agent orchestration", "Gemini", "Claude", "GPT-4o", "Llama", "AWS Bedrock", "VAPI", "ElevenLabs", "Twilio", "Prompt Engineering", "Evals", "Document Intelligence"] },
   { group: "Automation", items: ["Robocorp", "Playwright", "Puppeteer", "RPA", "Chrome Extensions", "Redis RQ", "Job Queues"] },
   { group: "Tools", items: ["Git", "PostHog", "Swagger", "Vercel", "Claude Code", "Cursor", "VS Code"] },
 ];

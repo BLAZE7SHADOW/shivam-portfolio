@@ -35,6 +35,12 @@ export default function ProjectsPage() {
                     <span className="text-accent">{p.year}</span>
                     <span className="text-ink-faint">·</span>
                     <span className="text-ink-dim">{p.role}</span>
+                    {p.flagship && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-400/30 bg-violet-400/10 px-2.5 py-0.5 text-[11px] font-medium text-violet-300">
+                        <span className="h-1.5 w-1.5 rounded-full bg-violet-300" />
+                        Flagship
+                      </span>
+                    )}
                     {p.wip && (
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-0.5 text-[11px] font-medium text-amber-400">
                         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />

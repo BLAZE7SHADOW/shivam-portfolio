@@ -18,9 +18,11 @@ function MediaFrame({
       <video
         className="aspect-video w-full rounded-xl border border-panel-border object-cover"
         src={item.src}
-        autoPlay
-        muted
-        loop
+        poster={item.poster}
+        autoPlay={!item.poster}
+        muted={!item.poster}
+        loop={!item.poster}
+        preload={item.poster ? "metadata" : "auto"}
         playsInline
         controls
       />
@@ -77,7 +79,7 @@ export default function Gallery({ media }: { media: Media[] }) {
 
         {current.caption && (
           <div className="mt-2 text-center font-mono text-[11px] text-ink-faint">
-            {current.caption} <span className="ml-1 text-accent-2">· click to zoom</span>
+            {current.caption} {current.type === "image" && <span className="ml-1 text-accent-2">· click to zoom</span>}
           </div>
         )}
 
@@ -95,7 +97,13 @@ export default function Gallery({ media }: { media: Media[] }) {
                     : "border-panel-border opacity-60 hover:opacity-100"
                 }`}
               >
-                {m.type === "video" ? (
+                {m.type === "video" && m.poster ? (
+                  <span className="relative block h-full w-full">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={m.poster} alt="" className="h-full w-full object-cover" />
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/40 text-[11px] text-white">▶</span>
+                  </span>
+                ) : m.type === "video" ? (
                   <span className="flex h-full w-full items-center justify-center bg-bg-soft text-[10px] text-ink-dim">
                     ▶ vid
                   </span>
@@ -145,12 +153,22 @@ export default function Gallery({ media }: { media: Media[] }) {
               className="flex flex-1 flex-col items-center gap-3 overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {media[lightbox].type === "video" ? (
+                <video
+                  src={media[lightbox].src}
+                  poster={media[lightbox].poster}
+                  controls
+                  playsInline
+                  className="max-h-[82vh] w-full rounded-2xl border border-white/10 bg-black"
+                />
+              ) : (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={media[lightbox].src}
                 alt={media[lightbox].caption || "project screenshot"}
                 className="max-h-[82vh] w-full rounded-2xl border border-white/10 object-contain shadow-2xl"
               />
+              )}
               <div className="flex items-center gap-4">
                 {media[lightbox].caption && (
                   <span className="font-mono text-xs text-white/50">{media[lightbox].caption}</span>
