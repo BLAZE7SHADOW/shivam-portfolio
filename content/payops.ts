@@ -16,7 +16,7 @@ export const payops = {
   status: "Flagship",
   tagline: "An AI investigator that isn't allowed to touch the money.",
   links: {
-    live: "https://payops-ai.example.com", // TODO: real live URL
+    live: "https://payops-ai-nine.vercel.app/",
     github: "https://github.com/BLAZE7SHADOW/PayOps-AI",
   },
   intro:

@@ -160,7 +160,7 @@ export const projects: Project[] = [
       "Hexagonal TypeScript monorepo: React 19 workbench, Express 5 + Socket.IO + pg-boss, one Postgres for data, queue and checkpoints. Hash-chained audit, MFA, ~460 tests",
     ],
     stack: ["LangGraph", "Gemini", "Jev (TypeSafe)", "TypeScript", "React 19", "Node.js", "Express 5", "PostgreSQL", "Drizzle", "pg-boss", "Socket.IO", "Zod"],
-    links: { live: "https://payops-ai.example.com", github: "https://github.com/BLAZE7SHADOW/PayOps-AI" }, // TODO: real live URL
+    links: { live: "https://payops-ai-nine.vercel.app/", github: "https://github.com/BLAZE7SHADOW/PayOps-AI" },
   },
   {
     slug: "faxflo",
