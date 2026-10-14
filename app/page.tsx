@@ -66,11 +66,17 @@ export default function Home() {
             <Magnetic>
               <ResumeButton href={profile.resume} variant="hero" />
             </Magnetic>
-            <Magnetic>
-              <a href={profile.socials.github} target="_blank" rel="noopener" data-mag aria-label="GitHub profile" className="inline-flex items-center gap-2 rounded-xl border border-panel-border bg-panel px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/[0.06]">
-                <Github className="h-4 w-4" /> GitHub
-              </a>
-            </Magnetic>
+            {[
+              { href: profile.socials.github, label: "GitHub", aria: "GitHub profile", Icon: Github },
+              { href: profile.socials.linkedin, label: "LinkedIn", aria: "LinkedIn profile", Icon: Linkedin },
+              { href: profile.socials.twitter, label: "X", aria: "X (Twitter) profile", Icon: Twitter },
+            ].map(({ href, label, aria, Icon }) => (
+              <Magnetic key={label}>
+                <a href={href} target="_blank" rel="noopener" data-mag aria-label={aria} className="inline-flex items-center gap-2 rounded-xl border border-panel-border bg-panel px-4 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/[0.06]">
+                  <Icon className="h-4 w-4" /> {label}
+                </a>
+              </Magnetic>
+            ))}
           </div>
         </Reveal>
         <Reveal delay={0.2}>
