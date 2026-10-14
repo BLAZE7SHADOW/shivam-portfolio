@@ -38,6 +38,7 @@ app/
   journey/page.tsx  Journey: growth path + experience "chapters" + hobbies
   projects/page.tsx Projects: cards with media slots (image/video)
   projects/payops/page.tsx  PayOps AI flagship case study (interactive agent graph, policy playground)
+  projects/voice-agent/page.tsx  Hinglish Clinic Voice Agent case study (in development; pipeline player, latency, modes)
   projects/motionstudio/page.tsx  MotionStudio case study
   now/page.tsx      Now: living status (building/learning/reading/interests)
   api/contact/route.ts   Contact form handler (Resend + mailto fallback)
@@ -57,7 +58,9 @@ components/
 content/data.ts     ← EDIT THIS for all content
 content/payops.ts   PayOps case-study copy + diagram data (graph nodes, scenarios, evals)
 content/motionstudio.ts  MotionStudio case-study copy
+content/voiceagent.ts  Voice-agent case-study copy + diagram data (stages, latency runs, modes, roadmap)
 components/payops/  AgentGraph, StateMatrix, DecisionPipeline, PolicyPlayground, HexArchitecture, ReplayModes
+components/voice/   VoicePipeline, LatencyWaterfall, ModeMachine, BookingSequence, Roadmap, Waveform
 lib/utils.ts        cn() class merge helper
 public/demos/       Project screenshots/videos go here (blur PHI first)
 public/images/      avatar.jpg + portrait.jpg

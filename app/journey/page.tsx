@@ -5,7 +5,7 @@ import TiltCard from "@/components/TiltCard";
 
 export const metadata: Metadata = {
   title: "Journey",
-  description: "From frontend engineer to full-stack AI — Shivam Govind Rao's career story across VoiceGenie and Diagna AI FAXFlo.",
+  description: "From frontend engineer to AI engineer — Shivam Govind Rao's career story across VoiceGenie and Diagna AI FAXFlo.",
   alternates: { canonical: "https://www.shivamgovindrao.com/journey" },
 };
 import { Eyebrow } from "@/components/Section";

@@ -10,6 +10,7 @@ import { Eyebrow, SectionHeading } from "@/components/Section";
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 import CopyEmail from "@/components/CopyEmail";
 import ResumeButton from "@/components/ResumeButton";
+import Waveform from "@/components/voice/Waveform";
 import {
   profile,
   stats,
@@ -23,7 +24,7 @@ import {
 export default function Home() {
   const flagship = projects.find((p) => p.flagship);
   const featured = projects.filter((p) => p.featured && !p.flagship);
-  const wip = projects.find((p) => p.wip);
+  const wips = projects.filter((p) => p.wip);
 
   return (
     <>
@@ -65,6 +66,11 @@ export default function Home() {
             <Magnetic>
               <ResumeButton href={profile.resume} variant="hero" />
             </Magnetic>
+            <Magnetic>
+              <a href={profile.socials.github} target="_blank" rel="noopener" data-mag aria-label="GitHub profile" className="inline-flex items-center gap-2 rounded-xl border border-panel-border bg-panel px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-white/[0.06]">
+                <Github className="h-4 w-4" /> GitHub
+              </a>
+            </Magnetic>
           </div>
         </Reveal>
         <Reveal delay={0.2}>
@@ -83,7 +89,7 @@ export default function Home() {
       {/* WORK */}
       <section id="work" className="py-28">
         <Reveal><Eyebrow>Experience</Eyebrow></Reveal>
-        <Reveal><SectionHeading title="Where I've shipped." sub="Two companies, both times the only frontend engineer, both times the work went to production and converted customers." /></Reveal>
+        <Reveal><SectionHeading title="Where I've shipped." sub="Two AI products, both taken to production and paying customers: document AI for US clinics, and a generative-AI voice platform." /></Reveal>
 
         <Reveal>
           <div className="mb-14 grid grid-cols-2 gap-5 sm:grid-cols-4">
@@ -301,8 +307,8 @@ export default function Home() {
         </div>
 
         {/* BUILDING NOW */}
-        {wip && (
-          <Reveal>
+        {wips.map((wip) => (
+          <Reveal key={wip.slug}>
             <TiltCard className="mt-5 grid overflow-hidden transition-colors hover:border-accent/40 sm:grid-cols-[1fr_1.1fr]" max={3}>
               <div className="flex flex-col justify-center p-7 sm:p-8">
                 <div className="mb-3 flex flex-wrap items-center gap-3 font-mono text-xs">
@@ -356,11 +362,27 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-bg/40 to-transparent" />
                   </Link>
-                ) : null;
+                ) : (
+                  <Link
+                    href={wip.caseStudy || `/projects#${wip.slug}`}
+                    aria-label={wip.title}
+                    className="relative flex min-h-[220px] flex-col justify-center gap-5 border-t border-panel-border bg-bg-soft/60 px-8 py-8 sm:border-l sm:border-t-0"
+                  >
+                    <div className="h-24"><Waveform /></div>
+                    <div className="flex flex-wrap items-center justify-center gap-1.5 font-mono text-[10.5px]">
+                      {["VAD", "STT", "LLM", "TTS"].map((st, k) => (
+                        <span key={st} className="flex items-center gap-1.5">
+                          <span className="rounded-md border border-panel-border bg-white/[0.03] px-2 py-0.5 text-ink-dim">{st}</span>
+                          {k < 3 && <span className="text-ink-faint">→</span>}
+                        </span>
+                      ))}
+                    </div>
+                  </Link>
+                );
               })()}
             </TiltCard>
           </Reveal>
-        )}
+        ))}
       </section>
 
       {/* SKILLS */}

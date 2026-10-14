@@ -91,7 +91,7 @@ export default function OpengraphImage() {
 
         {/* footer */}
         <div style={{ fontSize: 26, color: "#a1a1ad", fontFamily: "sans-serif" }}>
-          {profile.role} · Founding-engineer mindset · AI · Full-stack
+          {profile.role} · Agents · Real-time voice · LLM pipelines
         </div>
       </div>
     ),

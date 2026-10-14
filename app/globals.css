@@ -62,3 +62,11 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Voice-agent booking sequence: place each step under its lane on wide screens */
+@media (min-width: 768px) {
+  .seq-step {
+    width: 50%;
+    margin-left: clamp(0%, calc(var(--lane) * 25% - 12.5%), 50%);
+  }
+}

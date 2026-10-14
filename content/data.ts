@@ -6,8 +6,8 @@
 export const profile = {
   name: "Shivam Govind Rao",
   initials: "Home",
-  role: "Software Development Engineer",
-  tagline: "builds AI products end-to-end, with frontend craft at the core.",
+  role: "AI Engineer · Full-Stack",
+  tagline: "builds production AI — agents, voice, LLM pipelines — and the full stack around them.",
   // Drop your photo at /public/images/avatar.jpg (square works best)
   avatar: "/images/avatar.jpg",
   location: "Gurugram, India",
@@ -23,19 +23,19 @@ export const profile = {
     twitter: "https://x.com/BLAZE07SHADOW",
   },
   intro:
-    "I started as a frontend engineer and grew into owning full products end-to-end — backend, cloud, AI pipelines, and RPA automation. At Diagna AI I took FAXFlo from a company pivot to its first paying US clinic: the full clinical platform, a 40-endpoint Node.js API, a distributed AWS document pipeline processing 1,000+ faxes daily, and the AI + voice automation that made it all work.",
+    "AI Engineer with 2.5 years building production AI products end to end: LLM pipelines, multi-agent systems (LangGraph), RAG and real-time voice agents, plus the React, Node.js and Python systems around them. At Diagna AI I built the document-AI platform that processes 1,000+ medical faxes a day for live US clinics; before that I shipped VoiceGenie, a generative-AI voice platform, from 0 to $10K MRR in 11 months. I care about AI that holds up in production: guardrails in code, evals, and measured latency and cost.",
 };
 
 export const stats = [
-  { num: "2", label: "Full-stack AI products shipped from 0" },
+  { num: "2.5 yrs", label: "Shipping production AI products end to end" },
   { num: "1K+", label: "Medical docs processed daily" },
   { num: "$10K", label: "MRR built in 11 months" },
   { num: "40+", label: "AI doc categories at ~95% accuracy" },
 ];
 
 export const marquee = [
-  "React 19", "TypeScript", "Next.js", "Zustand", "Framer Motion",
-  "GSAP", "Tailwind", "Node.js", "LangGraph", "AWS Bedrock", "Remotion", "PostgreSQL", "PDF.js",
+  "LangGraph", "LiveKit Agents", "Python", "AWS Bedrock", "Gemini", "Claude", "RAG",
+  "React 19", "TypeScript", "Next.js", "Node.js", "FastAPI", "PostgreSQL", "Framer Motion", "Remotion",
 ];
 
 // ============================================================================
@@ -43,48 +43,51 @@ export const marquee = [
 // ============================================================================
 export const journey = [
   {
-    period: "Jan 2025 — April 2026",
-    role: "Software Development Engineer · Full-Stack",
+    period: "Jan 2025 — Apr 2026",
+    role: "Software Development Engineer · AI & Full-Stack",
     company: "Diagna AI — FAXFlo",
     place: "Gurugram",
-    tag: "End-to-end product ownership",
+    tag: "Document AI in production",
     chapter: "The healthcare era",
     summary:
-      "Took FAXFlo from a company pivot to its first paying US clinic in production. Owned the entire stack — React frontend, Node.js backend, AWS cloud pipeline, multi-model AI, Voice-AI scheduling, RPA automation, and analytics.",
+      "Built the document-AI platform behind FAXFlo, taking it from a company pivot to live paying US clinics. Owned it end to end: multi-model LLM extraction on AWS Bedrock, the HIPAA-compliant backend and queues, RPA write-back into a legacy EHR, and both React frontends.",
     // Short versions shown on the home page — full `points` live on /journey
     topPoints: [
-      "Built the complete **React 19** clinical platform solo — document inbox, PDF viewer, scheduling, analytics",
-      "**40+ endpoint** Node.js API and an AWS pipeline processing **1,000+ faxes daily** at 99%+ uptime",
-      "Multi-model AI classification at **~95% accuracy**, plus Voice-AI calls that cut manual outreach ~70%",
-      "Went from company pivot to **first paying US clinic** in production",
+      "Led **multi-model AI on AWS Bedrock** (Claude Sonnet, Amazon Nova Pro, Llama) classifying and extracting **1,000+ medical faxes a day** across **40+ document categories** for live US clinics",
+      "LLM reliability: pre-flight token counting, **cost-aware model routing**, schema-validated JSON with retries, and a **fallback chain** across model families",
+      "Cut manual fax triage from **about 3 hours to 10 minutes a day** by chaining AI extraction, patient matching, human review and EHR write-back",
+      "HIPAA backend: **40+ endpoints**, a 25-model Postgres schema, S3 · SQS · SNS into **7 BullMQ queues**; a FastAPI RPA service took referrals from **4.2 days to same day**",
+      "Built both production **React 19** frontends, including the editor for reviewing AI output",
     ],
     points: [
       "**Frontend** — Built the complete **React 19** clinical platform solo: document inbox with dual-view **PDF.js** viewer, eFax module, appointment scheduling and confirmation flows, and multi-clinic analytics dashboard — per-clinic feature flags, RBAC routing, and route-based code splitting to keep the platform lean as it scaled.",
-      "**Backend API** — Built the production **Node.js · Express · PostgreSQL** backend from scratch: **40+ REST endpoints**, JWT + RBAC auth, input validation, Swagger docs, and **Redis-backed BullMQ** job queues for async processing.",
+      "**Backend API** — Architected the core of a **HIPAA-compliant** platform on **Node.js · Express · PostgreSQL**: **40+ REST endpoints** (JWT + RBAC) over a **25-model** schema, and S3 · SQS · SNS ingestion into **7 BullMQ/Redis queues** with idempotency, rate limiting and a dead-letter queue.",
       "**AWS Pipeline** — Architected a distributed document pipeline (**S3 → SQS → Textract → SNS → Bedrock**) processing **1,000+ medical faxes daily** at **99%+ uptime** — with dead-letter queues (DLQ) for poison-message handling, SNS-triggered retries, and Slack alerting on failures.",
-      "**AI Classification** — Multi-model chain for document classification: **Claude (Sonnet) via AWS Bedrock** as the primary model, **GPT-4o** as a cross-check, and **Amazon Nova Pro** as retry fallback on oversized payloads — **~95% accuracy** across **40+ medical categories**, with custom system prompts, structured JSON extraction, confidence scoring, and fallback retry logic.",
+      "**AI Classification** — Led multi-model integration on **AWS Bedrock** (**Claude Sonnet**, **Amazon Nova Pro**, **Llama**) to classify and extract structured data from **1,000+ medical faxes a day** across **40+ document categories** — **~95% accuracy**, with clinic-specific prompts, structured JSON extraction and confidence scoring.",
+      "**LLM Reliability** — Pre-flight token counting, context- and **cost-aware model routing**, schema-validated JSON with retries for malformed output, and a **fallback chain across model families**, so one model's outage or bad output never stops the pipeline.",
+      "**Workflow impact** — Chained AI extraction, patient matching, human review and EHR write-back into one workflow: manual fax triage fell from **about 3 hours to 10 minutes a day**, and a recurring **2-day backlog** cleared.",
       "**SMS Orchestration** — Built an AI-driven SMS system across three providers (**Twilio · Telnyx · Vonage**) handling opt-in/opt-out compliance, appointment reminders, two-way patient messaging, and automated follow-up flows — with provider failover so no single outage breaks delivery.",
       "**Voice AI** — Built a Voice-AI outbound scheduling module (**VAPI + ElevenLabs**) for automated patient calls: appointment confirmations, reschedule handling, and intake — cutting manual outreach by **~70%**.",
-      "**RPA & EHR Automation** — Engineered a full RPA suite (**Robocorp · Python · FastAPI · Redis RQ**) targeting MDLand EHR's iframe-heavy UI: OTP/2FA login, patient lookup, document upload, and calendar sync — plus a **React Chrome Extension** that embedded the orchestration UI directly on the EHR page.",
+      "**RPA & EHR Automation** — Engineered a full RPA suite (**Robocorp · Playwright · Python · FastAPI · Redis RQ**) that writes into a no-API legacy EHR (MDLand's iframe-heavy UI: OTP/2FA login, patient lookup, document upload, calendar sync), plus **Medplum FHIR** sync — referral turnaround fell from **4.2 days to same day**. A **React Chrome Extension** embedded the orchestration UI directly on the EHR page.",
       "**Document Engine** — Wrote a custom **Zustand + Immer** editing engine with field-level diffing and patch-only backend sync; integrated **@react-pdf-viewer** for S3-hosted PDF preview — converting remote URLs to blob objects for CORS-safe rendering with proper `URL.revokeObjectURL` cleanup — plus multi-page batch processing and **~80% image compression** before S3 upload.",
       "**Analytics** — Built a **HIPAA-compliant PostHog** dashboard tracking EMR sync rates, document pipeline throughput, appointment conversion, and AI classification accuracy — the same dashboard used in the investor demo that **closed the first paying US clinic**.",
     ],
-    stack: ["React 19", "TypeScript", "Zustand", "Node.js", "Express", "PostgreSQL", "Redis", "BullMQ", "AWS Bedrock", "Claude", "GPT-4o", "Textract", "VAPI", "ElevenLabs", "Robocorp", "Python", "FastAPI", "PDF.js", "PostHog"],
+    stack: ["AWS Bedrock", "Claude", "Amazon Nova", "Llama", "Python", "FastAPI", "Node.js", "Express", "PostgreSQL", "Redis", "BullMQ", "Textract", "Robocorp", "Playwright", "Medplum FHIR", "React 19", "TypeScript", "Zustand", "VAPI", "ElevenLabs", "PostHog"],
   },
   {
     period: "Dec 2023 — Jan 2025",
-    role: "Frontend Developer",
+    role: "Software Engineer · Voice AI",
     company: "Oriserve — VoiceGenie.ai",
     place: "Noida",
-    tag: "Sole frontend engineer",
+    tag: "Generative-AI voice platform",
     chapter: "The voice-AI era",
     summary:
-      "The only frontend engineer on VoiceGenie, a generative-AI voice sales platform. Built the dashboard and marketing site that closed the first enterprise customers.",
+      "Sole frontend engineer on VoiceGenie, a generative-AI voice agent platform, and a collaborator on its voice infrastructure. Built the product that took it to $10K MRR and closed the first enterprise customers.",
     topPoints: [
       "Sole frontend engineer — designed and built the **entire platform** and marketing site from 0",
       "Campaign builder, **ElevenLabs** voice tuning, and post-call analytics with AI entity extraction",
-      "CRM integrations (**HubSpot · GoHighLevel · Cal.com**) with auto calendar booking on successful calls",
-      "**0 → $10K MRR in 11 months** · 30–50% faster page loads",
+      "Collaborated on **Twilio** voice-AI infrastructure for **2K+ concurrent calls**, with rate limiting that blocked **15K+ abusive requests a day**",
+      "**Stripe** payments end to end · CRM sync (**HubSpot · GoHighLevel · Cal.com**) · **0 → $10K MRR in 11 months**",
     ],
     points: [
       "**Product ownership** — Designed and built the **entire VoiceGenie platform from 0** as the **sole frontend engineer**: customer-facing dashboard, marketing site, and internal tooling — all shipped solo.",
@@ -95,9 +98,11 @@ export const journey = [
       "**Onboarding UX** — Designed and built the end-to-end user onboarding: account setup, workspace config, first-campaign walkthrough, and guided integration steps — reducing **time-to-first-call** for new customers.",
       "**CRM integrations** — Connected **HubSpot**, **GoHighLevel**, and **Cal.com**: contact sync, call outcome and entity data logged back to CRM records, and **auto calendar booking** on successful calls.",
       "**Script composer** — Live **@token** variable composer (@name, @appointment, @product) that resolves per-contact at call time; no hardcoded scripts — every call personalised dynamically.",
-      "**Performance & growth** — Cut page load times **30–50%** via code splitting, lazy loading, and caching; grew VoiceGenie from **0 to $10K MRR in 11 months** as the only frontend engineer.",
+      "**Voice infrastructure** — Collaborated on the **Twilio** voice-AI infrastructure behind **2K+ concurrent calls**, and on rate limiting that blocked **15K+ abusive requests a day**.",
+      "**Payments** — Integrated **Stripe** end to end: plans, checkout and billing state in the dashboard.",
+      "**Performance & growth** — Cut page load time **30%** via code splitting, lazy loading, and caching; grew VoiceGenie from **0 to $10K MRR in 11 months** as the only frontend engineer.",
     ],
-    stack: ["React", "Next.js", "TypeScript", "Material UI", "Redux", "Tailwind"],
+    stack: ["Next.js", "React", "TypeScript", "ElevenLabs", "Twilio", "Stripe", "Redux", "Material UI", "Tailwind"],
   },
 ];
 
@@ -106,8 +111,8 @@ export const growthPath = [
   { label: "Frontend Developer", note: "Where it started — components, state, UI craft." },
   { label: "Product Engineer", note: "Owning features end-to-end, thinking in user outcomes." },
   { label: "Full Stack Engineer", note: "Node, Postgres, queues, cloud — building the whole pipe." },
-  { label: "AI Engineer", note: "Bedrock, Claude, document intelligence, voice automation." },
-  { label: "Full-Stack AI Engineer", note: "0→production ownership — frontend, backend, cloud, AI, voice, RPA." },
+  { label: "Full-Stack AI Engineer", note: "Bedrock, Claude, document intelligence, voice automation — 0→production ownership." },
+  { label: "AI Engineer", note: "Multi-agent systems, real-time voice and RAG — with guardrails in code, evals, and measured latency and cost." },
 ];
 
 // ============================================================================
@@ -161,6 +166,25 @@ export const projects: Project[] = [
     ],
     stack: ["LangGraph", "Gemini", "Jev (TypeSafe)", "TypeScript", "React 19", "Node.js", "Express 5", "PostgreSQL", "Drizzle", "pg-boss", "Socket.IO", "Zod"],
     links: { live: "https://payops-ai-nine.vercel.app/", github: "https://github.com/BLAZE7SHADOW/PayOps-AI" },
+  },
+  {
+    slug: "voice-agent",
+    title: "Hinglish Clinic Voice Agent",
+    blurb: "A real-time voice receptionist for small Indian clinics. Callers speak English or Hinglish; the agent answers clinic questions, finds free slots, and books, moves or cancels appointments. It verifies the caller before touching their data and never writes anything they haven't clearly confirmed. Every stage of every turn is timed.",
+    year: "2026",
+    role: "Personal project · in development, week 3 of 8",
+    featured: false,
+    wip: true,
+    caseStudy: "/projects/voice-agent",
+    media: [],
+    highlights: [
+      "Streaming **LiveKit Agents** loop: Deepgram STT → **Gemini Flash** → Cartesia TTS, Silero VAD + turn detection, **barge-in in about 0.35–0.4 s**, with Sarvam and Gemini fallbacks",
+      "**Safety in code, not the prompt**: one agent with per-mode tool allowlists, caller verification before any personal data, read-backs built from the stored row, idempotent writes and a **DB constraint against double booking**",
+      "**Sandboxed evals**: 13/13 multi-turn tasks, **0 wrong actions**, 217 tests; per-stage p50/p95 latency on every turn",
+      "Doctor-name recognition on phone audio **61% → 99%**; slot lookup **up to 1.2 s → 200 ms**",
+    ],
+    stack: ["Python", "LiveKit Agents", "Deepgram", "Gemini", "Cartesia", "Sarvam", "Silero VAD", "PostgreSQL", "asyncpg", "pydantic", "pytest"],
+    links: { live: "", github: "https://github.com/BLAZE7SHADOW/hinglish-clinic-voice-agent" },
   },
   {
     slug: "faxflo",
@@ -235,6 +259,22 @@ export const projects: Project[] = [
     stack: ["Remotion", "React 19", "TypeScript", "Tailwind", "Zustand", "Supabase", "AWS Lambda"],
     links: { live: "https://motionstudio-six.vercel.app/", github: "https://github.com/BLAZE7SHADOW/MotionStudio" },
   },
+  {
+    slug: "clinrag",
+    title: "ClinRAG",
+    blurb: "Hybrid RAG over FDA drug labels, with the evaluation harness as the real deliverable. Dense and BM25 retrieval fused with reciprocal rank fusion, answers only from retrieved excerpts, and a RAGAS benchmark on hand-verified questions that decided what not to build.",
+    year: "2026",
+    role: "Personal project",
+    featured: false,
+    media: [],
+    highlights: [
+      "Table-aware chunking (Docling), **Cohere embeddings** on Bedrock, **FAISS + BM25** with reciprocal rank fusion, **Claude Haiku 4.5** answering only from retrieved excerpts",
+      "**RAGAS** on 12 hand-verified questions: hybrid lifted context recall **0.75 → 0.83** but faithfulness fell **0.98 → 0.88**, so it is not a clean win",
+      "Reranking was **scoped out on purpose**: the numbers didn't show a gap it would close",
+    ],
+    stack: ["Python", "AWS Bedrock", "Claude Haiku", "Cohere Embed", "FAISS", "BM25", "RAGAS", "Docling"],
+    links: { live: "", github: "https://github.com/BLAZE7SHADOW/ClinRAG" },
+  },
 ];
 
 // ============================================================================
@@ -242,10 +282,11 @@ export const projects: Project[] = [
 // ============================================================================
 export const now = {
   // EDIT: the date you last updated this page
-  updated: "June 2026",
+  updated: "October 2026",
   intro:
     "A living snapshot of what I'm building, learning, and thinking about right now. Updated regularly.",
   building: [
+    { title: "Hinglish Clinic Voice Agent", note: "A real-time voice receptionist for Indian clinics on LiveKit Agents. Week 3 of 8: turn-taking, latency and the V1 demo video. Every change is measured per stage, and guards live in code." },
     { title: "PayOps AI", note: "A multi-agent payment investigator: LangGraph specialists find why payment systems disagree, while deterministic policy, human approvals and an independent validator keep the money safe." },
     { title: "MotionStudio", note: "A real video editor that runs in the browser, built on Remotion — live and actively growing (keyframes, 34 text effects, 18 shader backgrounds, beat-synced shots, cloud render)." },
     { title: "What's next", note: "Actively exploring founding engineer and senior full-stack roles. If you're building something ambitious in AI or product, let's talk." },
@@ -253,6 +294,7 @@ export const now = {
   learning: [
     { title: "System Design", note: "Distributed systems, queues, and scaling patterns — applied directly to FAXFlo's pipeline." },
     { title: "DSA", note: "Sharpening data structures & algorithms regularly." },
+    { title: "Real-time voice AI", note: "Turn detection, endpointing and barge-in — where most of a voice agent's latency actually goes." },
     { title: "Remotion deep-dive", note: "Programmatic video as a first-class engineering problem." },
   ],
   reading: [
@@ -261,7 +303,7 @@ export const now = {
     { title: "Blog writing", note: "Starting to write about building in the AI era." },
   ],
   interests: [
-    "AI Applications", "Developer Tools", "System Design", "Distributed Systems",
+    "AI Applications", "Voice AI", "Multi-Agent Systems", "LLM Evals", "Developer Tools", "System Design", "Distributed Systems",
     "Video Generation", "Remotion", "Creative Tooling", "Automation",
     "Interactive UIs", "Agentic Workflows", "Building in Public",
   ],
@@ -282,10 +324,12 @@ export const hobbies = [
 //  SKILLS
 // ============================================================================
 export const skills = [
+  { group: "AI & Agents", items: ["LangGraph", "LangChain", "Multi-agent systems", "Tool calling", "RAG (FAISS, BM25)", "AWS Bedrock", "Claude", "Gemini", "OpenAI", "Llama", "Document Intelligence"] },
+  { group: "Evals & Reliability", items: ["RAGAS", "Golden datasets", "Record/replay evals", "Guardrails in code", "Human-in-the-loop", "Model fallbacks", "Latency telemetry"] },
+  { group: "Voice AI", items: ["LiveKit Agents", "Deepgram", "Cartesia", "Sarvam", "Silero VAD", "ElevenLabs", "VAPI", "Twilio"] },
+  { group: "Backend", items: ["Python", "FastAPI", "Pydantic", "Node.js", "Express", "PostgreSQL", "Redis", "BullMQ", "Prisma", "REST APIs", "JWT"] },
   { group: "Frontend", items: ["React 19", "Next.js", "TypeScript", "Tailwind", "Framer Motion", "GSAP", "Zustand", "React Query", "MUI", "Ant Design", "shadcn/ui", "Remotion"] },
-  { group: "Backend", items: ["Node.js", "Express", "Prisma", "PostgreSQL", "Redis", "BullMQ", "REST APIs", "JWT", "FastAPI", "Python"] },
   { group: "Cloud", items: ["AWS", "S3", "SQS", "SNS", "Textract", "Bedrock", "Lambda", "IAM", "Docker"] },
-  { group: "AI", items: ["LangGraph", "Multi-agent orchestration", "Gemini", "Claude", "GPT-4o", "Llama", "AWS Bedrock", "VAPI", "ElevenLabs", "Twilio", "Prompt Engineering", "Evals", "Document Intelligence"] },
   { group: "Automation", items: ["Robocorp", "Playwright", "Puppeteer", "RPA", "Chrome Extensions", "Redis RQ", "Job Queues"] },
-  { group: "Tools", items: ["Git", "PostHog", "Swagger", "Vercel", "Claude Code", "Cursor", "VS Code"] },
+  { group: "Tools", items: ["Git", "pytest", "Jest", "PostHog", "Swagger", "Vercel", "Claude Code", "Cursor", "VS Code"] },
 ];
